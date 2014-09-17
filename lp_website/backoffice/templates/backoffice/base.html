@@ -1,12 +1,15 @@
 <!DOCTYPE html>
+{% load bootstrap3 %}
 <html lang="fr">
   <head>
     <meta charset='utf-8'/>
     <title>{% block title %}Learn & Play{% endblock title %}</title>
+    {% bootstrap_css %}
     {% block css %}
     {% endblock css %}
+    {% bootstrap_javascript %}
     {% block js %}
-    {% endblock js %}
+    {% endblock js %}x
   </head>
 
   <body>
