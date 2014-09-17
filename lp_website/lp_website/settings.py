@@ -60,8 +60,12 @@ WSGI_APPLICATION = 'lp_website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ['LP_MYSQL_DBNAME'],
+        'USER': os.environ['LP_MYSQL_USER'],
+        'PASSWORD': os.environ['LP_MYSQL_PASSWORD'],
+        'HOST': os.environ['LP_MYSQL_HOST'],
+        'PORT': os.environ['LP_MYSQL_PORT'],
     }
 }
 
