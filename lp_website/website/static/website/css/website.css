@@ -1,0 +1,42 @@
+body {
+    font-size: 100%;
+}
+
+a {
+    font-size: 1.5em;
+}
+
+.backoffice-link {
+    float: right;
+    margin: 0.5em;
+}
+
+.display-box {
+    position: absolute;
+    width: 100%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+h1 {
+    font-size: 8em;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+h2 {
+    font-size: 3em;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #777777;
+}
+
+.centered-image {
+    display: block;
+    max-width: 100%;
+    margin-top: 5em;
+    margin-left: auto;
+    margin-right: auto;
+}
