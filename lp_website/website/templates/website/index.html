@@ -8,6 +8,7 @@
 
     {% bootstrap_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'website/css/fullPagejs/jquery.fullPage.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'website/css/textillatejs/animate.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'website/css/website.css' %}" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
@@ -19,10 +20,15 @@
     <div id="section-container">
       <div class="section">
 	<a href="{% url 'backoffice:backoffice-index' %}" class="backoffice-link">Accéder au backoffice</a>
-	<div class="display-box">
-	  <h1>Learn & Play</h1>
-	  <h2>Jeu éducatif multijoueur</h2>
-	  <img src="http://placehold.it/900x506" class="centered-image"></img>
+	<div class="container">
+	  <div class="col-lg-12 display-box">
+	    <h1 id="lp_title" data-in-effect="bounceIn">Learn & Play</h1>
+	    <h2 id="lp_under_title">Jeu éducatif multijoueur</h2>
+	    <img src="http://placehold.it/900x506" class="centered-image"></img>
+	    <p id="app-description">
+	      Learn&Play est un jeu éducatif pour tablettes tactiles destiné à une utilisation en classe de primaire. L’enfant sera plongé dans un monde ouvert dans lequel il fera évoluer son avatar.  Les enfants pourront interagir entre eux pendant les mini-jeux, et l’integralité de l’application sera paramétrable par l’enseignant.
+	    </p>
+	  </div>
 	</div>
       </div>
       <div class="section">
@@ -41,5 +47,9 @@
 	</div>
       </div>
     </div>
+    <script src="{% static 'website/js/textillatejs/jquery.fittext.js' %}"></script>
+    <script src="{% static 'website/js/textillatejs/jquery.lettering.js' %}"></script>
+    <script src="{% static 'website/js/textillatejs/jquery.textillate.js' %}"></script>
+    <script src="{% static 'website/js/textillateSetup.js' %}"></script>
   </body>
 </html>
