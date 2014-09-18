@@ -1,8 +1,23 @@
-{% extends "website/base.html" %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset='utf-8'/>
+    <title>Learn & Play</title>
 
-{% block title %}Learn & Play - Accueil{% endblock title %}
+    <link rel="stylesheet" type="text/css" href="{% static 'website/css/fullPagejs/jquery.fullPage.css' %}" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{% static 'website/js/fullPagejs/jquery.fullPage.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'website/js/fullPageConfig.js' %}"></script>
+  </head>
 
-{% block content %}
-<p>Website en construction</p>
-<a href="{% url 'backoffice:backoffice-index' %}">Acceder au backoffice</a>
-{% endblock content %}
+  <body>
+    <div id="section-container">
+      <div class="section">Page d'accueil</div>
+      <div class="section">Le projet</div>
+      <div class="section">L'équipe</div>
+      <div class="section">Les partenaires</div>
+    </div>
+  </body>
+</html>
