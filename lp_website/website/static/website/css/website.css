@@ -41,7 +41,10 @@ h2 {
 }
 
 #app-description {
-    font-size: 3em;
     text-align: justify;
+}
+
+.content-padding-top {
+    font-size: 3em;
     padding-top: 4em;
 }
