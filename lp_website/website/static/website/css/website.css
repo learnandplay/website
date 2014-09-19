@@ -69,3 +69,15 @@ h2#lp_under_title{
     -webkit-border-radius: 10em;
     border-radius: 10em;
 }
+
+#first-section, #third-section{
+    background-color: #EEEEEE;
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+#second-section, #last-section {
+    background-color: #DEDEDE;
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
