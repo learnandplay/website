@@ -48,3 +48,18 @@ h2 {
     font-size: 3em;
     padding-top: 4em;
 }
+
+#st-team-line {
+    padding-top: 8em;
+    padding-bottom: 3em;
+}
+
+#nd-team-line {
+    padding-bottom: 3em;
+}
+
+.equipe-portrait {
+    -moz-border-radius: 10em;
+    -webkit-border-radius: 10em;
+    border-radius: 10em;
+}

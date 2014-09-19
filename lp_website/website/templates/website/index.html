@@ -8,7 +8,6 @@
 
     {% bootstrap_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'website/css/fullPagejs/jquery.fullPage.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'website/css/textillatejs/animate.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'website/css/website.css' %}" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
@@ -39,9 +38,57 @@
 	  </div>
 	</div>
       </div>
-          <div class="section">
-	<div class="display-box">
-	  <h1>L'équipe</h1>
+      <div class="section">
+	<div class="container">
+	  <div class="col-lg-12 display-box">
+	    <h1>L'équipe</h1>
+	    <div class="col-lg-12" id="st-team-line">
+	      <img class="col-lg-2 equipe-portrait" alt="Ludovic Post" src="{% static 'website/image/post_l.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Ludovic Post</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	      <img class="col-lg-2 equipe-portrait" alt="Romain Zanchi" src="{% static 'website/image/zanchi_r.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Romain Zanchi</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	      <img class="col-lg-2 equipe-portrait" alt="Anthony Lingua" src="{% static 'website/image/lingua_a.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Anthony Lingua</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	    </div>
+	    <div class="col-lg-12" id="nd-team-line">
+	      <img class="col-lg-offset-2 col-lg-2 equipe-portrait" alt="Laeticia Lourenco" src="{% static 'website/image/louren_l.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Laeticia Lourenco</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	      <img class="col-lg-ofsset-2 col-lg-2 equipe-portrait" alt="Tom Rossi" src="{% static 'website/image/rossi_t.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Tom Rossi</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	    </div>
+	    <div class="col-lg-12" id="rd-team-line">
+	      <img class="col-lg-2 equipe-portrait" alt="Lambert Teisserenc-Bonesteve" src="{% static 'website/image/teisse_l.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Lambert Teisserenc-Bonesteve</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	      <img class="col-lg-2 equipe-portrait" alt="Benjamin Farcy" src="{% static 'website/image/farcy_b.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Benjamin Farcy</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	      <img class="col-lg-2 equipe-portrait" alt="Romain Calascibetta" src="{% static 'website/image/calasc_r.jpg' %}"/>
+	      <div class="col-lg-2">
+		<span style="font-weight: 700; font-size:3em;" class="dev-name">Romain Calascibetta</span>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
+	      </div>
+	    </div>
+	  </div>
 	</div>
       </div>
       <div class="section">
@@ -50,9 +97,5 @@
 	</div>
       </div>
     </div>
-    <script src="{% static 'website/js/textillatejs/jquery.fittext.js' %}"></script>
-    <script src="{% static 'website/js/textillatejs/jquery.lettering.js' %}"></script>
-    <script src="{% static 'website/js/textillatejs/jquery.textillate.js' %}"></script>
-    <script src="{% static 'website/js/textillateSetup.js' %}"></script>
   </body>
 </html>
