@@ -50,12 +50,18 @@ h2 {
 }
 
 #st-team-line {
-    padding-top: 8em;
+    text-align: justify;
+    padding-top: 3em;
     padding-bottom: 3em;
 }
 
 #nd-team-line {
+    text-align: justify;
     padding-bottom: 3em;
+}
+
+#rd-team-line {
+    text-align: justify;
 }
 
 .equipe-portrait {
