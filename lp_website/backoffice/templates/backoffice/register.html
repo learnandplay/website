@@ -1,0 +1,21 @@
+{% extends "backoffice/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Création de compte{% endblock title %}
+
+{% block content %}
+
+{% if registered %}
+Vous êtes enregistré. <a href="{% url 'backoffice:login' %}">Se connecter</a>
+
+{% else %}
+<form id="user_form" method="post" action="/backoffice/register/">
+  {% csrf_token %}
+  {% bootstrap_form registration_form %}
+  {% buttons %}
+  <button type="submit" name="submit" class="btn btn-primary">Créer le compte</button>
+  {% endbuttons %}
+</form>
+<a href="{% url 'backoffice:login' %}">Se connecter</a>
+{% endif %}
+{% endblock content %}

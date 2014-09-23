@@ -74,7 +74,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-FR'
 
 TIME_ZONE = 'Europe/Paris'
 
@@ -89,3 +89,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# custon configs
+LOGIN_URL = '/backoffice/login/'
+LOGGED_USER_REDIRECT = '/backoffice/'

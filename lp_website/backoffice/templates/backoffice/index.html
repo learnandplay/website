@@ -3,5 +3,9 @@
 {% block title %}Backoffice{% endblock title %}
 
 {% block content %}
-<p>Backoffice en construction</p>
+{% if user.is_authenticated %}
+<h1>Bienvenue {{ user.username }}!</h1>
+{% else %}
+<h1>Vous n'etes pas connecté</h1>
+{% endif %}
 {% endblock content %}

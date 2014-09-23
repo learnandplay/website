@@ -1,0 +1,15 @@
+{% extends "backoffice/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Connexion{% endblock title %}
+
+{% block content %}
+<form id="login_form" method="post" action="/backoffice/login/">
+  {% csrf_token %}
+  {% bootstrap_form login_form %}
+  {% buttons %}
+  <button type="submit" name="submit" class="btn btn-primary">Connexion</button>
+  {% endbuttons %}
+</form>
+<a href="{% url 'backoffice:register' %}">Créer un compte</a>
+{% endblock content %}
