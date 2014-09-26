@@ -1,19 +1,23 @@
 {% extends "backoffice/base.html" %}
 {% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'backoffice/js/register_form_validation.js' %}"></script>
+{% endblock js %}
 
 {% block title %}Création de compte{% endblock title %}
 
 {% block content %}
-
 {% if registered %}
 Vous êtes enregistré. <a href="{% url 'backoffice:login' %}">Se connecter</a>
-
 {% else %}
-<form id="user_form" method="post" action="/backoffice/register/">
+<form id="user-form" method="post" action="/backoffice/register/">
   {% csrf_token %}
   {% bootstrap_form registration_form %}
   {% buttons %}
-  <button type="submit" name="submit" class="btn btn-primary">Créer le compte</button>
+  <button id="submit-button" type="submit" name="submit" class="btn btn-primary">Créer le compte</button>
   {% endbuttons %}
 </form>
 <a href="{% url 'backoffice:login' %}">Se connecter</a>
