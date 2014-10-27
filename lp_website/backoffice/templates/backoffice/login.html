@@ -4,9 +4,14 @@
 {% block title %}Connexion{% endblock title %}
 
 {% block content %}
-<form id="login_form" method="post" action="/backoffice/login/">
+<h1>
+  Formulaire de connexion
+</h1>
+<form role="form" id="login_form" method="post" action="/backoffice/login/">
   {% csrf_token %}
-  {% bootstrap_form login_form %}
+  <div class="form-group">
+    {% bootstrap_form login_form %}
+  </div>
   {% buttons %}
   <button type="submit" name="submit" class="btn btn-primary">Connexion</button>
   {% endbuttons %}

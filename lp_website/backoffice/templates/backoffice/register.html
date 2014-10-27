@@ -10,6 +10,9 @@
 {% block title %}Création de compte{% endblock title %}
 
 {% block content %}
+<h1>
+  Création de compte
+</h1>
 {% if registered %}
 Vous êtes enregistré. <a href="{% url 'backoffice:login' %}">Se connecter</a>
 {% else %}
