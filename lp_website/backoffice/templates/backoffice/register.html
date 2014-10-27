@@ -11,7 +11,11 @@
 
 {% block content %}
 <h1>
-  Création de compte
+  <div class="row">
+    <div class="col-lg-offset-3 col-lg-6">
+      Création de compte
+    </div>
+  </div>
 </h1>
 {% if registered %}
 Vous êtes enregistré. <a href="{% url 'backoffice:login' %}">Se connecter</a>
@@ -20,15 +24,23 @@ Vous êtes enregistré. <a href="{% url 'backoffice:login' %}">Se connecter</a>
   {% csrf_token %}
   <div class="form-group">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-offset-3 col-lg-6">
 	{% bootstrap_form registration_form %}
       </div>
     </div>
   </div>
   {% buttons %}
-  <button id="submit-button" type="submit" name="submit" class="btn btn-primary">Créer le compte</button>
+  <div class="row">
+    <div class="col-lg-offset-3 col-lg-6">
+      <button id="submit-button" type="submit" name="submit" class="btn btn-primary">Créer le compte</button>
+    </div>
+  </div>
   {% endbuttons %}
 </form>
-<a href="{% url 'backoffice:login' %}">Se connecter</a>
+<div class="row" style="padding-top:2em;">
+  <div class="col-lg-offset-3 col-lg-6">
+    <a href="{% url 'backoffice:login' %}">Se connecter</a>
+  </div>
+</div>
 {% endif %}
 {% endblock content %}

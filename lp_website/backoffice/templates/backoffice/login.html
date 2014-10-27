@@ -5,20 +5,29 @@
 
 {% block content %}
 <h1 class="row">
-  Formulaire de connexion
+  <div class="col-lg-offset-3 col-lg-6">
+    Formulaire de connexion
+  </div>
 </h1>
 <form role="form" id="login_form" method="post" action="/backoffice/login/">
   {% csrf_token %}
   <div class="form-group">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-offset-3 col-lg-6">
 	{% bootstrap_form login_form %}
       </div>
     </div>
   </div>
   {% buttons %}
-  <button type="submit" name="submit" class="btn btn-primary">Connexion</button>
+  <div class="row">
+    <div class="col-lg-offset-3 col-lg-6">
+      <button type="submit" name="submit" class="btn btn-primary">Connexion</button>
+    </div>
     {% endbuttons %}
 </form>
-<a href="{% url 'backoffice:register' %}">Créer un compte</a>
+<div class="row" style="padding-top:2em;">
+  <div class="col-lg-offset-3 col-lg-6">
+    <a href="{% url 'backoffice:register' %}">Créer un compte</a>
+  </div>
+</div>
 {% endblock content %}
