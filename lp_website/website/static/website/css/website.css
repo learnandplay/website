@@ -84,10 +84,10 @@ h2#lp_under_title{
 
 .partners {
     padding-top: 1em;
-    font-size: 1em;
+    font-size: 0.8em;
+    text-align: justify;
 }
 
 .partners-title {
-    font-size: 2em;
-
+    font-size: 1.7em;
 }
