@@ -1,0 +1,166 @@
+body, html {
+    font-size: 100%;
+    height: 100%;
+    width: 100%;
+    color: white;
+}
+
+.display-box {
+    width: 100%;
+    padding-top: 3%;
+    padding-bottom: 5%;
+}
+h1, h2 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.centered-image {
+    display: block;
+    max-width: 100%;
+    margin-top: 5em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content-padding-top {
+    font-size: 1.5em;
+    padding-top: 4em;
+}
+
+
+.background-image{
+    -webkit-background-size: cover; /* pour Chrome et Safari */
+    -moz-background-size: cover; /* pour Firefox */
+    -o-background-size: cover; /* pour Opera */
+    background-size: cover; /* version standardisée */
+    background-repeat: no-repeat;
+    height: 100%;
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+#titre-equipe{
+    display: inline;
+    margin-right: 30px;
+    color: #000000;
+}
+
+p{
+    font-size: 1em;
+}
+
+.justify{
+    font-size: 1.2em;
+    text-align: justify;
+}
+#first-section{
+    background-image: url("website/image/accueil-fond.jpg");
+}
+
+#second-section{
+    background-image: url("website/image/projet-fond.jpg");
+}
+
+#third-section{
+    background-image: url("website/image/equipe-fond.jpg");
+}
+
+#fourth-section{
+    background-image: url("website/image/partenaires-fond.jpg");
+}
+
+#last-section{
+    background-image: url("website/image/contact-fond.jpg");
+}
+#logo{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#centre-page{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+button{
+    background-color: transparent;
+    background-image: none;
+    border: 2px solid !important;
+    font-size: 25px !important;
+    color: #ffffff;
+}
+
+.navbar-default{
+    background-image: none;
+    background-color: black;
+    opacity: 0.7;
+    border-color: #000000;
+    text-align: center
+}
+
+.image{
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+    display: block;
+}
+
+#ludovic{background-image: url('website/image/post_l.png');}
+#laetitia{background-image: url('website/image/louren_l.png');}
+#tom{background-image: url('website/image/rossi_t.png');}
+#dino{background-image: url('website/image/calasc_r.png');}
+#lambert{background-image: url('website/image/teisse_l.png');}
+#romainz{background-image: url('website/image/zanchi_r.png');}
+#benjamin{background-image: url('website/image/farcy_b.png');}
+#lingua{background-image: url('website/image/lingua_a.png');}
+
+.image:hover .circle {visibility: visible}
+
+.imagepadding{padding-bottom: 20px;}
+
+.linkequipe{position: relative; top: 53px;}
+
+.circle{
+    visibility: hidden;
+    width:150px;
+    height:150px;
+    background:forestgreen;
+    position: absolute;
+    border-radius:50%;
+    border:none;
+    right: 0px;
+    left: 13px;
+    opacity: .9;
+    text-align: center;
+}
+
+.col-lg-12{text-align: center}
+
+#equipe{
+    background-color: blanchedalmond;
+    padding-top: 50px;
+    text-align: center;
+}
+a{
+    color: white;
+}
+
+a:hover, a:focus{
+    text-decoration: none;
+    color: floralwhite;
+    cursor: pointer
+}
+
+.btn:hover, .btn.focus ,.btn:focus{
+    color: forestgreen;
+
+}
+.nom{
+    font-weight: bold;
+}
+
+.btn{font-size: 25px !important}

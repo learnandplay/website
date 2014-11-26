@@ -1,0 +1,164 @@
+{% load staticfiles %}
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset='utf-8'/>
+        <title>Learn & Play</title>
+        {% bootstrap_css %}
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'website/css/l&p.css' %}" />
+        <link rel="stylesheet" href="{% static 'website/css/social-buttons-3.css' %}" >
+    </head>
+<body>
+
+
+<nav class="navbar navbar-default navbar-fixed-top"  role="navigation">
+    <div class="container" style="line-height: 3">
+        <a href="#first-section"><div class="col-md-2 col-sm-6 col-xs-6">Accueil </div></a>
+        <a href="#second-section"><div class="col-md-2 col-sm-6 col-xs-6">Le Projet</div></a>
+        <a href="#third-section"><div class="col-md-2 col-sm-6 col-xs-6">Qui sommes nous ? </div></a>
+        <a href="#fourth-section"><div class="col-md-2 col-sm-6 col-xs-6"> Nos partenaires</div></a>
+        <a href="#last-section"><div class="col-md-2 col-sm-6 col-xs-6"> Contactez nous</div></a>
+        <div class="col-md-2 col-sm-6 col-xs-6">
+            <a href="{% url 'backoffice:index' %}">Accéder au backoffice</a>
+        </div>
+    </div>
+</nav>
+
+<div id="first-section" class="background-image">
+    <div class="container" id="centre-page">
+        <div class="row">
+            <div class="col-lg-12 ">
+                <img id="logo" class="img-responsive" title="logoPapillon" alt="LogoPapillon" src="{% static 'website/image/logoPapillon.png' %}" >
+            </div>
+            <div class="col-lg-12">
+                <h1>Bienvenue sur Learn and Play</h1>
+            </div>
+            <div class="col-lg-12 " style="text-align: center">
+                <h1 style="margin-bottom: 30px;">L'application qui va faire aimer réviser à vos enfants !</h1>
+                <a href="#second-section"><button class="btn btn-lg"> DECOUVRIR LE PROJET</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="second-section" class="background-image">
+    <div class="container" id="centre-page">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-sm-12">
+                <h1>Le Projet</h1>
+                <p class="justify">Learn&Play est un serious game pour tablettes tactiles destiné à une utilisation en classe de primaire et principalement
+                    aux classes de CP pour les élèves en difficulté.
+                    </br></br>L’enfant sera plongé dans un monde ouvert dans lequel il fera évoluer son avatar.
+                    Il pourra se balader à travers les différents univers représentant les différentes matières. Les élèves pourront interagir entre eux
+                    pendant les mini-jeux, jouer en coopération. Ceci leur permettra de développer leur esprit d’équipe.
+                    </br></br>Le site web mis en place permettra au professeur de débloquer des mondes (monde des mathématiques, du français) ou des mini-jeux à sa guise. L’application sera donc entièrement paramétrable par le professeur depuis un ordinateur ou une tablette.
+                    Notre objectif est de permettre à des enfants en difficulté de surmonter leurs problèmes grâce à une pédagogie différente qui les incite
+                    à s’entraider et une stimulation importante </p>
+                <img  id="logoPapillon" style="max-width: 20%" class="img-responsive" title="logo" alt="logo" src="{% static 'website/image/logoPapillon.png' %}" >
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="third-section" class="background-image">
+    <div class="container">
+        <div class="col-lg-12" style="margin-bottom: 50px;">
+            <h1 id="titre-equipe">L'équipe Learn&Play</h1>
+            <img  id="logoPapillon" style="max-width: 10%;display: inline" class="img-responsive" title="logo" alt="logo" src="{% static 'website/image/logoPapillon.png' %}">
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding">
+                <p class="image" id="ludovic">
+                    <span class="circle"><a class="linkequipe"> <font class="nom">Ludovic Post</font> <br>Chef de projet</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding">
+                <p class="image" id="laetitia">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Laetitia Lourenco</font> <br>Sous Chef de projet</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding" >
+                <p class="image" id="tom">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Tom Rossi</font> <br>Responsable pôle mini-jeux</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding">
+                <p class="image" id="dino">
+                    <span class="circle" ><a class="linkequipe" style="top: 37px;"> <font class="nom">Romain Calascibetta</font> <br>Responsable pôle serveur</a></span>
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding">
+                <p class="image" id="romainz">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Romain Zanchi</font><br>Responsable pôle web</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding">
+                <p class="image" id="lambert">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Lambert Teisserenc</font><br>Pôle graphique</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding">
+                <p class="image"  id="benjamin">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Benjamin Farcy</font><br>Pôle graphique</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-6 imagepadding">
+                <p class="image" id="lingua">
+                    <span class="circle" ><a class="linkequipe" style="top: 37px;"> <font class="nom">Anthony Lingua</font><br>Pôle web et responsable communication </a></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="fourth-section" class="background-image">
+    <div class="container">
+        <div class="col-lg-12">
+            <h1>Les partenaires</h1>
+            <div class="col-md-12 content-padding-top col-xs-12 col-sm-12">
+                   <p class="justify">Grâce à Epitech et à l'EIP (ou Epitech Innovative Project) et au doctor Gramont du CHU de Nîmes qui avait pour envie d'aider les enfants
+                       d'école primaire, est venu l'idée de Learn & Play afin de permettre au élèves de primaire de s'améliorer en classe tout en
+                       profitant d'un moment de détente au sein de notre serious game.
+                   </p>
+            </div>
+            <div class="col-lg-12" style="margin-top: 50px;">
+                <div class="col-md-2 col-xs-1"></div>
+                <div class="col-md-5 col-xs-5 col-sm-5">
+                    <img  id="eipLogo" class="img-responsive" title="eip" alt="eip" src="{% static 'website/image/eipLogo.jpg' %}" >
+                </div>
+                <div class="col-md-5 col-xs-5 col-sm-5">
+                    <img  id="chu" class="img-responsive" title="chu" alt="chu" src="{% static 'website/image/chuNimes.jpg' %}" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="last-section" class="background-image">
+    <div class="container" id="centre-page">
+        <div class="row" style="text-align: center">
+            <div class="col-md-6 col-sm-12 col-xs-12">
+                <img  id="logo" class="img-responsive" title="logo" alt="logo" src="{% static 'website/image/logo.png' %}" >
+            </div>
+            <div id="reseau"class="col-md-6 col-sm-12 col-xs-12" style="padding-top: 85px;">
+                <h1>Suivez notre actualitée sur les réseaux sociaux</h1>
+                <a target=_blank href="https://www.facebook.com/pages/LearnPlay/608063825982842?ref=aymt_homepage_panel" class="btn btn-social-icon btn-facebook" style="width: 50px;">
+                    <i class="fa fa-facebook"></i></a>
+                <a target=_blank href="https://twitter.com/learnandplayPro" class="btn btn-social-icon btn-twitter">
+                    <i class="fa fa-twitter"></i></a>
+                <a target=_blank href="https://plus.google.com/u/0/113160396156739741362/posts" class="btn btn-social-icon btn-google-plus">
+                    <i class="fa fa-google-plus"></i></a>
+                <h1>Vous avez des questions ? </h1>
+                <a href="mailto:lourencolaetitia@gmail.com"><button class="btn btn-default btn-lg">
+                    <span class="glyphicon glyphicon-envelope" ></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
