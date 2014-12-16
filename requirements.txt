@@ -2,3 +2,4 @@ Django==1.7
 MySQL-python==1.2.5
 django-bootstrap3==4.11.0
 django_extensions==1.4.0
+django-static-precompiler==0.8
