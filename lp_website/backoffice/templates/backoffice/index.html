@@ -1,11 +1,11 @@
-{% extends "backoffice/base.html" %}
+{% extends "backoffice/layout.html" %}
 
 {% block title %}Backoffice{% endblock title %}
 
+{% block navbar_home %}active{% endblock navbar_home %}
+
 {% block content %}
-{% if user.is_authenticated %}
-<h1>Bienvenue {{ user.username }}!</h1>
-{% else %}
-<h1>Vous n'etes pas connecté</h1>
-{% endif %}
+<p>Username: {{ user.username }}</p>
+<p>school: {{ user.school_class.name }}</p>
+<p>data: {{ user.data }}</p>
 {% endblock content %}
