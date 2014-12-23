@@ -1,13 +1,15 @@
 # -*- coding: UTF-8 -*-
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect, HttpResponse
 from backoffice.forms import UserRegistrationForm, UserLoginForm
 from backoffice.models import LPUser
-from backoffice.decorators import anonymous_required
+from backoffice.decorators import anonymous_required, teacher_required
 
 @login_required
+@teacher_required
 def index(request):
     return render(request, 'backoffice/index.html')
 
@@ -19,6 +21,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.set_password(user.password)
+            user.groups.add(Group.objects.get(name='teachers'))
             user.save()
             lp_user = LPUser()
             lp_user.user = user
@@ -55,4 +58,7 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('backoffice:index')
-    
+
+@login_required
+def teachers_required(request):
+    return render(request, 'backoffice/teachers_required.html')
