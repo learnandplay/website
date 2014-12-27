@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.auth.models import User
 from django import forms
+from backoffice.models import SchoolClass
 
 class UserRegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -33,3 +34,10 @@ class UserLoginForm(forms.Form):
     username = forms.CharField(label="Nom d'utilisateur", max_length=30)
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
     remember_me = forms.BooleanField(label="Se souvenir de moi", required=False, widget=forms.CheckboxInput())
+
+class ClassForm(forms.ModelForm):
+    class Meta:
+        model = SchoolClass
+        exclude = ('data',)
+    name = forms.CharField(label="Nom de la classe", max_length=64)
+    school_name = forms.CharField(label="Nom de l'établissement", max_length=128)

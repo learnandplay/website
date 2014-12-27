@@ -2,10 +2,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
-from backoffice.forms import UserRegistrationForm, UserLoginForm
-from backoffice.models import LPUser
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm
+from backoffice.models import LPUser, SchoolClass
 from backoffice.decorators import anonymous_required, teacher_required
 
 @login_required
@@ -62,3 +62,24 @@ def user_logout(request):
 @login_required
 def teachers_required(request):
     return render(request, 'backoffice/teachers_required.html')
+
+@login_required
+@teacher_required
+def my_classes(request):
+    user = request.user.LPUser
+    classes = user.school_class.all()
+    return render(request, 'backoffice/my_classes.html',
+        {'classes': classes})
+
+@login_required
+@teacher_required
+def edit_class(request, id=None):
+    school_class = SchoolClass.objects.get(id=id) if id else None
+    form = ClassForm(request.POST or None, instance=school_class)
+    if form.is_valid():
+        school_class = form.save()
+        if not id:
+            request.user.LPUser.school_class.add(school_class)
+        return redirect('backoffice:my_classes')
+    return render(request, 'backoffice/edit_class.html',
+        {'class_form': form, 'school_class': school_class})

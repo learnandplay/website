@@ -1,0 +1,15 @@
+{% extends "backoffice/layout.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Mes classes{% endblock title %}
+
+{% block navbar_administration %}active{% endblock navbar_administration %}
+
+{% block content %}
+{% if classes %}
+<p>Mes classes</p>
+{% else %}
+<div class="alert alert-danger" role="alert">Votre compte n'est pas encore associé à une classe</div>
+{% endif %}
+<a class="btn btn-primary" href="{% url 'backoffice:create_class' %}">{% bootstrap_icon "plus" %} Créer une classe</a>
+{% endblock content %}

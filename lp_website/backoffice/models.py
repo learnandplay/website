@@ -51,7 +51,7 @@ class ExerciseConfig(models.Model):
         return "Config %s for %s" % (self.exercise, self.school_class)
 
 class LPUser(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name="LPUser")
     school_class = models.ManyToManyField(SchoolClass, null=True, blank=True)
     data = models.TextField(null=True, blank=True)
     class Meta:
