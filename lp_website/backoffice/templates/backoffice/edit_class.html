@@ -1,7 +1,8 @@
 {% extends "backoffice/layout.html" %}
 {% load bootstrap3 %}
 
-{% block title %}toto{% endblock title %}
+
+{% block title %}{% if school_class %}Editer une classe{% else %}Créer une classe{% endif %}{% endblock title %}
 
 {% block navbar_administration %}active{% endblock navbar_administration %}
 
