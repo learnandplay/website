@@ -83,3 +83,11 @@ def edit_class(request, id=None):
         return redirect('backoffice:my_classes')
     return render(request, 'backoffice/edit_class.html',
         {'class_form': form, 'school_class': school_class})
+
+@login_required
+@teacher_required
+def delete_class(request):
+    class_id = request.POST.get("class_id")
+    if class_id is not None:
+        SchoolClass.objects.get(id=class_id).delete()
+    return redirect('backoffice:my_classes')
