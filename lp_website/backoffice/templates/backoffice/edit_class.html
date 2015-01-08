@@ -7,6 +7,7 @@
 {% block navbar_administration %}active{% endblock navbar_administration %}
 
 {% block content %}
+<a href="{% url 'backoffice:my_classes' %}">< retour à mes classes</a>
 <form role="form" id="class_form" method="post" action="{% if school_class %}{% url 'backoffice:edit_class' id=school_class.id %}{% else %}{% url 'backoffice:create_class' %}{% endif %}">
   {% csrf_token %}
   <div class="form-group">
