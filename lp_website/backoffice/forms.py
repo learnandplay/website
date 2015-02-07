@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.auth.models import User
 from django import forms
-from backoffice.models import SchoolClass
+from backoffice.models import SchoolClass, LPUser
 
 class UserRegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -41,3 +41,19 @@ class ClassForm(forms.ModelForm):
         exclude = ('data',)
     name = forms.CharField(label="Nom de la classe", max_length=64)
     school_name = forms.CharField(label="Nom de l'établissement", max_length=128)
+
+class StudentAvatarForm(forms.ModelForm):
+    class Meta:
+        model = LPUser
+        fields = ('avatar',)
+        labels = {
+            'avatar': "Avatar"
+        }
+
+class StudentForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username',)
+        help_texts = {
+            'username': '',
+        }

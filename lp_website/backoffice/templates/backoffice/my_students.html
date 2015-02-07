@@ -1,0 +1,82 @@
+{% extends "backoffice/layout.html" %}
+{% load bootstrap3 %}
+
+
+{% block title %}{% if selected_class %}{{selected_class.name}}{% else %}Mes élèves{% endif %}{% endblock title %}
+
+{% block navbar_administration %}active{% endblock navbar_administration %}
+
+{% block content %}
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirmer la suppression
+            </div>
+            <div class="modal-body">
+                <p>Vous êtes sur le point de supprimer l'élève <strong id="username-modal"></strong>.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button id="confirm-delete-modal" type="button" class="btn btn-danger">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if classes %}
+    <select id="class-select" class="form-control">
+        {% for class in classes %}
+            <option value="{{class.id}}" {% if class.id == selected_class.id %}selected{% endif %}>{{class.name}} - {{class.school_name}}</option>
+        {% endfor %}
+    </select>
+    {% if students %}
+        <form id="delete-user-form" method="post" action="/backoffice/delete_user/">
+            <input id="user-id-input" type="hidden" name="user_id" value="-1">
+            {% csrf_token %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th data-field="name">Nom</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{student.user.username}}</td>
+                            <td>
+                                <a href="{% url 'backoffice:edit_student' class_id=selected_class.id id=student.id %}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-xs btn-danger" data-student-username="{{student.user.username}}" data-student-id="{{student.id}}" data-toggle="modal" data-target="#confirm-delete">Supprimer</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    {% else %}
+        <br/>
+        <div class="alert alert-danger" role="alert">Cette classe ne contient pas encore d'élèves</div>
+    {% endif %}
+
+    <a href="{% url 'backoffice:create_student' class_id=selected_class.id %}" class="btn btn-primary">Ajouter un élève</a>
+    
+{% else %}
+    <div class="alert alert-danger" role="alert">Votre compte n'est pas encore associé à une classe. <a href="{% url 'backoffice:create_class' %}">Créer une classe</a></div>
+{% endif %}
+
+{% endblock content %}
+
+{% block script %}
+$('#class-select').change(function() {
+    window.location = "{% url 'backoffice:my_students_default' %}" + $(this).val() + '/';
+});
+$('#confirm-delete').on('show.bs.modal', function(e) {
+    $('#user-id-input').val(e.relatedTarget.getAttribute('data-student-id'));
+    $('#username-modal').text(e.relatedTarget.getAttribute('data-student-username'))
+});
+$('#confirm-delete-modal').on('click', function(e) {
+    $("#delete-user-form").submit();
+});
+{% endblock script %}

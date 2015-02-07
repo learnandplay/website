@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'bootstrap3',
     'static_precompiler',
+    'imagekit',
     'website',
     'backoffice',
 )
@@ -89,16 +90,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_ROOT = os.path.realpath('..')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATIC_URL = '/static/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-     'static_precompiler.finders.StaticPrecompilerFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder',
 )
 
-# custon configs
+# Medias
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
+ADMIN_MEDIA_PREFIX = '/media/admin/'
+
+# custom configs
 LOGIN_URL = '/backoffice/login/'
 LOGGED_USER_REDIRECT = '/backoffice/'

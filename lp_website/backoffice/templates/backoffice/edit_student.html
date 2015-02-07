@@ -1,0 +1,29 @@
+{% extends "backoffice/layout.html" %}
+{% load bootstrap3 %}
+
+
+{% block title %}{% if student %}Editer un élève{% else %}Créer un élève{% endif %}{% endblock title %}
+
+{% block navbar_administration %}active{% endblock navbar_administration %}
+
+{% block content %}
+<img class="centered-image large-avatar"src="{{ student.avatar.url }}">
+<form role="form" id="student-form" method="post" action="{% if student %}{% url 'backoffice:edit_student' class_id=school_class.id id=student.id %}{% else %}{% url 'backoffice:create_student' class_id=school_class.id %}{% endif %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-group">
+    <div class="row">
+      <div class="col-lg-offset-3 col-lg-6">
+  {% bootstrap_form avatar_form %}
+  {% bootstrap_form student_form %}
+      </div>
+    </div>
+  </div>
+  {% buttons %}
+  <div class="row">
+    <div class="col-lg-offset-3 col-lg-6">
+      <button type="submit" name="submit" class="btn btn-primary">{% if student %}Sauvegarder les modifications{% else %}Créer l'élève{% endif %}</button>
+    </div>
+  </div>
+  {% endbuttons %}
+</form>
+{% endblock content %}

@@ -1,3 +1,7 @@
 *.pyc
 *~
-COMPILED/
+lp_website/static/
+lp_website/media/*
+!lp_website/media/avatars
+lp_website/media/avatars/*
+!lp_website/media/avatars/default.png

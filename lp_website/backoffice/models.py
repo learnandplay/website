@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 class Subject(models.Model):
     name = models.CharField(max_length=32)
@@ -51,7 +53,13 @@ class ExerciseConfig(models.Model):
         return "Config %s for %s" % (self.exercise, self.school_class)
 
 class LPUser(models.Model):
-    user = models.OneToOneField(User, related_name="LPUser")
+    avatar = ProcessedImageField(upload_to='avatars',
+                                           null=True, blank=True,
+                                           default='avatars/default.png',
+                                           processors=[ResizeToFill(400, 400)],
+                                           format='JPEG',
+                                           options={'quality': 90})
+    user = models.OneToOneField(User, related_name='LPUser')
     school_class = models.ManyToManyField(SchoolClass, null=True, blank=True)
     data = models.TextField(null=True, blank=True)
     class Meta:

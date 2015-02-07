@@ -4,9 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
-from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm
 from backoffice.models import LPUser, SchoolClass
 from backoffice.decorators import anonymous_required, teacher_required
+from django.core.urlresolvers import reverse
 
 @login_required
 @teacher_required
@@ -31,6 +32,14 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'backoffice/register.html',
         {'registration_form': form, 'registered': registered})
+
+@login_required
+@teacher_required
+def delete_user(request):
+    user_id = request.POST.get("user_id")
+    if user_id is not None:
+        LPUser.objects.get(id=user_id).delete()
+    return redirect(request.META.get('HTTP_REFERER', reverse('backoffice:index')))
 
 @anonymous_required
 def user_login(request):
@@ -90,4 +99,47 @@ def delete_class(request):
     class_id = request.POST.get("class_id")
     if class_id is not None:
         SchoolClass.objects.get(id=class_id).delete()
-    return redirect('backoffice:my_classes')
+    return redirect(request.META.get('HTTP_REFERER', reverse('backoffice:my_classes')))
+
+@login_required
+@teacher_required
+def my_students(request, class_id=None):
+    selected_class = None
+    students = None
+    classes = SchoolClass.objects.all()
+    if classes and class_id is None:
+        selected_class = classes[0]
+    elif class_id is not None:
+        selected_class = SchoolClass.objects.get(id=class_id)
+    if selected_class is not None:
+        students = selected_class.lpuser_set.filter(user__groups__name__in=['students'])
+    return render(request, 'backoffice/my_students.html',
+        {'classes': classes, 'selected_class': selected_class, 'students': students})
+
+@login_required
+@teacher_required
+def edit_student(request, class_id, id=None):
+    school_class = SchoolClass.objects.get(id=class_id)
+    student = LPUser.objects.get(id=id) if id else None
+    instance = student.user if student else None
+    avatar_form = StudentAvatarForm(request.POST, request.FILES)
+    form = StudentForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        user = form.save()
+        user.set_password("password")
+        user.save()
+        if not id:
+            user.groups.add(Group.objects.get(name='students'))
+            lp_user = LPUser()
+            lp_user.user = user
+            lp_user.save()
+            lp_user.school_class.add(school_class)
+        else:
+            lp_user = student
+        if avatar_form.is_valid():
+            lp_user.avatar = avatar_form.cleaned_data['avatar']
+            lp_user.save()
+        return redirect(reverse('backoffice:my_students', kwargs={'class_id': class_id}))
+
+    return render(request, 'backoffice/edit_student.html',
+        {'avatar_form': avatar_form, 'student_form': form, 'school_class': school_class, 'student': student})
