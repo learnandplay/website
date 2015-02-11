@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
-from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm, AddAdministratorForm
 from backoffice.models import LPUser, SchoolClass
 from backoffice.decorators import anonymous_required, teacher_required
 from django.core.urlresolvers import reverse
@@ -143,3 +143,34 @@ def edit_student(request, class_id, id=None):
 
     return render(request, 'backoffice/edit_student.html',
         {'avatar_form': avatar_form, 'student_form': form, 'school_class': school_class, 'student': student})
+
+@login_required
+@teacher_required
+def class_administrators(request, class_id):
+    school_class = SchoolClass.objects.get(id=class_id)
+    add_administrator_form = AddAdministratorForm(request.POST)
+    add_username_failed = None
+    if add_administrator_form.is_valid() and add_administrator_form.cleaned_data.get('username'):
+        try:
+            username = add_administrator_form.cleaned_data.get('username')
+            user = LPUser.objects.filter(user__groups__name__in=['teachers']).get(user__username=add_administrator_form.cleaned_data.get('username'))
+            user.school_class.add(school_class)
+        except LPUser.DoesNotExist:
+            add_username_failed = username
+        add_administrator_form = AddAdministratorForm()
+    administrators = school_class.lpuser_set.filter(user__groups__name__in=['teachers'])
+    return render(request, 'backoffice/class_administrators.html',
+        {'add_administrator_form': add_administrator_form, 'administrators': administrators, 'school_class': school_class,
+        'add_username_failed': add_username_failed})
+
+@login_required
+@teacher_required
+def delete_administrator(request):
+    class_id = request.POST.get("class_id")
+    administrator_id = request.POST.get("administrator_id")
+    if class_id is not None and administrator_id is not None:
+        LPUser.objects.get(id=administrator_id).school_class.remove(SchoolClass.objects.get(id=class_id))
+    if request.user.id == administrator_id:
+        return redirect(reverse('backoffice:my_classes'))
+    else:
+        return redirect(reverse('backoffice:class_administrators', kwargs={'class_id': class_id}))

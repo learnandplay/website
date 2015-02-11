@@ -57,3 +57,6 @@ class StudentForm(forms.ModelForm):
         help_texts = {
             'username': '',
         }
+
+class AddAdministratorForm(forms.Form):
+    username = forms.CharField(label="", max_length=30, required=False, widget=forms.TextInput(attrs={'placeholder': "Nom d'utilisateur"}))

@@ -43,6 +43,7 @@
 				<td>{{class.school_name}}</td>
 				<td>
 					<a href="{% url 'backoffice:edit_class' id=class.id %}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
+					<a href="{% url 'backoffice:class_administrators' class_id=class.id %}" class="btn btn-xs btn-primary">Administrateurs</a>&nbsp;&nbsp;
 					<button type="button" class="btn btn-xs btn-danger" data-class-name="{{class.name}}" data-class-id="{{class.id}}" data-toggle="modal" data-target="#confirm-delete">Supprimer</button>
 				</td>
 			</tr>
