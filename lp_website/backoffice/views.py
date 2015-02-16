@@ -94,12 +94,9 @@ def edit_class(request, id=None):
 @login_required
 @teacher_required
 def delete_class(request):
-    print "Ca passe ici"
     class_id = request.POST.get("class_id")
-    print class_id
     if class_id is not None:
         SchoolClass.objects.get(id=class_id).delete()
-    print "Ca passe là"
     return redirect(request.META.get('HTTP_REFERER', reverse('backoffice:my_classes')))
 
 @login_required
