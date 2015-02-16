@@ -4,10 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
 from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm, AddAdministratorForm
 from backoffice.models import LPUser, SchoolClass
 from backoffice.decorators import anonymous_required, teacher_required
-from django.core.urlresolvers import reverse
+
 
 @login_required
 @teacher_required
@@ -75,10 +76,7 @@ def teachers_required(request):
 @login_required
 @teacher_required
 def my_classes(request):
-    user = request.user.LPUser
-    classes = user.school_class.all()
-    return render(request, 'backoffice/my_classes.html',
-        {'classes': classes})
+    return render(request, 'backoffice/my_classes.html')
 
 @login_required
 @teacher_required
@@ -96,9 +94,12 @@ def edit_class(request, id=None):
 @login_required
 @teacher_required
 def delete_class(request):
+    print "Ca passe ici"
     class_id = request.POST.get("class_id")
+    print class_id
     if class_id is not None:
         SchoolClass.objects.get(id=class_id).delete()
+    print "Ca passe là"
     return redirect(request.META.get('HTTP_REFERER', reverse('backoffice:my_classes')))
 
 @login_required

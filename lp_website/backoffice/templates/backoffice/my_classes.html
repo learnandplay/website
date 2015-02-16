@@ -6,7 +6,6 @@
 {% block navbar_administration %}active{% endblock navbar_administration %}
 
 {% block content %}
-
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -23,37 +22,33 @@
         </div>
     </div>
 </div>
-
-{% if classes %}
-<form id="delete-class-form" method="post" action="/backoffice/delete_class/">
-	<input id="class-id-input" type="hidden" name="class_id" value="-1">
-	{% csrf_token %}
-	<table class="table table-striped">
-    	<thead>
-        	<tr>
-            	<th data-field="name">Classe</th>
-            	<th data-field="school">Etablissement</th>
-            	<th>Actions</th>
-        	</tr>
-    	</thead>
-    	<tbody>
-			{% for class in classes %}
-			<tr>
-				<td>{{class.name}}</td>
-				<td>{{class.school_name}}</td>
-				<td>
-					<a href="{% url 'backoffice:edit_class' id=class.id %}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
-					<a href="{% url 'backoffice:class_administrators' class_id=class.id %}" class="btn btn-xs btn-primary">Administrateurs</a>&nbsp;&nbsp;
-					<button type="button" class="btn btn-xs btn-danger" data-class-name="{{class.name}}" data-class-id="{{class.id}}" data-toggle="modal" data-target="#confirm-delete">Supprimer</button>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</form>
-{% else %}
-<div class="alert alert-danger" role="alert">Votre compte n'est pas encore associé à une classe</div>
-{% endif %}
+<div ng-controller="ClassesListCtrl">
+    <form id="delete-class-form" method="post" action="/backoffice/delete_class/">
+    	<input id="class-id-input" type="hidden" name="class_id" value="-1">
+    	{% csrf_token %}
+    	<table class="table table-striped" ng-show="classes.length!=0">
+        	<thead>
+            	<tr>
+                	<th data-field="name">Classe</th>
+                	<th data-field="school">Etablissement</th>
+                	<th>Actions</th>
+            	</tr>
+        	</thead>
+        	<tbody ng-controller="ClassesListCtrl">
+    			<tr ng-repeat="class in classes">
+    				<td>{%verbatim%}{{class.name}}{%endverbatim%}</td>
+    				<td>{%verbatim%}{{class.school_name}}{%endverbatim%}</td>
+    				<td>
+    					<a href="#" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
+    					<a href="#" class="btn btn-xs btn-primary">Administrateurs</a>&nbsp;&nbsp;
+    					<button type="button" class="btn btn-xs btn-danger" data-class-name="{%verbatim%}{{class.name}}{%endverbatim%}" data-class-id="{%verbatim%}{{class.id}}{%endverbatim%}" data-toggle="modal" data-target="#confirm-delete">Supprimer</button>
+    				</td>
+    			</tr>
+    		</tbody>
+    	</table>
+    </form>
+    <div class="alert alert-danger" role="alert" ng-show="classes.length==0">Votre compte n'est pas encore associé à une classe</div>
+</div>
 
 <a class="btn btn-primary" href="{% url 'backoffice:create_class' %}">{% bootstrap_icon "plus" %} Créer une classe</a>
 {% endblock content %}
@@ -64,6 +59,6 @@
 		$('#class-name-modal').text(e.relatedTarget.getAttribute('data-class-name'))
 	});
 	$('#confirm-delete-modal').on('click', function(e) {
-		$("#delete-class-form").submit();
+		$('#delete-class-form').submit();
 	});
 {% endblock script %}
