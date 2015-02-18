@@ -39,8 +39,8 @@
     				<td>{%verbatim%}{{class.name}}{%endverbatim%}</td>
     				<td>{%verbatim%}{{class.school_name}}{%endverbatim%}</td>
     				<td>
-    					<a href="#" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
-    					<a href="#" class="btn btn-xs btn-primary">Administrateurs</a>&nbsp;&nbsp;
+    					<a href="{%verbatim%}{{class.edit_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
+    					<a href="{%verbatim%}{{class.administrators_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Administrateurs</a>&nbsp;&nbsp;
     					<button type="button" class="btn btn-xs btn-danger" data-class-name="{%verbatim%}{{class.name}}{%endverbatim%}" data-class-id="{%verbatim%}{{class.id}}{%endverbatim%}" data-toggle="modal" data-target="#confirm-delete">Supprimer</button>
     				</td>
     			</tr>
