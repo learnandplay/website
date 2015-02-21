@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm, AddAdministratorForm
@@ -75,6 +76,7 @@ def teachers_required(request):
 
 @login_required
 @teacher_required
+@ensure_csrf_cookie
 def my_classes(request):
     return render(request, 'backoffice/my_classes.html')
 
@@ -90,14 +92,6 @@ def edit_class(request, id=None):
         return redirect('backoffice:my_classes')
     return render(request, 'backoffice/edit_class.html',
         {'class_form': form, 'school_class': school_class})
-
-@login_required
-@teacher_required
-def delete_class(request):
-    class_id = request.POST.get("class_id")
-    if class_id is not None:
-        SchoolClass.objects.get(id=class_id).delete()
-    return redirect(request.META.get('HTTP_REFERER', reverse('backoffice:my_classes')))
 
 @login_required
 @teacher_required

@@ -6,47 +6,43 @@
 {% block navbar_administration %}active{% endblock navbar_administration %}
 
 {% block content %}
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Confirmer la suppression
-            </div>
-            <div class="modal-body">
-                <p>Vous êtes sur le point de supprimer la classe <strong id="class-name-modal"></strong>.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <button id="confirm-delete-modal" type="button" class="btn btn-danger">Supprimer</button>
+<div ng-controller="ClassesListCtrl">
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Confirmer la suppression
+                </div>
+                <div class="modal-body">
+                    <p>Vous êtes sur le point de supprimer la classe <strong ng-init="userData.schoolClassToDelete='';">{%verbatim%}{{userData.schoolClassToDelete.name}}{%endverbatim%}</strong>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button id="confirm-delete-modal" type="button" class="btn btn-danger" ng-click="deleteSchoolClass(userData.schoolClassToDelete);">Supprimer</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div ng-controller="ClassesListCtrl">
-    <form id="delete-class-form" method="post" action="/backoffice/delete_class/">
-    	<input id="class-id-input" type="hidden" name="class_id" value="-1">
-    	{% csrf_token %}
-    	<table class="table table-striped" ng-show="classes.length!=0">
-        	<thead>
-            	<tr>
-                	<th data-field="name">Classe</th>
-                	<th data-field="school">Etablissement</th>
-                	<th>Actions</th>
-            	</tr>
-        	</thead>
-        	<tbody ng-controller="ClassesListCtrl">
-    			<tr ng-repeat="class in classes">
-    				<td>{%verbatim%}{{class.name}}{%endverbatim%}</td>
-    				<td>{%verbatim%}{{class.school_name}}{%endverbatim%}</td>
-    				<td>
-    					<a href="{%verbatim%}{{class.edit_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
-    					<a href="{%verbatim%}{{class.administrators_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Administrateurs</a>&nbsp;&nbsp;
-    					<button type="button" class="btn btn-xs btn-danger" data-class-name="{%verbatim%}{{class.name}}{%endverbatim%}" data-class-id="{%verbatim%}{{class.id}}{%endverbatim%}" data-toggle="modal" data-target="#confirm-delete">Supprimer</button>
-    				</td>
-    			</tr>
-    		</tbody>
-    	</table>
-    </form>
+	<table class="table table-striped" ng-show="classes.length!=0">
+    	<thead>
+        	<tr>
+            	<th data-field="name">Classe</th>
+            	<th data-field="school">Etablissement</th>
+            	<th>Actions</th>
+        	</tr>
+    	</thead>
+    	<tbody>
+			<tr ng-repeat="class in classes">
+				<td>{%verbatim%}{{class.name}}{%endverbatim%}</td>
+				<td>{%verbatim%}{{class.school_name}}{%endverbatim%}</td>
+				<td>
+					<a href="{%verbatim%}{{class.edit_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
+					<a href="{%verbatim%}{{class.administrators_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Administrateurs</a>&nbsp;&nbsp;
+					<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirm-delete" ng-click="userData.schoolClassToDelete = class;">Supprimer</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
     <div class="alert alert-danger" role="alert" ng-show="classes.length==0">Votre compte n'est pas encore associé à une classe</div>
 </div>
 
@@ -54,11 +50,7 @@
 {% endblock content %}
 
 {% block script %}
-	$('#confirm-delete').on('show.bs.modal', function(e) {
-		$('#class-id-input').val(e.relatedTarget.getAttribute('data-class-id'));
-		$('#class-name-modal').text(e.relatedTarget.getAttribute('data-class-name'))
-	});
-	$('#confirm-delete-modal').on('click', function(e) {
-		$('#delete-class-form').submit();
-	});
+$("#confirm-delete-modal").on('click', function() {
+   $("#confirm-delete").modal("hide");
+});
 {% endblock script %}
