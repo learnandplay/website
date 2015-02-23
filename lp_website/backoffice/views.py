@@ -35,14 +35,6 @@ def register(request):
     return render(request, 'backoffice/register.html',
         {'registration_form': form, 'registered': registered})
 
-@login_required
-@teacher_required
-def delete_user(request):
-    user_id = request.POST.get("user_id")
-    if user_id is not None:
-        LPUser.objects.get(id=user_id).delete()
-    return redirect(request.META.get('HTTP_REFERER', reverse('backoffice:index')))
-
 @anonymous_required
 def user_login(request):
     if request.method == 'POST':
