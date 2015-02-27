@@ -19,7 +19,7 @@ class JSONResponse(HttpResponse):
 @teacher_required
 def get_user_schoolclasses(request):
     user = request.user.LPUser
-    classes = user.school_class.all()
+    classes = user.school_class.all().order_by('name')
     serializer = SchoolClassSerializer(classes, many=True)
     return JSONResponse(serializer.data)
 
@@ -37,13 +37,13 @@ def delete_school_class(request):
 @teacher_required
 def get_all_classes_students(request):
 	user = request.user.LPUser
-	school_classes = user.school_class.all()
+	school_classes = user.school_class.all().order_by('name')
 	school_class_serializer = SchoolClassSerializer(school_classes, many=True)
 	response = {}
 	response['school_classes'] = school_class_serializer.data
 	response['students'] = {}
 	for school_class in school_classes:
-		user_serializer = LPUserSerializer(school_class.lpuser_set.filter(user__groups__name__in=['students']), many=True)
+		user_serializer = LPUserSerializer(school_class.lpuser_set.filter(user__groups__name__in=['students']).order_by('user__username'), many=True)
 		response['students'][school_class.id] = user_serializer.data
 	return JSONResponse(json.dumps(response))
 
