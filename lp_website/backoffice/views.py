@@ -88,17 +88,7 @@ def edit_class(request, id=None):
 @login_required
 @teacher_required
 def my_students(request, class_id=None):
-    selected_class = None
-    students = None
-    classes = SchoolClass.objects.all()
-    if classes and class_id is None:
-        selected_class = classes[0]
-    elif class_id is not None:
-        selected_class = SchoolClass.objects.get(id=class_id)
-    if selected_class is not None:
-        students = selected_class.lpuser_set.filter(user__groups__name__in=['students'])
-    return render(request, 'backoffice/my_students.html',
-        {'classes': classes, 'selected_class': selected_class, 'students': students})
+    return render(request, 'backoffice/my_students.html')
 
 @login_required
 @teacher_required
