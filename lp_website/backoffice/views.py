@@ -132,19 +132,5 @@ def class_administrators(request, class_id):
         except LPUser.DoesNotExist:
             add_username_failed = username
         add_administrator_form = AddAdministratorForm()
-    administrators = school_class.lpuser_set.filter(user__groups__name__in=['teachers'])
     return render(request, 'backoffice/class_administrators.html',
-        {'add_administrator_form': add_administrator_form, 'administrators': administrators, 'school_class': school_class,
-        'add_username_failed': add_username_failed})
-
-@login_required
-@teacher_required
-def delete_administrator(request):
-    class_id = request.POST.get("class_id")
-    administrator_id = request.POST.get("administrator_id")
-    if class_id is not None and administrator_id is not None:
-        LPUser.objects.get(id=administrator_id).school_class.remove(SchoolClass.objects.get(id=class_id))
-    if request.user.id == administrator_id:
-        return redirect(reverse('backoffice:my_classes'))
-    else:
-        return redirect(reverse('backoffice:class_administrators', kwargs={'class_id': class_id}))
+        {'add_administrator_form': add_administrator_form, 'school_class': school_class, 'add_username_failed': add_username_failed})

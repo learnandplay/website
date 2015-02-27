@@ -2,6 +2,7 @@
 import json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from rest_framework.renderers import JSONRenderer
 from backoffice.decorators import anonymous_required, teacher_required
 from backoffice.models import LPUser, SchoolClass
@@ -50,7 +51,7 @@ def get_all_classes_students(request):
 @login_required
 @teacher_required
 def delete_user(request):
-    post = json.loads(request.body);
+    post = json.loads(request.body)
     user_id = post['user_id']
     response = {}
     if user_id is not None:
@@ -59,4 +60,28 @@ def delete_user(request):
         response['deleted'] = user_id
     else:
     	response['result'] = 'failure'
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def get_schoolclass_administrators(request, class_id):
+    school_class = SchoolClass.objects.get(id=class_id)
+    administrators = school_class.lpuser_set.filter(user__groups__name__in=['teachers']).order_by('user__username')
+    response = LPUserSerializer(administrators, many=True).data
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def remove_administrator(request):
+    post = json.loads(request.body)
+    class_id = post['class_id']
+    administrator_id = post['administrator_id']
+    response = {}
+    if class_id is not None and administrator_id is not None:
+        LPUser.objects.get(id=administrator_id).school_class.remove(SchoolClass.objects.get(id=class_id))
+        response['result'] = 'success'
+        response['removed'] = administrator_id
+        response['class_id'] = class_id
+    if request.user.id == administrator_id:
+        response['needRedirect'] = reverse('backoffice:my_classes')
     return JSONResponse(json.dumps(response))

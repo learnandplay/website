@@ -1,9 +1,15 @@
-var backofficeApp = angular.module('backofficeApp', []);
+var backofficeApp = angular.module('backofficeApp', ['ngRoute']);
 
-backofficeApp.config(['$httpProvider', function($httpProvider) {
+backofficeApp.config(function($httpProvider, $routeProvider, $locationProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-}]);
+
+    $routeProvider.when('/backoffice/class_administrators/:class_id/', {
+        controller: 'AdministratorsCtrl'
+    });
+
+    $locationProvider.html5Mode(true);
+});
 
 backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 	$scope.deleteSchoolClass = function(schoolClass) {
@@ -83,4 +89,43 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 	};
 
 	$scope.getStudentsList();
+});
+
+backofficeApp.controller('AdministratorsCtrl', function($rootScope, $scope, $routeParams, $route, $http) {
+    $rootScope.$on('$routeChangeSuccess', function () {
+        $scope.getAdministratorsList();
+    });
+
+    $scope.removeAdministrator = function(administrator) {
+		$http({
+    		url: "/backoffice/restapi/remove_administrator",
+    		method: "POST",
+    		data: {"class_id": $routeParams.class_id, "administrator_id": administrator.id},
+    		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+		}).success(function(data, status, headers, config) {
+			data = JSON.parse(data)
+			if (data.needRedirect) {
+				window.location = data.needRedirect
+			}
+			var i = $scope.administrators.length;
+			while (i--) {
+				if ($scope.administrators[i].id == administrator.id) {
+					$scope.administrators.splice(i, 1);
+				}
+			}
+		}).error(function(data, status, headers, config) {
+    		console.log(status);
+		});
+    };
+
+	$scope.getAdministratorsList = function() {
+		$http({
+			url: "/backoffice/restapi/get_schoolclass_administrators/" + $routeParams.class_id,
+			method: "GET",
+		}).success(function(data, status, headers, config) {
+			$scope.administrators = JSON.parse(data);
+		}).error(function(data, status, headers, config) {
+	    	console.log(status);
+		});
+	};
 });

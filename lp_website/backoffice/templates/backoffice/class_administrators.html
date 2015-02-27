@@ -7,90 +7,80 @@
 {% block navbar_administration %}active{% endblock navbar_administration %}
 
 {% block content %}
+<div ng-controller="AdministratorsCtrl">
+  {% if add_username_failed %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong>Impossible d'ajouter l'administrateur</strong>: Aucun professeur avec le nom d'utilisateur '{{add_username_failed}}' existant
+    </div>
+  {% endif %}
 
-{% if add_username_failed %}
-  <div class="alert alert-danger alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <strong>Impossible d'ajouter l'administrateur</strong>: Aucun professeur avec le nom d'utilisateur '{{add_username_failed}}' existant
+  <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  Confirmer la suppression
+              </div>
+              <div class="modal-body">
+                  <p>Vous êtes sur le point de supprimer l'administrateur <strong ng-init="userData.administratorToRemove='';">{%verbatim%}{{userData.administratorToRemove.username}}{%endverbatim%}</strong> de la classe <strong>{{school_class.name}}</strong>.</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                  <button id="confirm-delete-modal" type="button" class="btn btn-danger" ng-click="removeAdministrator(userData.administratorToRemove);">Supprimer</button>
+              </div>
+          </div>
+      </div>
   </div>
-{% endif %}
 
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Confirmer la suppression
-            </div>
-            <div class="modal-body">
-                <p>Vous êtes sur le point de supprimer l'administrateur <strong id="administrator-name-modal">XXX</strong> de la classe <strong id="class-name-modal">{{school_class.name}}</strong>.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                <button id="confirm-delete-modal" type="button" class="btn btn-danger">Supprimer</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="cannot-delete" tabindex="-1" role="dialog" aria-labelledby="error-modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-              Erreur
-            </div>
-            <div class="modal-body">
-              <p><strong>Impossible de supprimer l'administrateur</strong> : Au moins 1 administrateur doit être assigné à une classe.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<form role="form" id="add-administrator-form" method="post" action="{% url 'backoffice:class_administrators' class_id=school_class.id %}" enctype="multipart/form-data">
-  {% csrf_token %}
-    <div class="row">
-      <div class="col-md-2">
-        {% bootstrap_form add_administrator_form %}
+  <div class="modal fade" id="cannot-delete" tabindex="-1" role="dialog" aria-labelledby="error-modal" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                Erreur
+              </div>
+              <div class="modal-body">
+                <p><strong>Impossible de supprimer l'administrateur</strong> : Au moins 1 administrateur doit être assigné à une classe.</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+              </div>
+          </div>
       </div>
-      <div class="col-md-1">
-        {% buttons %}<button type="submit" name="submit" class="btn btn-primary">Ajouter</button>{% endbuttons %}
-      </div>
-    </div>
-</form>
+  </div>
 
-<form id="delete-administrator-form" method="post" action="/backoffice/delete_administrator/">
-  <input id="administrator-id-input" type="hidden" name="administrator_id" value="-1">
-  <input id="class-id-input" type="hidden" name="class_id" value="{{school_class.id}}">
-  {% csrf_token %}
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th data-field="name">Nom</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for administrator in administrators %}
-                <tr>
-                    <td>{{administrator.user.username}}</td>
-                    <td>
-                        <button type="button" class="btn btn-xs btn-danger" data-administrator-username="{{administrator.user.username}}" data-administrator-id="{{administrator.id}}" data-toggle="modal" data-target="{% if administrators.count > 1 %}#confirm-delete{% else %}#cannot-delete{% endif %}">Supprimer</button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</form>
+  <form role="form" id="add-administrator-form" method="post" action="{% url 'backoffice:class_administrators' class_id=school_class.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+      <div class="row">
+        <div class="col-md-2">
+          {% bootstrap_form add_administrator_form %}
+        </div>
+        <div class="col-md-1">
+          {% buttons %}<button type="submit" name="submit" class="btn btn-primary">Ajouter</button>{% endbuttons %}
+        </div>
+      </div>
+  </form>
+
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th data-field="name">Nom</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="administrator in administrators">
+            <td>{%verbatim%}{{administrator.username}}{%endverbatim%}</td>
+            <td>
+                <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="{% verbatim %}{{administrators.length == 1 ? '#cannot-delete' : '#confirm-delete'}}{% endverbatim %}" ng-click="userData.administratorToRemove = administrator;">Supprimer</button>
+            </td>
+        </tr>
+      </tbody>
+  </table>
+</div>
 {% endblock content %}
 
 {% block script %}
-  $('#confirm-delete').on('show.bs.modal', function(e) {
-    $('#administrator-id-input').val(e.relatedTarget.getAttribute('data-administrator-id'));
-    $('#administrator-name-modal').text(e.relatedTarget.getAttribute('data-administrator-username'));
-  });
-  $('#confirm-delete-modal').on('click', function(e) {
-    $("#delete-administrator-form").submit();
+  $("#confirm-delete-modal").on('click', function() {
+     $("#confirm-delete").modal("hide");
   });
 {% endblock script %}

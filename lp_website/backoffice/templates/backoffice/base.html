@@ -5,6 +5,7 @@
 <html lang="fr">
 <head>
   <meta charset='utf-8'/>
+  <base href="/">
   <title>{% block title %}Learn & Play{% endblock title %}</title>
   {% block css %}
   {% bootstrap_css %}
@@ -13,6 +14,7 @@
   {% block js %}
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-route.js"></script>
   <script type="text/javascript" src="{% static 'backoffice/js/controllers.js' %}"></script>
   {% bootstrap_javascript %}
   {% endblock js %}
