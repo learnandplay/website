@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from rest_framework.renderers import JSONRenderer
+from rest_framework import status
+from rest_framework.response import Response
 from backoffice.decorators import anonymous_required, teacher_required
 from backoffice.models import LPUser, SchoolClass
 from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer
@@ -85,3 +87,20 @@ def remove_administrator(request):
     if request.user.id == administrator_id:
         response['needRedirect'] = reverse('backoffice:my_classes')
     return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def add_administrator(request):
+    post = json.loads(request.body)
+    response = {}
+    try:
+        user = LPUser.objects.filter(user__groups__name__in=['teachers']).get(user__username=post['username'])
+        if user.school_class.filter(id=post['class_id']).exists():
+            return HttpResponse(status=400)
+        school_class = SchoolClass.objects.get(id=post['class_id'])
+        user.school_class.add(school_class)
+        response['result'] = 'success'
+        response['added_administrator'] = LPUserSerializer(user).data
+    except (LPUser.DoesNotExist, SchoolClass.DoesNotExist):
+        return HttpResponse(status=400)
+    return JSONResponse(json.dumps(response))        

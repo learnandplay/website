@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^delete_user', views.delete_user, name='api_delete_user'),
     url(r'^get_schoolclass_administrators/(?P<class_id>\d+)/', views.get_schoolclass_administrators, name="api_get_schoolclass_administrators"),
     url(r'^remove_administrator', views.remove_administrator, name="api_remove_administrator"),
+    url(r'^add_administrator', views.add_administrator, name="api_add_administrator"),
 )

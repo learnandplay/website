@@ -1,14 +1,8 @@
 var backofficeApp = angular.module('backofficeApp', ['ngRoute']);
 
-backofficeApp.config(function($httpProvider, $routeProvider, $locationProvider) {
+backofficeApp.config(function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-    $routeProvider.when('/backoffice/class_administrators/:class_id/', {
-        controller: 'AdministratorsCtrl'
-    });
-
-    $locationProvider.html5Mode(true);
 });
 
 backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
@@ -91,16 +85,30 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 	$scope.getStudentsList();
 });
 
-backofficeApp.controller('AdministratorsCtrl', function($rootScope, $scope, $routeParams, $route, $http) {
-    $rootScope.$on('$routeChangeSuccess', function () {
-        $scope.getAdministratorsList();
-    });
+backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
+    $scope.addAdministrator = function(administrator_username) {
+    	$http({
+    		url: "/backoffice/restapi/add_administrator",
+    		method: "POST",
+    		data: {"class_id": $scope.class_id, "username": administrator_username},
+    		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+		}).success(function(data, status, headers, config) {
+			data = JSON.parse(data);
+			$scope.administrators.push(data.added_administrator);
+			$scope.administrators.sort(function(a, b) {return a.username.localeCompare(b.username);});
+		}).error(function(data, status, headers, config) {
+			console.log(status);
+			$scope.addAdministratorFailed = true;
+			$scope.addAdministratorFailedUsername = administrator_username;
+		});
+    	$scope.userData.administratorToAdd = "";
+    };
 
     $scope.removeAdministrator = function(administrator) {
 		$http({
     		url: "/backoffice/restapi/remove_administrator",
     		method: "POST",
-    		data: {"class_id": $routeParams.class_id, "administrator_id": administrator.id},
+    		data: {"class_id": $scope.class_id, "administrator_id": administrator.id},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
 		}).success(function(data, status, headers, config) {
 			data = JSON.parse(data)
@@ -120,7 +128,7 @@ backofficeApp.controller('AdministratorsCtrl', function($rootScope, $scope, $rou
 
 	$scope.getAdministratorsList = function() {
 		$http({
-			url: "/backoffice/restapi/get_schoolclass_administrators/" + $routeParams.class_id,
+			url: "/backoffice/restapi/get_schoolclass_administrators/" + $scope.class_id,
 			method: "GET",
 		}).success(function(data, status, headers, config) {
 			$scope.administrators = JSON.parse(data);
@@ -128,4 +136,9 @@ backofficeApp.controller('AdministratorsCtrl', function($rootScope, $scope, $rou
 	    	console.log(status);
 		});
 	};
+
+	$scope.init = function(class_id) {
+		$scope.class_id = class_id;
+		$scope.getAdministratorsList();
+	}
 });

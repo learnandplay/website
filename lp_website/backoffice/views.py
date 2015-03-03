@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm, AddAdministratorForm
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm
 from backoffice.models import LPUser, SchoolClass
 from backoffice.decorators import anonymous_required, teacher_required
 
@@ -122,15 +122,5 @@ def edit_student(request, class_id, id=None):
 @teacher_required
 def class_administrators(request, class_id):
     school_class = SchoolClass.objects.get(id=class_id)
-    add_administrator_form = AddAdministratorForm(request.POST)
-    add_username_failed = None
-    if add_administrator_form.is_valid() and add_administrator_form.cleaned_data.get('username'):
-        try:
-            username = add_administrator_form.cleaned_data.get('username')
-            user = LPUser.objects.filter(user__groups__name__in=['teachers']).get(user__username=add_administrator_form.cleaned_data.get('username'))
-            user.school_class.add(school_class)
-        except LPUser.DoesNotExist:
-            add_username_failed = username
-        add_administrator_form = AddAdministratorForm()
     return render(request, 'backoffice/class_administrators.html',
-        {'add_administrator_form': add_administrator_form, 'school_class': school_class, 'add_username_failed': add_username_failed})
+        {'school_class': school_class})

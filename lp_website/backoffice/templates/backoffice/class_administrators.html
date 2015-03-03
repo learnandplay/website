@@ -7,13 +7,11 @@
 {% block navbar_administration %}active{% endblock navbar_administration %}
 
 {% block content %}
-<div ng-controller="AdministratorsCtrl">
-  {% if add_username_failed %}
-    <div class="alert alert-danger alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <strong>Impossible d'ajouter l'administrateur</strong>: Aucun professeur avec le nom d'utilisateur '{{add_username_failed}}' existant
-    </div>
-  {% endif %}
+<div ng-controller="AdministratorsCtrl" ng-init="init({{school_class.id}})">
+  <div class="alert alert-danger alert-dismissible" role="alert" ng-show='addAdministratorFailed'>
+    <button type="button" class="close" ng-click="addAdministratorFailed=false"><span aria-hidden="true">&times;</span></button>
+    <strong>Impossible d'ajouter l'administrateur</strong>: Aucun professeur avec le nom d'utilisateur '{%verbatim%}{{addAdministratorFailedUsername}}{%endverbatim%}' existant
+  </div>
 
   <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
       <div class="modal-dialog">
@@ -48,17 +46,14 @@
       </div>
   </div>
 
-  <form role="form" id="add-administrator-form" method="post" action="{% url 'backoffice:class_administrators' class_id=school_class.id %}" enctype="multipart/form-data">
-    {% csrf_token %}
-      <div class="row">
-        <div class="col-md-2">
-          {% bootstrap_form add_administrator_form %}
-        </div>
-        <div class="col-md-1">
-          {% buttons %}<button type="submit" name="submit" class="btn btn-primary">Ajouter</button>{% endbuttons %}
-        </div>
-      </div>
-  </form>
+  <div class="row">
+    <div class="col-md-2">
+      <input class="form-control" type="text" ng-model="userData.administratorToAdd"/>
+    </div>
+    <div class="col-md-1">
+      <button class="btn btn-primary" ng-click="addAdministrator(userData.administratorToAdd)">Ajouter</button>
+    </div>
+  </div>
 
   <table class="table table-striped">
       <thead>
