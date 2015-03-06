@@ -67,7 +67,10 @@ def delete_user(request):
 @login_required
 @teacher_required
 def get_schoolclass_administrators(request, class_id):
-    school_class = SchoolClass.objects.get(id=class_id)
+    try:
+        school_class = SchoolClass.objects.get(id=class_id)
+    except SchoolClass.DoesNotExist:
+        return HttpResponse(status=400)
     administrators = school_class.lpuser_set.filter(user__groups__name__in=['teachers']).order_by('user__username')
     response = LPUserSerializer(administrators, many=True).data
     return JSONResponse(json.dumps(response))
@@ -80,10 +83,15 @@ def remove_administrator(request):
     administrator_id = post['administrator_id']
     response = {}
     if class_id is not None and administrator_id is not None:
-        LPUser.objects.get(id=administrator_id).school_class.remove(SchoolClass.objects.get(id=class_id))
+        try:
+            LPUser.objects.get(id=administrator_id).school_class.remove(SchoolClass.objects.get(id=class_id))
+        except (LPUser.DoesNotExist, SchoolClass.DoesNotExist):
+            return HttpResponse(status=400)
         response['result'] = 'success'
         response['removed'] = administrator_id
         response['class_id'] = class_id
+    else:
+        return HttpResponse(status=400)
     if request.user.id == administrator_id:
         response['needRedirect'] = reverse('backoffice:my_classes')
     return JSONResponse(json.dumps(response))

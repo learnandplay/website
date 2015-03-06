@@ -8,9 +8,9 @@
 
 {% block content %}
 <div ng-controller="AdministratorsCtrl" ng-init="init({{school_class.id}})">
-  <div class="alert alert-danger alert-dismissible" role="alert" ng-show='addAdministratorFailed'>
-    <button type="button" class="close" ng-click="addAdministratorFailed=false"><span aria-hidden="true">&times;</span></button>
-    <strong>Impossible d'ajouter l'administrateur</strong>: Aucun professeur avec le nom d'utilisateur '{%verbatim%}{{addAdministratorFailedUsername}}{%endverbatim%}' existant
+  <div class="alert alert-danger alert-dismissible" role="alert" ng-show='alertError'>
+    <button type="button" class="close" ng-click="alertError=false"><span aria-hidden="true">&times;</span></button>
+    {%verbatim%}{{administratorAlerError}}{%endverbatim%}
   </div>
 
   <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
