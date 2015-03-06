@@ -60,11 +60,16 @@ def delete_user(request):
     user_id = post['user_id']
     response = {}
     if user_id is not None:
-        LPUser.objects.get(id=user_id).delete()
+        try:
+            lp_user = LPUser.objects.get(id=user_id)
+            lp_user.user.delete()
+            lp_user.delete()
+        except LPUser.DoesNotExist:
+            return HttpResponse(status=400)
         response['result'] = 'success'
         response['deleted'] = user_id
     else:
-    	response['result'] = 'failure'
+        return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
 
 @login_required

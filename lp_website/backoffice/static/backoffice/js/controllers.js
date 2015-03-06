@@ -21,7 +21,7 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 			}
 		}).error(function(data, status, headers, config) {
     		$scope.alertError = true;
-			$scope.schoolClassAlerError = "Impossible de supprimer la classe";
+			$scope.schoolClassAlertError = "Impossible de supprimer la classe";
 		});
 	};
 
@@ -33,7 +33,7 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 	    	$scope.classes = data;
 		}).error(function(data, status, headers, config) {
     		$scope.alertError = true;
-			$scope.schoolClassAlerError = "Impossible de récupérer la liste des classes";
+			$scope.schoolClassAlertError = "Impossible de récupérer la liste des classes";
 		});
 	};
 
@@ -55,7 +55,8 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 				}
 			}
 		}).error(function(data, status, headers, config) {
-    		console.log(status);
+			$scope.alertError = true;
+			$scope.studentsAlertError = "Impossible de supprimer l'étudiant";
 		});
 	};
 
@@ -80,7 +81,8 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 				$scope.students = undefined;
 			}
 		}).error(function(data, status, headers, config) {
-	    	console.log(status);
+			$scope.alertError = true;
+			$scope.studentsAlertError = "Impossible de récupérer la liste des étudiants";
 		});
 	};
 
@@ -100,7 +102,7 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 			$scope.administrators.sort(function(a, b) {return a.username.localeCompare(b.username);});
 		}).error(function(data, status, headers, config) {
 			$scope.alertError = true;
-			$scope.administratorAlerError = "Impossible d'ajouter l'administrateur: Aucun professeur avec le nom d'utilisateur '"+administrator_username+"' existant";
+			$scope.administratorAlertError = "Impossible d'ajouter l'administrateur: Aucun professeur avec le nom d'utilisateur '"+administrator_username+"' existant";
 		});
     	$scope.userData.administratorToAdd = "";
     };
@@ -124,7 +126,7 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 			}
 		}).error(function(data, status, headers, config) {
 			$scope.alertError = true;
-			$scope.administratorAlerError = "Impossible de supprimer l'administrateur";
+			$scope.administratorAlertError = "Impossible de supprimer l'administrateur";
 		});
     };
 
@@ -136,7 +138,7 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 			$scope.administrators = JSON.parse(data);
 		}).error(function(data, status, headers, config) {
 			$scope.alertError = true;
-			$scope.administratorAlerError = "Impossible de récupérer la liste des administrateurs";
+			$scope.administratorAlertError = "Impossible de récupérer la liste des administrateurs";
 		});
 	};
 
