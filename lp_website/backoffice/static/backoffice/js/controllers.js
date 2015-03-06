@@ -20,7 +20,8 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 				}
 			}
 		}).error(function(data, status, headers, config) {
-    		console.log(status);
+    		$scope.alertError = true;
+			$scope.schoolClassAlerError = "Impossible de supprimer la classe";
 		});
 	};
 
@@ -31,7 +32,8 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 		}).success(function(data, status, headers, config) {
 	    	$scope.classes = data;
 		}).error(function(data, status, headers, config) {
-	    	console.log(status);
+    		$scope.alertError = true;
+			$scope.schoolClassAlerError = "Impossible de récupérer la liste des classes";
 		});
 	};
 

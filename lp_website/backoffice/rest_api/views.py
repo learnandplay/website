@@ -29,12 +29,15 @@ def get_user_schoolclasses(request):
 @login_required
 @teacher_required
 def delete_school_class(request):
-	post = json.loads(request.body)
-	SchoolClass.objects.get(id=post['class_id']).delete()
-	response = {}
-	response['result'] = 'success'
-	response['deleted'] = post['class_id']
-	return JSONResponse(json.dumps(response))
+    post = json.loads(request.body)
+    try:
+        SchoolClass.objects.get(id=post['class_id']).delete()
+    except SchoolClass.DoesNotExist:
+        return HttpResponse(status=400)
+    response = {}
+    response['result'] = 'success'
+    response['deleted'] = post['class_id']
+    return JSONResponse(json.dumps(response))
 
 @login_required
 @teacher_required
