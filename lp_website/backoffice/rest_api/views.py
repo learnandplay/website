@@ -1,4 +1,8 @@
 # -*- coding: UTF-8 -*-
+## @package api
+# API de la partie backoffice\n
+# Il est nécessaire d'être un utilisateur authentifié de type 'teacher' pour utiliser cette API\n
+# Les réponses sont au format JSON
 import json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -11,13 +15,18 @@ from backoffice.models import LPUser, SchoolClass
 from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer
 from pprint import pprint
 
-
+## Classe JSONResponse\n
+# Génère une réponse de type JSON\n
+# Utilisé pour générer les réponses de l'API
 class JSONResponse(HttpResponse):
     def __init__(self, data, **kwargs):
         content = JSONRenderer().render(data)
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
+## get_user_schoolclasses\n
+# Requête GET
+# @returns Toutes les classes dont l'utilisateur loggé est un administrateur
 @login_required
 @teacher_required
 def get_user_schoolclasses(request):
@@ -26,6 +35,11 @@ def get_user_schoolclasses(request):
     serializer = SchoolClassSerializer(classes, many=True)
     return JSONResponse(serializer.data)
 
+## delete_school_class\n
+# Supprimer une classe\n
+# Requête POST
+# @param class_id ID de la classe à supprimer
+# @returns Une erreur 400 si la classe n'existe pas, sinon un json confirmant la suppression
 @login_required
 @teacher_required
 def delete_school_class(request):
@@ -39,6 +53,9 @@ def delete_school_class(request):
     response['deleted'] = post['class_id']
     return JSONResponse(json.dumps(response))
 
+## get_all_classes_students\n
+# Requête GET
+# @returns Toutes les classes liées au professeur ainsi que les élèves dans chaque classe
 @login_required
 @teacher_required
 def get_all_classes_students(request):
@@ -53,6 +70,12 @@ def get_all_classes_students(request):
 		response['students'][school_class.id] = user_serializer.data
 	return JSONResponse(json.dumps(response))
 
+
+## delete_user\n
+# Supprimer un utilisateur\n
+# Requête POST
+# @param user_id ID de l'utilisateur à supprimer
+# @returns Une erreur 400 si l'utilisateur n'existe pas, sinon un json confirmant la suppression
 @login_required
 @teacher_required
 def delete_user(request):
@@ -72,6 +95,11 @@ def delete_user(request):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
 
+## get_schoolclass_administrators\n
+# Récupérer la liste des administrateurs pour une classe donnée\n
+# Requête GET
+# @param class_id ID de la classe
+# @returns Une erreur 400 si la classe n'existe pas, sinon la liste des administrateurs associés à la classe
 @login_required
 @teacher_required
 def get_schoolclass_administrators(request, class_id):
@@ -83,6 +111,12 @@ def get_schoolclass_administrators(request, class_id):
     response = LPUserSerializer(administrators, many=True).data
     return JSONResponse(json.dumps(response))
 
+## remove_administrator\n
+# Retirer les droits d'administrateur d'un utilisateur sur une classe\n
+# Requête POST
+# @param class_id ID de la classe
+# @param administrator_id ID de l'administrateur
+# @returns Une erreur 400 si la classe n'existe pas ou si l'utilisateur n'en est pas administrateur, sinon un json confirmant la suppression
 @login_required
 @teacher_required
 def remove_administrator(request):
@@ -104,6 +138,12 @@ def remove_administrator(request):
         response['needRedirect'] = reverse('backoffice:my_classes')
     return JSONResponse(json.dumps(response))
 
+## add_administrator\n
+# Ajouter un administrateur à une classe\n
+# Requête POST
+# @param class_id ID de la classe
+# @param username Username de l'utilisateur à ajouter en administrateur
+# @returns Une erreur 400 si la classe ou l'utilisateur n'existe pas, sinon un json confirmant la suppression
 @login_required
 @teacher_required
 def add_administrator(request):
