@@ -1,53 +1,72 @@
 {% extends "backoffice/base.html" %}
 
-{% block fullpage-container %}
-<header class="navbar navbar-default navbar-fixed-top bs-docs-nav" role="banner">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+{% block page-content %}
+<div class="wrapper">
+  <header class="main-header">
+    <a href="/" class="logo">Learn & Play</a>
+    <nav class="navbar navbar-static-top" role="navigation">
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="/" class="navbar-brand">Learn & Play</a>
-    </div>
-    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-      <ul class="nav navbar-nav navbar-right">
-        <li class="{% block navbar_home %}{% endblock %}">
-          <a href="{% url 'backoffice:index' %}">Accueil</a>
-        </li>
-        <li class="dropdown {% block navbar_administration %}{% endblock %}">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administration <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url 'backoffice:my_classes' %}">Mes classes</a></li>
-            <li><a href="{% url 'backoffice:my_students_default' %}">Mes élèves</a></li>
-          </ul>
-        </li>
-        <li class="{% block navbar_statistics %}{% endblock %}">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Statistiques <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Menu 1</a></li>
-            <li><a href="#">Menu 2</a></li>
-            <li><a href="#">Menu 3</a></li>
-          </ul>
-        </li>
-        <li class="{% block navbar_personalization %}{% endblock %}">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Personnalisation <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Menu 1</a></li>
-            <li><a href="#">Menu 2</a></li>
-            <li><a href="#">Menu 3</a></li>
-          </ul>
-        </li>
-        <li>
-         <a href="{% url 'backoffice:logout' %}">Déconnexion</a>
-        </li>
-      </ul>
+      </a>
+
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src="{{ user.LPUser.avatar.url }}" class="user-image" alt="User Image"/>
+              <span class="hidden-xs">{{ user.username }}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="user-header">
+                <img src="{{ user.LPUser.avatar.url }}" class="img-circle" alt="User Image" />
+                <p>{{ user.username }}</p>
+              </li>
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a href="{% url 'backoffice:index' %}" class="btn btn-default btn-flat">Profil</a>
+                </div>
+                <div class="pull-right">
+                  <a href="{% url 'backoffice:logout' %}" class="btn btn-default btn-flat">Déconnexion</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
     </nav>
+  </header>
+
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <ul class="sidebar-menu">
+        <li class="header">GÉNÉRAL</li>
+        <li class="{% block navbar_home %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Accueil</span></a></li>
+        <li class="header">ADMINISTRATION</li>
+        <li class="{% block navbar_my_classes %}{% endblock %}"><a href="{% url 'backoffice:my_classes' %}"><span>Mes classes</span></a></li>
+        <li class="{% block navbar_my_students %}{% endblock %}"><a href="{% url 'backoffice:my_students_default' %}"><span>Mes élèves</span></a></li>
+        <li class="header">STATISTIQUES</li>
+        <li class="{% block navbar_stats1 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 1</span></a></li>
+        <li class="{% block navbar_stats2 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 2</span></a></li>
+        <li class="{% block navbar_stats3 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 3</span></a></li>
+        <li class="header">PERSONNALISATION</li>
+        <li class="{% block navbar_pers1 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 1</span></a></li>
+        <li class="{% block navbar_pers2 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 2</span></a></li>
+        <li class="{% block navbar_pers3 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 3</span></a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <div class="content-wrapper">
+    <section class="content-header">
+    </section>
+    <section class="content">
+      {% block content %}{% endblock content %}
+    </section>
   </div>
-</header>
-<div class="container-fluid page-content">
-  {% block content %}{% endblock content %}
+
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2015 <a href="/">Learn & Play</a>.</strong> All rights reserved.
+  </footer>
 </div>
-{% endblock fullpage-container %}
+{% endblock page-content %}
