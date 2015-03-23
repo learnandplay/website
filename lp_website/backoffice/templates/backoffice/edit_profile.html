@@ -1,0 +1,27 @@
+{% extends "backoffice/layout.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Mon profil{% endblock title %}
+
+{% block content %}
+<img class="centered-image large-avatar"src="{{ lp_user.avatar.url }}">
+<form role="form" id="profile-form" method="post" action="{% url 'backoffice:edit_profile' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-group">
+    <div class="row">
+      <div class="col-lg-offset-3 col-lg-6">
+  {% bootstrap_form avatar_form %}
+  {% bootstrap_form email_form %}
+  {% bootstrap_form password_form %}
+      </div>
+    </div>
+  </div>
+  {% buttons %}
+  <div class="row">
+    <div class="col-lg-offset-3 col-lg-6">
+      <button type="submit" name="submit" class="btn btn-primary">Sauvegarder les modifications</button>
+    </div>
+  </div>
+  {% endbuttons %}
+</form>
+{% endblock content %}

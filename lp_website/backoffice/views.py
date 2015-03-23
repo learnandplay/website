@@ -6,10 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, StudentAvatarForm, StudentForm
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm
 from backoffice.models import LPUser, SchoolClass
 from backoffice.decorators import anonymous_required, teacher_required
-
+from pprint import pprint
 
 ## index\n
 # Page d'accueil de l'application
@@ -118,7 +118,7 @@ def edit_student(request, class_id, id=None):
     school_class = SchoolClass.objects.get(id=class_id)
     student = LPUser.objects.get(id=id) if id else None
     instance = student.user if student else None
-    avatar_form = StudentAvatarForm(request.POST, request.FILES)
+    avatar_form = AvatarForm(request.POST, request.FILES)
     form = StudentForm(request.POST or None, instance=instance)
     if form.is_valid():
         user = form.save()
@@ -132,7 +132,7 @@ def edit_student(request, class_id, id=None):
             lp_user.school_class.add(school_class)
         else:
             lp_user = student
-        if avatar_form.is_valid():
+        if avatar_form.is_valid() and avatar_form.cleaned_data['avatar'] != 'avatars/default.png':
             lp_user.avatar = avatar_form.cleaned_data['avatar']
             lp_user.save()
         return redirect(reverse('backoffice:my_students', kwargs={'class_id': class_id}))
@@ -149,3 +149,24 @@ def class_administrators(request, class_id):
     school_class = SchoolClass.objects.get(id=class_id)
     return render(request, 'backoffice/class_administrators.html',
         {'school_class': school_class})
+
+@login_required
+@teacher_required
+def edit_profile(request):
+    user = request.user
+    lp_user = user.LPUser
+    avatar_form = AvatarForm(request.POST, request.FILES)
+    email_form = UserEmailForm(request.POST or None, instance=user)
+    password_form = UserPasswordNotRequiredForm(request.POST or None)
+    if avatar_form.is_valid() and avatar_form.cleaned_data['avatar'] != 'avatars/default.png':
+        lp_user.avatar = avatar_form.cleaned_data['avatar']
+        lp_user.save()
+    if email_form.is_valid():
+        form_data = email_form.save()
+        user.email = form_data.email
+        user.save()
+    if password_form.is_valid() and password_form.cleaned_data['password'] != '':
+        user.set_password(password_form.cleaned_data['password'])
+        user.save()
+    return render(request, 'backoffice/edit_profile.html',
+        {'avatar_form': avatar_form, 'email_form': email_form, 'password_form': password_form, 'lp_user': lp_user})

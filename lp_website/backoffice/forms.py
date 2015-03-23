@@ -6,7 +6,7 @@ from django import forms
 from backoffice.models import SchoolClass, LPUser
 
 ## Classe UserRegistrationForm\n
-# Formulaire de création de comptre professeur
+# Formulaire de création de compte professeur
 class UserRegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
@@ -59,9 +59,9 @@ class ClassForm(forms.ModelForm):
     ## Nom de l'établissement
     school_name = forms.CharField(label="Nom de l'établissement", max_length=128)
 
-## Classe StudentAvatarForm\n
+## Classe AvatarForm\n
 # Formulaire pour l'upload d'avatar
-class StudentAvatarForm(forms.ModelForm):
+class AvatarForm(forms.ModelForm):
     class Meta:
         model = LPUser
         fields = ('avatar',)
@@ -78,4 +78,27 @@ class StudentForm(forms.ModelForm):
         help_texts = {
             'username': '',
         }
-        
+
+class UserEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email',)
+
+class UserPasswordNotRequiredForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('password',)
+    password = forms.CharField(required=False, label="Mot de passe",
+                               widget=forms.PasswordInput(render_value = True, attrs={'placeholder': 'Mot de passe contenant au moins 8 caractères'}))
+    password_confirm = forms.CharField(required=False, label="Confirmation du mot de passe", widget=forms.PasswordInput(render_value = True))
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if len(password) < 8 and len(password) > 0:
+            raise forms.ValidationError("Erreur ! Le mot de passe doit contenir au moins 8 caractères")
+        return password
+    def clean_password_confirm(self):
+        password = self.cleaned_data.get('password')
+        password_confirm = self.cleaned_data.get('password_confirm')
+        if password != password_confirm:
+            raise forms.ValidationError("Erreur ! La confirmation du mot de passe ne correspond pas")
+        return password_confirm
