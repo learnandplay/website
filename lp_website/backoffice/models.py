@@ -37,6 +37,7 @@ class SchoolClass(models.Model):
     name = models.CharField(max_length=64)
     ## Nom de l'établissement
     school_name = models.CharField(max_length=128)
+    password = models.CharField(max_length=128)
     ## Date de création
     creation_date = models.DateTimeField(auto_now_add=True)
     ## Date de modification

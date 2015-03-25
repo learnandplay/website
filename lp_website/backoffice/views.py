@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm, SchoolClassPasswordForm, SchoolClassPasswordNotRequiredForm
 from backoffice.models import LPUser, SchoolClass
 from backoffice.decorators import anonymous_required, teacher_required
 from pprint import pprint
@@ -92,13 +93,21 @@ def my_classes(request):
 def edit_class(request, id=None):
     school_class = SchoolClass.objects.get(id=id) if id else None
     form = ClassForm(request.POST or None, instance=school_class)
-    if form.is_valid():
+    password_form = None
+    if not id:
+        password_form = SchoolClassPasswordForm(request.POST or None)
+    else:
+        password_form = SchoolClassPasswordNotRequiredForm(request.POST or None)
+    if form.is_valid() and password_form.is_valid():
         school_class = form.save()
+        if id or password_form.cleaned_data['password'] != '':
+            school_class.password = make_password(password_form.cleaned_data['password'])
         if not id:
             request.user.LPUser.school_class.add(school_class)
+        school_class.save()
         return redirect('backoffice:my_classes')
     return render(request, 'backoffice/edit_class.html',
-        {'class_form': form, 'school_class': school_class})
+        {'class_form': form, 'password_form': password_form, 'school_class': school_class})
 
 ## my_students\n
 # Liste des étudiants gérés par l'utilisateur
