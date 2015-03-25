@@ -32,6 +32,7 @@
 	<table class="table table-striped" ng-show="classes.length!=0">
     	<thead>
         	<tr>
+                <th data-field="id">Identifiant</th>
             	<th data-field="name">Classe</th>
             	<th data-field="school">Etablissement</th>
             	<th>Actions</th>
@@ -39,6 +40,7 @@
     	</thead>
     	<tbody>
 			<tr ng-repeat="class in classes">
+                <td>{%verbatim%}{{class.id}}{%endverbatim%}</td>
 				<td>{%verbatim%}{{class.name}}{%endverbatim%}</td>
 				<td>{%verbatim%}{{class.school_name}}{%endverbatim%}</td>
 				<td>
