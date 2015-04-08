@@ -112,8 +112,6 @@ class LPUser(models.Model):
 class Statistics(models.Model):
     ## Utilisateur lié
     user = models.ForeignKey(LPUser)
-    ## Sujet lié
-    subject = models.ForeignKey(Subject)
     ## Exercice lié
     exercise = models.ForeignKey(Exercise)
     ## Données statistiques
