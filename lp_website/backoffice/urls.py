@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     ))),
     url(r'^class_administrators/(?P<class_id>\d+)/', views.class_administrators, name='class_administrators'),
     url(r'^edit_profile/$', views.edit_profile, name='edit_profile'),
+    url(r'^statistics/$', views.statistics, name='statistics'),
 )

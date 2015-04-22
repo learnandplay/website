@@ -11,8 +11,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.response import Response
 from backoffice.decorators import anonymous_required, teacher_required
-from backoffice.models import LPUser, SchoolClass
-from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer
+from backoffice.models import LPUser, SchoolClass, Statistics
+from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer
 from pprint import pprint
 
 ## Classe JSONResponse\n
@@ -159,4 +159,17 @@ def add_administrator(request):
         response['added_administrator'] = LPUserSerializer(user).data
     except (LPUser.DoesNotExist, SchoolClass.DoesNotExist):
         return HttpResponse(status=400)
-    return JSONResponse(json.dumps(response))        
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def get_statistics(request, class_id, student_id):
+    class_id = int(class_id)
+    student_id = int(student_id)
+    stats = None
+    if student_id == -1:
+        stats = Statistics.objects.filter(user__school_class__id__in=[class_id]).order_by('user__user__username', 'date')
+    else:
+        stats = Statistics.objects.filter(user__id__in=[student_id]).order_by('date')
+    response = StatisticsSerializer(stats, many=True).data
+    return JSONResponse(json.dumps(response))

@@ -1,0 +1,36 @@
+{% extends "backoffice/layout.html" %}
+{% load bootstrap3 %}
+
+
+{% block title %}Statistiques{% endblock title %}
+
+{% block navbar_statistics %}active{% endblock navbar_statistics %}
+
+{% block content %}
+<div ng-controller="StatisticsCtrl">
+
+  <div class="alert alert-danger alert-dismissible" role="alert" ng-show='alertError'>
+      <button type="button" class="close" ng-click="alertError=false"><span aria-hidden="true">&times;</span></button>
+      {%verbatim%}{{alertErrorMessage}}{%endverbatim%}
+  </div>
+
+  <select class="form-control"
+          ng-model="selectedSchoolClass"
+          ng-options="(class.name + ' - ' + class.school_name) for class in classes"
+          ng-change="changeSelectedSchoolClass()">
+  </select>
+
+  <select class="form-control"
+          ng-model="selectedStudent"
+          ng-options="student.username for student in students">
+          <option value="" ng-selected="selected">Tous les élèves</option>
+  </select>
+
+  <select class="form-control"
+          ng-model="selectedStatisticsType"
+          ng-options="statisticsType.name for statisticsType in statisticsTypes">
+  </select>
+
+  <button class="btn btn-primary" ng-click="getStatistics()">Voir les statistiques</button>
+</div>
+{% endblock content %}

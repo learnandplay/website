@@ -1,9 +1,10 @@
-var backofficeApp = angular.module('backofficeApp', ['ngRoute']);
+var backofficeApp = angular.module("backofficeApp", ['ngRoute']);
 
 backofficeApp.config(function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 });
+
 
 backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 	$scope.deleteSchoolClass = function(schoolClass) {
@@ -39,6 +40,7 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 
 	$scope.getSchoolClasses();
 });
+
 
 backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 	$scope.deleteStudent = function(student) {
@@ -88,6 +90,7 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 
 	$scope.getStudentsList();
 });
+
 
 backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
     $scope.addAdministrator = function(administrator_username) {
@@ -146,4 +149,64 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 		$scope.class_id = class_id;
 		$scope.getAdministratorsList();
 	}
+});
+
+
+backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
+  $scope.statisticsTypes = [{'type': 'stats_solo_multi', 'name': 'Solo/Multijoueur'},
+                          {'type': 'stats_time_subject', 'name': 'Temps par matière'},
+                          {'type': 'stats_success_fail', 'name': 'Echec/Reussite'}];
+  $scope.selectedStatisticsType = $scope.statisticsTypes[0];
+  $scope.previousSchoolClass = undefined;
+  $scope.previousStudent = undefined;
+
+  $scope.getStatistics = function() {
+    if ($scope.previousSchoolClass != $scope.selectedSchoolClass ||
+        $scope.previousStudent != $scope.selectedStudent) {
+          $http({
+            url: "/backoffice/restapi/get_statistics/" + $scope.selectedSchoolClass.id + "/" + ($scope.selectedStudent ? $scope.selectedStudent.id : "-1"),
+            method: "GET",
+          }).success(function(data, status, headers, config) {
+            data = JSON.parse(data);
+            data.forEach(function (item) {
+              item.data = JSON.parse(item.data);
+            });
+          }).error(function(data, status, headers, config) {
+            $scope.alertError = true;
+            $scope.alertErrorMessage = "Impossible de récupérer les statistiques";
+          });
+    }
+    $scope.previousSchoolClass = $scope.selectedSchoolClass;
+    $scope.previousStudent = $scope.selectedStudent;
+  }
+
+  $scope.changeSelectedSchoolClass = function() {
+    $scope.students = $scope.initialData.students[$scope.selectedSchoolClass.id];
+    $scope.selectedStudent = null;
+  };
+
+  $scope.getStudentsList = function() {
+    $http({
+      url: "/backoffice/restapi/get_all_classes_students",
+      method: "GET",
+    }).success(function(data, status, headers, config) {
+      data = JSON.parse(data);
+      $scope.initialData = data;
+      $scope.classes = data.school_classes;
+      if ($scope.classes[0]) {
+        $scope.students = data.students[data.school_classes[0].id];
+        $scope.selectedSchoolClass = $scope.classes[0];
+      }
+      else {
+        $scope.students = undefined;
+        $scope.selectedSchoolClass = undefined;
+      }
+      $scope.selectedStudent = null;
+    }).error(function(data, status, headers, config) {
+      $scope.alertError = true;
+      $scope.alertErrorMessage = "Impossible de récupérer la liste des étudiants";
+    });
+  };
+
+  $scope.getStudentsList();
 });

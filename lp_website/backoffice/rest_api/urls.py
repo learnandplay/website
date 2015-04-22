@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^get_schoolclass_administrators/(?P<class_id>\d+)/', views.get_schoolclass_administrators, name="api_get_schoolclass_administrators"),
     url(r'^remove_administrator', views.remove_administrator, name="api_remove_administrator"),
     url(r'^add_administrator', views.add_administrator, name="api_add_administrator"),
+    url(r'^get_statistics/(?P<class_id>\d+)/(?P<student_id>-?\d+)', views.get_statistics, name='api_get_statistics'),
 )

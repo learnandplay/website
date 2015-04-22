@@ -179,3 +179,8 @@ def edit_profile(request):
         user.save()
     return render(request, 'backoffice/edit_profile.html',
         {'avatar_form': avatar_form, 'email_form': email_form, 'password_form': password_form, 'lp_user': lp_user})
+
+@login_required
+@teacher_required
+def statistics(request):
+    return render(request, 'backoffice/statistics.html')

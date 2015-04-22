@@ -3,6 +3,7 @@
 # Modèles utilisés pour l'ORM de django
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
@@ -114,6 +115,7 @@ class Statistics(models.Model):
     user = models.ForeignKey(LPUser)
     ## Exercice lié
     exercise = models.ForeignKey(Exercise)
+    date = models.DateTimeField(default=datetime.now, blank=True)
     ## Données statistiques
     data = models.TextField()
     class Meta:
