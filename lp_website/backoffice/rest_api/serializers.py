@@ -62,17 +62,31 @@ class LPUserSerializer(serializers.ModelSerializer):
 		model = LPUser
 		fields = ('id', 'username', 'edit_url', 'data')
 
+## Classe StatisticsSerializer\n
+# Serialise une statistique
 class StatisticsSerializer(serializers.ModelSerializer):
+	## Nom d'utilisateur
 	username = serializers.SerializerMethodField('generate_username')
+	## Matiere scolaire
 	subject = serializers.SerializerMethodField('generate_subject')
+	## Exercice
 	exercise = serializers.SerializerMethodField('generate_exercise')
 
+	## Génère le nom d'utilisateur
+	# @param statistics Une statistique
+	# @returns Le nom d'utilisateur
 	def generate_username(self, statistics):
 		return statistics.user.user.username
 
+	## Génère la matiere scolaire
+	# @param statistics Une statistique
+	# @returns La matiere scolaire
 	def generate_subject(self, statistics):
 		return statistics.exercise.subject.name
 
+	## Génère l'exercice'
+	# @param statistics Une statistique
+	# @returns Le nom de l'exercice
 	def generate_exercise(self, statistics):
 		return statistics.exercise.name
 

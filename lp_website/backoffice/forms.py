@@ -79,23 +79,31 @@ class StudentForm(forms.ModelForm):
             'username': '',
         }
 
+## Classe UserLoginForm\n
+# Formulaire d'email utilisateur
 class UserEmailForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email',)
 
+## Classe UserPasswordNotRequiredForm\n
+# Formulaire de mot de passe utilisateur optionnel
 class UserPasswordNotRequiredForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('password',)
+    ## Mot de passe
     password = forms.CharField(required=False, label="Mot de passe",
                                widget=forms.PasswordInput(render_value = True, attrs={'placeholder': 'Mot de passe contenant au moins 8 caractères'}))
+    ## Confirmation du mot de passe
     password_confirm = forms.CharField(required=False, label="Confirmation du mot de passe", widget=forms.PasswordInput(render_value = True))
+    ## Verification du mot de passe
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if len(password) < 8 and len(password) > 0:
             raise forms.ValidationError("Erreur ! Le mot de passe doit contenir au moins 8 caractères")
         return password
+    ## Verification de la confirmation du mot de passe
     def clean_password_confirm(self):
         password = self.cleaned_data.get('password')
         password_confirm = self.cleaned_data.get('password_confirm')
@@ -103,18 +111,24 @@ class UserPasswordNotRequiredForm(forms.ModelForm):
             raise forms.ValidationError("Erreur ! La confirmation du mot de passe ne correspond pas")
         return password_confirm
 
+## Classe SchoolClassPasswordForm\n
+# Formulaire de mot de passe pour une classe
 class SchoolClassPasswordForm(forms.ModelForm):
     class Meta:
         model = SchoolClass
         fields = ('password',)
+    ## Mot de passe
     password = forms.CharField(label="Mot de passe",
                                widget=forms.PasswordInput(render_value = True, attrs={'placeholder': 'Mot de passe contenant au moins 8 caractères'}))
+    ## Confirmation du mot de passe
     password_confirm = forms.CharField(label="Confirmation du mot de passe", widget=forms.PasswordInput(render_value = True))
+    ## Verification du mot de passe
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if len(password) < 8:
             raise forms.ValidationError("Erreur ! Le mot de passe doit contenir au moins 8 caractères")
         return password
+    ## Verification de la confirmation du mot de passe
     def clean_password_confirm(self):
         password = self.cleaned_data.get('password')
         password_confirm = self.cleaned_data.get('password_confirm')
@@ -124,18 +138,24 @@ class SchoolClassPasswordForm(forms.ModelForm):
             raise forms.ValidationError("Erreur ! La confirmation du mot de passe ne correspond pas")
         return password_confirm
 
+## Classe SchoolClassPasswordNotRequiredForm\n
+# Formulaire de mot de passe optionnel pour une classe
 class SchoolClassPasswordNotRequiredForm(forms.ModelForm):
     class Meta:
         model = SchoolClass
         fields = ('password',)
+    ## Mot de passe
     password = forms.CharField(required=False, label="Mot de passe",
                                widget=forms.PasswordInput(render_value = True, attrs={'placeholder': 'Mot de passe contenant au moins 8 caractères'}))
+    ## Confirmation du mot de passe
     password_confirm = forms.CharField(required=False, label="Confirmation du mot de passe", widget=forms.PasswordInput(render_value = True))
+    ## Verification du mot de passe
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if len(password) < 8 and len(password) > 0:
             raise forms.ValidationError("Erreur ! Le mot de passe doit contenir au moins 8 caractères")
         return password
+    ## Verification de la confirmation du mot de passe
     def clean_password_confirm(self):
         password = self.cleaned_data.get('password')
         password_confirm = self.cleaned_data.get('password_confirm')

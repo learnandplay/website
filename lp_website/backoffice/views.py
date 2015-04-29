@@ -159,6 +159,8 @@ def class_administrators(request, class_id):
     return render(request, 'backoffice/class_administrators.html',
         {'school_class': school_class})
 
+## edit_profile\n
+# Page d'edition du profil utilisateur
 @login_required
 @teacher_required
 def edit_profile(request):
@@ -180,6 +182,8 @@ def edit_profile(request):
     return render(request, 'backoffice/edit_profile.html',
         {'avatar_form': avatar_form, 'email_form': email_form, 'password_form': password_form, 'lp_user': lp_user})
 
+## statistics\n
+# Page de visualisation des statistiques
 @login_required
 @teacher_required
 def statistics(request):

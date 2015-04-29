@@ -38,6 +38,7 @@ class SchoolClass(models.Model):
     name = models.CharField(max_length=64)
     ## Nom de l'établissement
     school_name = models.CharField(max_length=128)
+    ## Mot de passe de la classe
     password = models.CharField(max_length=128)
     ## Date de création
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -115,6 +116,7 @@ class Statistics(models.Model):
     user = models.ForeignKey(LPUser)
     ## Exercice lié
     exercise = models.ForeignKey(Exercise)
+    ## Date de creation
     date = models.DateTimeField(default=datetime.now, blank=True)
     ## Données statistiques
     data = models.TextField()

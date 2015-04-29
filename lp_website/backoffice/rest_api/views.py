@@ -161,6 +161,12 @@ def add_administrator(request):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
 
+## get_statistics\n
+# Recuperer les statistiques associees a un eleve ou une classe\n
+# Requête GET
+# @param class_id ID de la classe
+# @param student_id Id de l'utilisateur
+# @returns Les statistiques de l'utilisateur ou les statistiques de la classe si student_id == -1
 @login_required
 @teacher_required
 def get_statistics(request, class_id, student_id):
