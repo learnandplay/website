@@ -1,4 +1,4 @@
-var backofficeApp = angular.module("backofficeApp", ['ngRoute']);
+var backofficeApp = angular.module("backofficeApp", ['ngRoute', 'chart.js']);
 
 backofficeApp.config(function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -153,6 +153,8 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 
 
 backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
+  $scope.options = {animationSteps: 20, animationEasing: "linear"};
+  $scope.loadedStatisticsType = undefined;
   $scope.statisticsTypes = [{'type': 'stats_solo_multi', 'name': 'Solo/Multijoueur'},
                           {'type': 'stats_time_subject', 'name': 'Temps par matière'},
                           {'type': 'stats_success_fail', 'name': 'Echec/Reussite'}];
@@ -160,25 +162,71 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   $scope.previousSchoolClass = undefined;
   $scope.previousStudent = undefined;
 
+  $scope.display_stats_solo_multi = function() {
+    $scope.colours = ['#81CFE0', '#1E8BC3'];
+    $scope.labels = ["Solo", "Multijoueur"];
+    $scope.prepared_data = [37, 63];
+    $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+  }
+
+  $scope.display_stats_time_subject = function() {
+    $scope.colours = ['#2ECC71'];
+    $scope.labels = ["Mathématiques", "Français", "Histoire"];
+    $scope.prepared_data = [
+      [65, 59, 90]
+    ];
+    $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+  }
+
+  $scope.display_stats_success_fail = function() {
+    $scope.colours = ['#2ECC71', '#F7464A'];
+    $scope.labels = ["Réussite", "Echec"];
+    $scope.prepared_data = [85, 15];
+    $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+  }
+
+  $scope.displayStatistics = function() {
+    switch($scope.selectedStatisticsType.type) {
+      case 'stats_solo_multi':
+        $scope.display_stats_solo_multi();
+        break;
+      case 'stats_time_subject':
+        $scope.display_stats_time_subject();
+        break;
+      case 'stats_success_fail':
+        $scope.display_stats_success_fail();
+        break;
+      default:
+        break;
+    }
+  }
+
   $scope.getStatistics = function() {
+    $scope.loadedStatisticsType = undefined;
     if ($scope.previousSchoolClass != $scope.selectedSchoolClass ||
         $scope.previousStudent != $scope.selectedStudent) {
           $http({
             url: "/backoffice/restapi/get_statistics/" + $scope.selectedSchoolClass.id + "/" + ($scope.selectedStudent ? $scope.selectedStudent.id : "-1"),
             method: "GET",
           }).success(function(data, status, headers, config) {
-            data = JSON.parse(data);
-            data.forEach(function (item) {
+            $scope.data = JSON.parse(data);
+            $scope.data.forEach(function (item) {
               item.data = JSON.parse(item.data);
             });
+            $scope.displayStatistics();
           }).error(function(data, status, headers, config) {
             $scope.alertError = true;
             $scope.alertErrorMessage = "Impossible de récupérer les statistiques";
           });
     }
+    else {
+      $scope.displayStatistics();
+    }
     $scope.previousSchoolClass = $scope.selectedSchoolClass;
     $scope.previousStudent = $scope.selectedStudent;
   }
+
+
 
   $scope.changeSelectedSchoolClass = function() {
     $scope.students = $scope.initialData.students[$scope.selectedSchoolClass.id];

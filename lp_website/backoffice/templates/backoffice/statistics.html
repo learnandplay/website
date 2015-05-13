@@ -32,5 +32,11 @@
   </select>
 
   <button class="btn btn-primary" ng-click="getStatistics()">Voir les statistiques</button>
+
+  <div>
+    <canvas ng-if="loadedStatisticsType.type == 'stats_solo_multi'" id="pie" class="chart chart-pie" data="prepared_data" labels="labels" colours="colours" options="options"></canvas>
+    <canvas ng-if="loadedStatisticsType.type == 'stats_time_subject'" id="radar" class="chart chart-radar" data="prepared_data" labels="labels" colours="colours" options="options"></canvas>
+    <canvas ng-if="loadedStatisticsType.type == 'stats_success_fail'" id="pie" class="chart chart-pie" data="prepared_data" labels="labels" colours="colours" options="options"></canvas>
+  </div>
 </div>
 {% endblock content %}
