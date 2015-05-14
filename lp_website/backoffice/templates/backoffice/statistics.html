@@ -34,9 +34,12 @@
   <button class="btn btn-primary" ng-click="getStatistics()">Voir les statistiques</button>
 
   <div>
-    <canvas ng-if="loadedStatisticsType.type == 'stats_solo_multi'" id="pie" class="chart chart-pie" data="prepared_data" labels="labels" colours="colours" options="options"></canvas>
-    <canvas ng-if="loadedStatisticsType.type == 'stats_time_subject'" id="radar" class="chart chart-radar" data="prepared_data" labels="labels" colours="colours" options="options"></canvas>
-    <canvas ng-if="loadedStatisticsType.type == 'stats_success_fail'" id="pie" class="chart chart-pie" data="prepared_data" labels="labels" colours="colours" options="options"></canvas>
+    <div class="alert alert-danger" role="alert" ng-show='noStatToDisplay'>
+        Pas de statistiques a afficher
+    </div>
+    <canvas ng-if="loadedStatisticsType.type == 'stats_solo_multi'" id="pie" class="chart chart-pie" data="prepared_data" labels="labels" colours="colours_stats_solo_multi" options="options_stats_solo_multi"></canvas>
+    <canvas ng-if="loadedStatisticsType.type == 'stats_time_subject'" id="radar" class="chart chart-radar" data="prepared_data" labels="labels" colours="colours_stats_time_subject" options="options_stats_time_subject"></canvas>
+    <canvas ng-if="loadedStatisticsType.type == 'stats_success_fail'" id="pie" class="chart chart-pie" data="prepared_data" labels="labels" colours="colours_stats_success_fail" options="options_stats_success_fail"></canvas>
   </div>
 </div>
 {% endblock content %}

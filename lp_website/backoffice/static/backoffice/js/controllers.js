@@ -153,7 +153,6 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 
 
 backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
-  $scope.options = {animationSteps: 20, animationEasing: "linear"};
   $scope.loadedStatisticsType = undefined;
   $scope.statisticsTypes = [{'type': 'stats_solo_multi', 'name': 'Solo/Multijoueur'},
                           {'type': 'stats_time_subject', 'name': 'Temps par matière'},
@@ -161,16 +160,20 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   $scope.selectedStatisticsType = $scope.statisticsTypes[0];
   $scope.previousSchoolClass = undefined;
   $scope.previousStudent = undefined;
+  $scope.options_stats_solo_multi = {animationSteps: 20, animationEasing: "linear", responsive: true};
+  $scope.colours_stats_solo_multi = ['#81CFE0', '#1E8BC3'];
+  $scope.options_stats_time_subject = {animationSteps: 20, animationEasing: "linear", responsive: true};
+  $scope.colours_stats_time_subject = ['#2ECC71'];
+  $scope.options_stats_success_fail = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>%"};
+  $scope.colours_stats_success_fail = ['#2ECC71', '#F7464A'];
 
   $scope.display_stats_solo_multi = function() {
-    $scope.colours = ['#81CFE0', '#1E8BC3'];
     $scope.labels = ["Solo", "Multijoueur"];
     $scope.prepared_data = [37, 63];
     $scope.loadedStatisticsType = $scope.selectedStatisticsType;
   }
 
   $scope.display_stats_time_subject = function() {
-    $scope.colours = ['#2ECC71'];
     $scope.labels = ["Mathématiques", "Français", "Histoire"];
     $scope.prepared_data = [
       [65, 59, 90]
@@ -179,10 +182,26 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   }
 
   $scope.display_stats_success_fail = function() {
-    $scope.colours = ['#2ECC71', '#F7464A'];
+    var success = 0;
+    var failure = 0;
+    var percentSuccesss;
+    var percentFailure;
     $scope.labels = ["Réussite", "Echec"];
-    $scope.prepared_data = [85, 15];
-    $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+    $scope.data.forEach(function(stat) {
+      if (stat.data.success && stat.data.failure) {
+        success += parseInt(stat.data.success);
+        failure += parseInt(stat.data.failure);
+      }
+    });
+    percentSuccesss = Math.round(success * 100 / (success + failure));
+    percentFailure = Math.round(failure * 100 / (success + failure));
+    if (success && failure) {
+      $scope.prepared_data = [percentSuccesss, percentFailure];
+      $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+    }
+    else {
+      $scope.noStatToDisplay = true;
+    }
   }
 
   $scope.displayStatistics = function() {
@@ -202,6 +221,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   }
 
   $scope.getStatistics = function() {
+    $scope.noStatToDisplay = false;
     $scope.loadedStatisticsType = undefined;
     if ($scope.previousSchoolClass != $scope.selectedSchoolClass ||
         $scope.previousStudent != $scope.selectedStudent) {
