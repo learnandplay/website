@@ -160,7 +160,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   $scope.selectedStatisticsType = $scope.statisticsTypes[0];
   $scope.previousSchoolClass = undefined;
   $scope.previousStudent = undefined;
-  $scope.options_stats_solo_multi = {animationSteps: 20, animationEasing: "linear", responsive: true};
+  $scope.options_stats_solo_multi = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>%"};
   $scope.colours_stats_solo_multi = ['#81CFE0', '#1E8BC3'];
   $scope.options_stats_time_subject = {animationSteps: 20, animationEasing: "linear", responsive: true};
   $scope.colours_stats_time_subject = ['#2ECC71'];
@@ -169,8 +169,30 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
 
   $scope.display_stats_solo_multi = function() {
     $scope.labels = ["Solo", "Multijoueur"];
-    $scope.prepared_data = [37, 63];
-    $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+    var solo = 0;
+    var multi = 0;
+    var percentSolo;
+    var percentMulti;
+    $scope.data.forEach(function(stat) {
+      console.log(stat.data);
+      if (stat.data.multi && (stat.data.multi == 'true' || stat.data.multi == true)) {
+        console.log("multi");
+        multi++;
+      }
+      else {
+        console.log("solo");
+        solo++
+      }
+    });
+    percentSolo = Math.round(solo * 100 / (solo + multi));
+    percentMulti = Math.round(multi * 100 / (solo + multi));
+    if (solo || multi) {
+      $scope.prepared_data = [percentSolo, percentMulti];
+      $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+    }
+    else {
+      $scope.noStatToDisplay = true;
+    }
   }
 
   $scope.display_stats_time_subject = function() {
@@ -195,7 +217,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
     });
     percentSuccesss = Math.round(success * 100 / (success + failure));
     percentFailure = Math.round(failure * 100 / (success + failure));
-    if (success && failure) {
+    if (success || failure) {
       $scope.prepared_data = [percentSuccesss, percentFailure];
       $scope.loadedStatisticsType = $scope.selectedStatisticsType;
     }
