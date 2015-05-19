@@ -174,15 +174,10 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
     var percentSolo;
     var percentMulti;
     $scope.data.forEach(function(stat) {
-      console.log(stat.data);
-      if (stat.data.multi && (stat.data.multi == 'true' || stat.data.multi == true)) {
-        console.log("multi");
+      if (stat.data.multi && (stat.data.multi == 'true' || stat.data.multi == true))
         multi++;
-      }
-      else {
-        console.log("solo");
+      else
         solo++
-      }
     });
     percentSolo = Math.round(solo * 100 / (solo + multi));
     percentMulti = Math.round(multi * 100 / (solo + multi));
