@@ -11,8 +11,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.response import Response
 from backoffice.decorators import anonymous_required, teacher_required
-from backoffice.models import LPUser, SchoolClass, Statistics
-from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer
+from backoffice.models import LPUser, SchoolClass, Statistics, Subject
+from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer
 from pprint import pprint
 
 ## Classe JSONResponse\n
@@ -179,3 +179,10 @@ def get_statistics(request, class_id, student_id):
         stats = Statistics.objects.filter(user__id__in=[student_id]).order_by('date')
     response = StatisticsSerializer(stats, many=True).data
     return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def get_subjects(request):
+    subjects = Subject.objects.all().order_by('name')
+    serializer = SubjectSerializer(subjects, many=True)
+    return JSONResponse(serializer.data)

@@ -153,6 +153,16 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 
 
 backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
+  var generateTimeTooltip = function(label, time) {
+    time = Math.round(time);
+    var hours = Math.floor(time / (60 * 60));
+    var minutes_divisor = time % (60 * 60);
+    var minutes = Math.floor(minutes_divisor / 60);
+    var seconds_divisor = minutes_divisor % 60;
+    var seconds = Math.ceil(seconds_divisor);
+    return (label + "= " + hours + " heure(s) " + minutes + " minute(s) " + seconds + " seconde(s)");
+  }
+
   $scope.loadedStatisticsType = undefined;
   $scope.statisticsTypes = [{'type': 'stats_solo_multi', 'name': 'Solo/Multijoueur'},
                           {'type': 'stats_time_subject', 'name': 'Temps par matière'},
@@ -160,11 +170,11 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   $scope.selectedStatisticsType = $scope.statisticsTypes[0];
   $scope.previousSchoolClass = undefined;
   $scope.previousStudent = undefined;
-  $scope.options_stats_solo_multi = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>%"};
+  $scope.options_stats_solo_multi = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%=value%>%"};
   $scope.colours_stats_solo_multi = ['#81CFE0', '#1E8BC3'];
-  $scope.options_stats_time_subject = {animationSteps: 20, animationEasing: "linear", responsive: true};
+  $scope.options_stats_time_subject = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: function(v){return(generateTimeTooltip(v.label, v.value));}};
   $scope.colours_stats_time_subject = ['#2ECC71'];
-  $scope.options_stats_success_fail = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>%"};
+  $scope.options_stats_success_fail = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%=value%>%"};
   $scope.colours_stats_success_fail = ['#2ECC71', '#F7464A'];
 
   $scope.display_stats_solo_multi = function() {
@@ -191,11 +201,38 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   }
 
   $scope.display_stats_time_subject = function() {
-    $scope.labels = ["Mathématiques", "Français", "Histoire"];
-    $scope.prepared_data = [
-      [65, 59, 90]
-    ];
-    $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+    $http({
+      url: "/backoffice/restapi/get_subjects",
+      method: "GET",
+    }).success(function(data, status, headers, config) {
+      var stats = {};
+      var labels = [];
+      var values = [];
+      var statFound = false;
+      data.forEach(function(subject) {
+        stats[subject.name] = 0;
+      });
+      $scope.data.forEach(function(stat) {
+        if (stat.subject in stats && stat.data.time) {
+          stats[stat.subject] += parseInt(stat.data.time);
+          statFound = true;
+        }
+      });
+      for (var key in stats) {
+        labels.push(key);
+        values.push(stats[key]);
+      }
+      if (statFound) {
+        $scope.labels = labels;
+        $scope.prepared_data = [values];
+        $scope.loadedStatisticsType = $scope.selectedStatisticsType;
+      }
+      else {
+        $scope.noStatToDisplay = true;
+      }
+    }).error(function(data, status, headers, config) {
+      $scope.noStatToDisplay = true;
+    });
   }
 
   $scope.display_stats_success_fail = function() {
