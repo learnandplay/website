@@ -173,7 +173,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   $scope.options_stats_solo_multi = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%=value%>%"};
   $scope.colours_stats_solo_multi = ['#81CFE0', '#1E8BC3'];
   $scope.options_stats_time_subject = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: function(v){return(generateTimeTooltip(v.label, v.value));}};
-  $scope.colours_stats_time_subject = ['#2ECC71'];
+  $scope.colours_stats_time_subject = ['#2ECC71', '#1BA39C'];
   $scope.options_stats_success_fail = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%=value%>%"};
   $scope.colours_stats_success_fail = ['#2ECC71', '#F7464A'];
 
@@ -224,7 +224,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
       }
       if (statFound) {
         $scope.labels = labels;
-        $scope.prepared_data = [values];
+        $scope.prepared_data = labels.length > 2 ? [values] : values;
         $scope.loadedStatisticsType = $scope.selectedStatisticsType;
       }
       else {
