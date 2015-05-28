@@ -14,26 +14,33 @@
       {%verbatim%}{{alertErrorMessage}}{%endverbatim%}
   </div>
 
-  <select class="form-control"
-          ng-model="selectedSchoolClass"
-          ng-options="(class.name + ' - ' + class.school_name) for class in classes"
-          ng-change="changeSelectedSchoolClass()">
-  </select>
+  <div class="row">
+    <div class="col-xs-6 col-sm-3">
+      <select class="form-control"
+        ng-model="selectedSchoolClass"
+        ng-options="(class.name + ' - ' + class.school_name) for class in classes"
+        ng-change="changeSelectedSchoolClass()">
+      </select>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      <select class="form-control"
+        ng-model="selectedStudent"
+        ng-options="student.username for student in students">
+        <option value="" ng-selected="selected">Tous les élèves</option>
+      </select>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      <select class="form-control"
+        ng-model="selectedStatisticsType"
+        ng-options="statisticsType.name for statisticsType in statisticsTypes">
+      </select>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      <button class="btn btn-primary" ng-click="getStatistics()">Voir les statistiques</button>
+    </div>
+  </div>
 
-  <select class="form-control"
-          ng-model="selectedStudent"
-          ng-options="student.username for student in students">
-          <option value="" ng-selected="selected">Tous les élèves</option>
-  </select>
-
-  <select class="form-control"
-          ng-model="selectedStatisticsType"
-          ng-options="statisticsType.name for statisticsType in statisticsTypes">
-  </select>
-
-  <button class="btn btn-primary" ng-click="getStatistics()">Voir les statistiques</button>
-
-  <div>
+  <div class="stat-container">
     <div class="alert alert-danger" role="alert" ng-show='noStatToDisplay'>
         Pas de statistiques a afficher
     </div>
