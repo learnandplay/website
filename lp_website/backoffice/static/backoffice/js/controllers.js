@@ -160,7 +160,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
     var minutes = Math.floor(minutes_divisor / 60);
     var seconds_divisor = minutes_divisor % 60;
     var seconds = Math.ceil(seconds_divisor);
-    return (label + "= " + hours + " heure(s) " + minutes + " minute(s) " + seconds + " seconde(s)");
+    return (label + ": " + hours + " heure(s) " + minutes + " minute(s) " + seconds + " seconde(s)");
   }
 
   $scope.loadedStatisticsType = undefined;
