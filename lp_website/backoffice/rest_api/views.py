@@ -11,8 +11,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.response import Response
 from backoffice.decorators import anonymous_required, teacher_required
-from backoffice.models import LPUser, SchoolClass, Statistics, Subject
-from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer
+from backoffice.models import LPUser, SchoolClass, Statistics, Subject, Exercise
+from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer, ExerciseSerializer
 from pprint import pprint
 
 ## Classe JSONResponse\n
@@ -186,3 +186,15 @@ def get_subjects(request):
     subjects = Subject.objects.all().order_by('name')
     serializer = SubjectSerializer(subjects, many=True)
     return JSONResponse(serializer.data)
+
+@login_required
+@teacher_required
+def get_subjects_exercices(request):
+    response = {}
+    subjects = Subject.objects.all().order_by('name')
+    subjects_serializer = SubjectSerializer(subjects, many=True)
+    response['subjects'] = subjects_serializer.data
+    exercises = Exercise.objects.all().order_by('subject__name', 'name')
+    exercises_serializer = ExerciseSerializer(exercises, many=True)
+    response['exercises'] = exercises_serializer.data
+    return JSONResponse(json.dumps(response))

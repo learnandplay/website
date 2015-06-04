@@ -48,9 +48,7 @@
         <li class="header">STATISTIQUES</li>
         <li class="{% block navbar_statistics %}{% endblock %}"><a href="{% url 'backoffice:statistics' %}"><span>Statistiques</span></a></li>
         <li class="header">PERSONNALISATION</li>
-        <li class="{% block navbar_pers1 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 1</span></a></li>
-        <li class="{% block navbar_pers2 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 2</span></a></li>
-        <li class="{% block navbar_pers3 %}{% endblock %}"><a href="{% url 'backoffice:index' %}"><span>Menu 3</span></a></li>
+        <li class="{% block navbar_configuration %}{% endblock %}"><a href="{% url 'backoffice:configuration' %}"><span>Personnalisation</span></a></li>
       </ul>
     </section>
   </aside>

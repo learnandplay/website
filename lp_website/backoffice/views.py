@@ -188,3 +188,8 @@ def edit_profile(request):
 @teacher_required
 def statistics(request):
     return render(request, 'backoffice/statistics.html')
+
+@login_required
+@teacher_required
+def configuration(request):
+    return render(request, 'backoffice/configuration.html')

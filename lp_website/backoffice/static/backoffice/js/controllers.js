@@ -300,8 +300,6 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
     $scope.previousStudent = $scope.selectedStudent;
   }
 
-
-
   $scope.changeSelectedSchoolClass = function() {
     $scope.students = $scope.initialData.students[$scope.selectedSchoolClass.id];
     $scope.selectedStudent = null;
@@ -331,4 +329,38 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   };
 
   $scope.getStudentsList();
+});
+
+
+backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
+  $scope.configTypes = ["Exercice", "Matière"];
+  $scope.selectedConfigType = $scope.configTypes[0];
+
+  $scope.prepareForm = function() {
+    console.log("Prepare form");
+    console.log($scope.selectedConfigType);
+    if ($scope.selectedConfigType == "Exercice")
+      console.log($scope.selectedExercise);
+    else
+      console.log($scope.selectedSubject);
+  };
+
+  $scope.getExercisesAndSubjects = function() {
+    $http({
+      url: "/backoffice/restapi/get_subjects_exercices",
+      method: "GET",
+    }).success(function(data, status, headers, config) {
+      data = JSON.parse(data);
+      $scope.initialData = data;
+      $scope.exercises = data.exercises;
+      $scope.subjects = data.subjects;
+      $scope.selectedExercise = $scope.exercises[0] ? $scope.exercises[0] : undefined;
+      $scope.selectedSubject = $scope.subjects[0] ? $scope.subjects[0] : undefined;
+    }).error(function(data, status, headers, config) {
+      $scope.alertError = true;
+      $scope.alertErrorMessage = "Impossible de récupérer la liste des exercices et des matières";
+    });
+  };
+
+  $scope.getExercisesAndSubjects();
 });
