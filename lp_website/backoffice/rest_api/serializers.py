@@ -97,7 +97,7 @@ class StatisticsSerializer(serializers.ModelSerializer):
 class SubjectSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Subject
-		fields = ('id', 'name')
+		fields = ('id', 'name', 'data')
 
 class ExerciseSerializer(serializers.ModelSerializer):
 	subject = serializers.SerializerMethodField('generate_subject')

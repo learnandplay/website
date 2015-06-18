@@ -24,12 +24,12 @@
     <div class="col-xs-6 col-sm-4">
       <select class="form-control"
         ng-if="selectedConfigType == 'Exercice'"
-        ng-model="selectedExercise"
+        ng-model="select.selectedExercise"
         ng-options="(exercise.subject + ' - ' + exercise.name) for exercise in exercises">
       </select>
       <select class="form-control"
         ng-if="selectedConfigType == 'Matière'"
-        ng-model="selectedSubject"
+        ng-model="select.selectedSubject"
         ng-options="subject.name for subject in subjects">
       </select>
     </div>

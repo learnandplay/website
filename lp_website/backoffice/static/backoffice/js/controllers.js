@@ -333,16 +333,17 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
 
 
 backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
+  $scope.select = {};
   $scope.configTypes = ["Exercice", "Matière"];
   $scope.selectedConfigType = $scope.configTypes[0];
 
   $scope.prepareForm = function() {
-    console.log("Prepare form");
-    console.log($scope.selectedConfigType);
-    if ($scope.selectedConfigType == "Exercice")
-      console.log($scope.selectedExercise);
-    else
-      console.log($scope.selectedSubject);
+    if ($scope.selectedConfigType == "Exercice") {
+      console.log($scope.select.selectedExercise);
+    }
+    else {
+      console.log($scope.select.selectedSubject);
+    }
   };
 
   $scope.getExercisesAndSubjects = function() {
@@ -354,8 +355,8 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       $scope.initialData = data;
       $scope.exercises = data.exercises;
       $scope.subjects = data.subjects;
-      $scope.selectedExercise = $scope.exercises[0] ? $scope.exercises[0] : undefined;
-      $scope.selectedSubject = $scope.subjects[0] ? $scope.subjects[0] : undefined;
+      $scope.select.selectedExercise = $scope.exercises[0] ? $scope.exercises[0] : undefined;
+      $scope.select.selectedSubject = $scope.subjects[0] ? $scope.subjects[0] : undefined;
     }).error(function(data, status, headers, config) {
       $scope.alertError = true;
       $scope.alertErrorMessage = "Impossible de récupérer la liste des exercices et des matières";
