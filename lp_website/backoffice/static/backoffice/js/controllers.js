@@ -338,11 +338,15 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   $scope.selectedConfigType = $scope.configTypes[0];
 
   $scope.prepareForm = function() {
-    if ($scope.selectedConfigType == "Exercice") {
-      console.log($scope.select.selectedExercise);
+    var configData = $scope.selectedConfigType == "Exercice" ? $scope.select.selectedExercise.data : $scope.select.selectedSubject.data;
+    if (configData) {
+      $scope.schema = {};
+      $scope.form = {};
+      $scope.model = {};
     }
     else {
-      console.log($scope.select.selectedSubject);
+      $scope.alertWarning = true;
+      $scope.alertWarningMessage = "Aucune configuration n'est disponible pour cette sélection";
     }
   };
 

@@ -38,5 +38,12 @@
     </div>
   </div>
 
+  <div class="config-container">
+    <div class="alert alert-warning alert-dismissible" role="alert" ng-show='alertWarning'>
+      <button type="button" class="close" ng-click="alertWarning=false"><span aria-hidden="true">&times;</span></button>
+      {%verbatim%}{{alertWarningMessage}}{%endverbatim%}
+    </div>
+  </div>
+
 </div>
 {% endblock content %}
