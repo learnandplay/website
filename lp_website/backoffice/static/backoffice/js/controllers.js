@@ -1,4 +1,4 @@
-var backofficeApp = angular.module("backofficeApp", ['ngRoute', 'chart.js']);
+var backofficeApp = angular.module("backofficeApp", ['ngRoute', 'chart.js', 'schemaForm']);
 
 backofficeApp.config(function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
