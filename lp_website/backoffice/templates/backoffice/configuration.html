@@ -43,7 +43,9 @@
       <button type="button" class="close" ng-click="alertWarning=false"><span aria-hidden="true">&times;</span></button>
       {%verbatim%}{{alertWarningMessage}}{%endverbatim%}
     </div>
+    <div ng-controller="ConfigurationCtrl">
+      <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+    </div>
   </div>
-
 </div>
 {% endblock content %}

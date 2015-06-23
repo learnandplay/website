@@ -337,12 +337,77 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   $scope.configTypes = ["Exercice", "Matière"];
   $scope.selectedConfigType = $scope.configTypes[0];
 
+  $scope.addSelectToForm = function(key, fieldConfig) {
+    $scope.schema.properties[key] = {
+      "title": fieldConfig.title,
+      "type": typeof fieldConfig.value[0],
+      "enum": fieldConfig.value,
+      "default": fieldConfig.default ? fieldConfig.default : fieldConfig.value[0]
+    };
+    $scope.form.push({
+      "key": key,
+      "type": "select"
+    });
+  };
+
+  $scope.addIntegerInputToForm = function(key, fieldConfig) {
+  };
+
+  $scope.addStringInputToForm = function(key, fieldConfig) {
+  };
+
+  $scope.addBoolInputToForm = function(key, fieldConfig) {
+    $scope.schema.properties[key] = {
+      "title": fieldConfig.title,
+      "type": "boolean",
+      "default": fieldConfig.hasOwnProperty("default") && typeof fieldConfig.default == "boolean" ? fieldConfig.default : true
+    };
+    $scope.form.push({
+      "key": key,
+      "type": "radiobuttons",
+      "titleMap": [
+        {
+          "value": true,
+          "name": fieldConfig.titleMap && fieldConfig.titleMap.length == 2 ? fieldConfig.titleMap[0] : "Oui"
+        },
+        {
+          "value": false,
+          "name": fieldConfig.titleMap && fieldConfig.titleMap.length == 2 ? fieldConfig.titleMap[1] : "Non"
+        }
+      ]
+    });
+  };
+
+  $scope.initSchema = function() {
+    $scope.schema = {
+      type: "object",
+      properties: {}
+    };
+    $scope.form = [];
+    $scope.model = {};
+  }
+
   $scope.prepareForm = function() {
-    var configData = $scope.selectedConfigType == "Exercice" ? $scope.select.selectedExercise.data : $scope.select.selectedSubject.data;
+    $scope.initSchema();
+    var configData = $scope.selectedConfigType == "Exercice" ? JSON.parse($scope.select.selectedExercise.data) : JSON.parse($scope.select.selectedSubject.data);
     if (configData) {
-      $scope.schema = {};
-      $scope.form = {};
-      $scope.model = {};
+      for (var key in configData) {
+        if (!configData.hasOwnProperty(key)) {
+          continue;
+        }
+        if (configData[key].value.constructor === Array && configData[key].value.length) {
+          $scope.addSelectToForm(key, configData[key]);
+        }
+        else if (configData[key].value === "integer") {
+          $scope.addIntegerInputToForm(key, configData[key]);
+        }
+        else if (configData[key].value === "string") {
+          $scope.addStringInputToForm(key, configData[key]);
+        }
+        else if (configData[key].value === "bool") {
+          $scope.addBoolInputToForm(key, configData[key]);
+        }
+      }
     }
     else {
       $scope.alertWarning = true;
