@@ -351,6 +351,14 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   };
 
   $scope.addIntegerInputToForm = function(key, fieldConfig) {
+    $scope.schema.properties[key] = {
+      "title": fieldConfig.title,
+      "type": "integer",
+    };
+    if (fieldConfig.default) {
+      $scope.schema.properties[key].default = parseInt(fieldConfig.default);
+    }
+    $scope.form.push(key);
   };
 
   $scope.addStringInputToForm = function(key, fieldConfig) {
