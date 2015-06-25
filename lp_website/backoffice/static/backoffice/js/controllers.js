@@ -354,6 +354,19 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   };
 
   $scope.addStringInputToForm = function(key, fieldConfig) {
+    $scope.schema.properties[key] = {
+      "title": fieldConfig.title,
+      "type": "string",
+      "minLength": fieldConfig.minLength ? fieldConfig.minLength : 1,
+      "default": fieldConfig.default ? fieldConfig.default : ""
+    };
+    if (fieldConfig.maxLength) {
+      $scope.schema.properties[key].maxLength = fieldConfig.maxLength;
+    }
+    $scope.form.push({
+      "key": key,
+      "type": "string"
+    });
   };
 
   $scope.addBoolInputToForm = function(key, fieldConfig) {

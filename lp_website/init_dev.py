@@ -244,7 +244,7 @@ exercises = []
 exercises.append([])
 exercises[0].append(Exercise(name='Additions simples', subject=subjects[0], data='{"foo": {"value": ["value1", "value2"], "title": "Test select"}, "bar": {"value": "integer", "title": "description integer"}, "result": {"value": "string", "title": "description string"}, "choice": {"value": "bool", "title": "Autoriser multi"}}'))
 exercises[0][0].save()
-exercises[0].append(Exercise(name='Soustractions', subject=subjects[0], data='{"foo": {"value": ["value1", "value2", "value3", "value4"], "default": "value2", "title": "Test select with default value"}, "bar": {"value": "integer", "title": "description integer"}, "result": {"value": "string", "title": "description string"}, "choice": {"value": "bool", "default": false, "title": "Autoriser multi"}}'))
+exercises[0].append(Exercise(name='Soustractions', subject=subjects[0], data='{"foo": {"value": ["value1", "value2", "value3", "value4"], "default": "value2", "title": "Test select with default value"}, "bar": {"value": "integer", "title": "description integer"}, "result": {"value": "string", "minLength": 4, "maxLength": 12, "default": "maths", "title": "description string"}, "choice": {"value": "bool", "default": false, "title": "Autoriser multi"}}'))
 exercises[0][1].save()
 exercises[0].append(Exercise(name='Géométrie', subject=subjects[0], data='{"foo": {"value": ["value"], "title": "Test select"}, "bar": {"value": "integer", "title": "description integer"}, "result": {"value": "string", "title": "description string"}, "choice": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser multi"}}'))
 exercises[0][2].save()
