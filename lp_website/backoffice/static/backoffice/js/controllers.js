@@ -344,6 +344,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       "enum": fieldConfig.value,
       "default": fieldConfig.default ? fieldConfig.default : fieldConfig.value[0]
     };
+    $scope.schema.required.push(key);
     $scope.form.push({
       "key": key,
       "type": "select"
@@ -358,6 +359,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     if (fieldConfig.default) {
       $scope.schema.properties[key].default = parseInt(fieldConfig.default);
     }
+    $scope.schema.required.push(key);
     $scope.form.push(key);
   };
 
@@ -371,6 +373,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     if (fieldConfig.maxLength) {
       $scope.schema.properties[key].maxLength = fieldConfig.maxLength;
     }
+    $scope.schema.required.push(key);
     $scope.form.push({
       "key": key,
       "type": "string"
@@ -383,6 +386,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       "type": "boolean",
       "default": fieldConfig.hasOwnProperty("default") && typeof fieldConfig.default == "boolean" ? fieldConfig.default : true
     };
+    $scope.schema.required.push(key);
     $scope.form.push({
       "key": key,
       "type": "radiobuttons",
@@ -401,11 +405,23 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
 
   $scope.initSchema = function() {
     $scope.schema = {
-      type: "object",
-      properties: {}
+      "type": "object",
+      "properties": {},
+      "required": []
     };
     $scope.form = [];
     $scope.model = {};
+  }
+
+  $scope.addSaveButton = function() {
+    $scope.form.push({"type": "submit", "title": "Sauvegarder"});
+  }
+
+  $scope.onSubmit = function(form) {
+    $scope.$broadcast('schemaFormValidate');
+    if (form.$valid) {
+      console.log($scope.model);
+    }
   }
 
   $scope.prepareForm = function() {
@@ -429,6 +445,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
           $scope.addBoolInputToForm(key, configData[key]);
         }
       }
+      $scope.addSaveButton();
     }
     else {
       $scope.alertWarning = true;

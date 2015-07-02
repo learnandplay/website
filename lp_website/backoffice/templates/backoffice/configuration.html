@@ -44,7 +44,7 @@
       {%verbatim%}{{alertWarningMessage}}{%endverbatim%}
     </div>
     <div ng-controller="ConfigurationCtrl">
-      <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+      <form name="configurationForm" sf-schema="schema" sf-form="form" sf-model="model" ng-submit="onSubmit(configurationForm)"></form>
     </div>
   </div>
 </div>
