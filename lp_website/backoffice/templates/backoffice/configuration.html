@@ -43,8 +43,12 @@
       <button type="button" class="close" ng-click="alertWarning=false"><span aria-hidden="true">&times;</span></button>
       {%verbatim%}{{alertWarningMessage}}{%endverbatim%}
     </div>
-    <div ng-controller="ConfigurationCtrl">
-      <form name="configurationForm" sf-schema="schema" sf-form="form" sf-model="model" ng-submit="onSubmit(configurationForm)"></form>
+    <div class="alert alert-success alert-dismissible" role="alert" ng-show='alertSuccess'>
+      <button type="button" class="close" ng-click="alertSuccess=false"><span aria-hidden="true">&times;</span></button>
+      {%verbatim%}{{alertSuccessMessage}}{%endverbatim%}
+    </div>
+    <div>
+      <form name="configurationForm" sf-schema="schema" sf-form="form" sf-model="model" ng-submit="onSubmit(configurationForm, select)"></form>
     </div>
   </div>
 </div>

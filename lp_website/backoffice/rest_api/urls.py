@@ -12,4 +12,6 @@ urlpatterns = patterns('',
     url(r'^get_statistics/(?P<class_id>\d+)/(?P<student_id>-?\d+)/$', views.get_statistics, name='api_get_statistics'),
     url(r'^get_subjects/$', views.get_subjects, name="api_get_subjects"),
     url(r'^get_subjects_exercices/$', views.get_subjects_exercices, name="api_get_subjects_exercices"),
+    url(r'^save_subject_config/$', views.save_subject_config, name="api_save_subject_config"),
+    url(r'^save_exercise_config/$', views.save_exercise_config, name="api_save_exercise_config"),
 )

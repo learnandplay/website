@@ -9,7 +9,7 @@ backofficeApp.config(function($httpProvider) {
 backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 	$scope.deleteSchoolClass = function(schoolClass) {
 		$http({
-    		url: "/backoffice/restapi/delete_school_class",
+    		url: "/backoffice/restapi/delete_school_class/",
     		method: "POST",
     		data: {"class_id": schoolClass.id},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -28,7 +28,7 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 
 	$scope.getSchoolClasses = function() {
 		$http({
-	    	url: "/backoffice/restapi/get_user_schoolclasses",
+	    	url: "/backoffice/restapi/get_user_schoolclasses/",
 	    	method: "GET",
 		}).success(function(data, status, headers, config) {
 	    	$scope.classes = data;
@@ -45,7 +45,7 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 	$scope.deleteStudent = function(student) {
 		$http({
-    		url: "/backoffice/restapi/delete_user",
+    		url: "/backoffice/restapi/delete_user/",
     		method: "POST",
     		data: {"user_id": student.id},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -68,7 +68,7 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 
 	$scope.getStudentsList = function() {
 		$http({
-			url: "/backoffice/restapi/get_all_classes_students",
+			url: "/backoffice/restapi/get_all_classes_students/",
 			method: "GET",
 		}).success(function(data, status, headers, config) {
 			data = JSON.parse(data);
@@ -95,7 +95,7 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
     $scope.addAdministrator = function(administrator_username) {
     	$http({
-    		url: "/backoffice/restapi/add_administrator",
+    		url: "/backoffice/restapi/add_administrator/",
     		method: "POST",
     		data: {"class_id": $scope.class_id, "username": administrator_username},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -112,7 +112,7 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 
     $scope.removeAdministrator = function(administrator) {
 		$http({
-    		url: "/backoffice/restapi/remove_administrator",
+    		url: "/backoffice/restapi/remove_administrator/",
     		method: "POST",
     		data: {"class_id": $scope.class_id, "administrator_id": administrator.id},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -202,7 +202,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
 
   $scope.display_stats_time_subject = function() {
     $http({
-      url: "/backoffice/restapi/get_subjects",
+      url: "/backoffice/restapi/get_subjects/",
       method: "GET",
     }).success(function(data, status, headers, config) {
       var stats = {};
@@ -307,7 +307,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
 
   $scope.getStudentsList = function() {
     $http({
-      url: "/backoffice/restapi/get_all_classes_students",
+      url: "/backoffice/restapi/get_all_classes_students/",
       method: "GET",
     }).success(function(data, status, headers, config) {
       data = JSON.parse(data);
@@ -417,16 +417,51 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     $scope.form.push({"type": "submit", "title": "Sauvegarder"});
   }
 
-  $scope.onSubmit = function(form) {
+  $scope.onSubmit = function(form, select) {
     $scope.$broadcast('schemaFormValidate');
     if (form.$valid) {
-      console.log($scope.model);
+      var requestData = {"data": $scope.model};
+      if ($scope.selectedConfigType == "Exercice") {
+        requestData["exercise_id"] = $scope.select.selectedExercise.id;
+        $http({
+          url: "/backoffice/restapi/save_exercise_config/",
+          method: "POST",
+          data: requestData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        }).success(function(data, status, headers, config) {
+          $scope.alertSuccess = true;
+          $scope.alertSuccessMessage = "Configuration sauvegardée";
+        }).error(function(data, status, headers, config) {
+          $scope.alertError = true;
+          $scope.alertErrorMessage = "Impossible de sauvegarder la configuration";
+        });
+      }
+      else {
+        requestData["subject_id"] = $scope.select.selectedSubject.id;
+        $http({
+          url: "/backoffice/restapi/save_subject_config/",
+          method: "POST",
+          data: requestData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        }).success(function(data, status, headers, config) {
+          $scope.alertSuccess = true;
+          $scope.alertSuccessMessage = "Configuration sauvegardée";
+        }).error(function(data, status, headers, config) {
+          $scope.alertError = true;
+          $scope.alertErrorMessage = "Impossible de sauvegarder la configuration";
+        });
+      }
     }
   }
 
   $scope.prepareForm = function() {
+    $scope.alertSuccess = false;
+    $scope.alertWarning = false;
+    $scope.alertError = false;
     $scope.initSchema();
-    var configData = $scope.selectedConfigType == "Exercice" ? JSON.parse($scope.select.selectedExercise.data) : JSON.parse($scope.select.selectedSubject.data);
+    var configData = $scope.selectedConfigType == "Exercice" ? $scope.select.selectedExercise.data : $scope.select.selectedSubject.data;
+    if (configData)
+      configData = JSON.parse(configData);
     if (configData) {
       for (var key in configData) {
         if (!configData.hasOwnProperty(key)) {
@@ -455,7 +490,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
 
   $scope.getExercisesAndSubjects = function() {
     $http({
-      url: "/backoffice/restapi/get_subjects_exercices",
+      url: "/backoffice/restapi/get_subjects_exercices/",
       method: "GET",
     }).success(function(data, status, headers, config) {
       data = JSON.parse(data);

@@ -11,7 +11,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.response import Response
 from backoffice.decorators import anonymous_required, teacher_required
-from backoffice.models import LPUser, SchoolClass, Statistics, Subject, Exercise
+from backoffice.models import LPUser, SchoolClass, Statistics, Subject, Exercise, SubjectConfig, ExerciseConfig
 from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer, ExerciseSerializer
 from pprint import pprint
 
@@ -197,4 +197,41 @@ def get_subjects_exercices(request):
     exercises = Exercise.objects.all().order_by('subject__name', 'name')
     exercises_serializer = ExerciseSerializer(exercises, many=True)
     response['exercises'] = exercises_serializer.data
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def save_subject_config(request):
+    post = json.loads(request.body)
+    subject_id = post['subject_id']
+    data = json.dumps(post['data'])
+    response = {}
+    try:
+        if subject_id is not None and data is not None:
+            subject = Subject.objects.get(id=subject_id)
+            subject_config = SubjectConfig()
+            subject_config.subject = subject
+            subject_config.data = data
+            subject_config.save()
+            response['result'] = 'success'
+    except (Subject.DoesNotExist):
+        return HttpResponse(status=400)
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def save_exercise_config(request):
+    post = json.loads(request.body)
+    exercise_id = post['exercise_id']
+    data = json.dumps(post['data'])
+    response = {}
+    try:
+        if exercise_id is not None and data is not None:
+            exercise = Exercise.objects.get(id=exercise_id)
+            exercise_config = ExerciseConfig()
+            exercise_config.exercise = exercise
+            exercise_config.data = data
+            exercise_config.save()
+    except (Exercise.DoesNotExist):
+        return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
