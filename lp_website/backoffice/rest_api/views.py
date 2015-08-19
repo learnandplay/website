@@ -223,12 +223,14 @@ def save_subject_config(request):
 def save_exercise_config(request):
     post = json.loads(request.body)
     exercise_id = post['exercise_id']
+    config_name = post['config_name']
     data = json.dumps(post['data'])
     response = {}
     try:
-        if exercise_id is not None and data is not None:
+        if exercise_id is not None and data is not None and config_name is not None:
             exercise = Exercise.objects.get(id=exercise_id)
             exercise_config = ExerciseConfig()
+            exercise_config.name = config_name
             exercise_config.exercise = exercise
             exercise_config.data = data
             exercise_config.save()

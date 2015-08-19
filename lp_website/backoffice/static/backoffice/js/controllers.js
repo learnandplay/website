@@ -413,6 +413,10 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     $scope.model = {};
   }
 
+  $scope.addNameField = function() {
+    $scope.addStringInputToForm("config_name", {"title": "Nom de la configuration", "maxLength": 64});
+  }
+
   $scope.addSaveButton = function() {
     $scope.form.push({"type": "submit", "title": "Sauvegarder"});
   }
@@ -420,7 +424,10 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   $scope.onSubmit = function(form, select) {
     $scope.$broadcast('schemaFormValidate');
     if (form.$valid) {
-      var requestData = {"data": $scope.model};
+      var requestData = {
+        "config_name": $scope.model.config_name,
+        "data": $scope.model,
+      };
       if ($scope.selectedConfigType == "Exercice") {
         requestData["exercise_id"] = $scope.select.selectedExercise.id;
         $http({
@@ -463,6 +470,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     if (configData)
       configData = JSON.parse(configData);
     if (configData) {
+      $scope.addNameField();
       for (var key in configData) {
         if (!configData.hasOwnProperty(key)) {
           continue;

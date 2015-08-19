@@ -73,6 +73,8 @@ class SubjectConfig(models.Model):
 ## Classe ExerciseConfig\n
 # Classe servant à personnaliser un exercice
 class ExerciseConfig(models.Model):
+    ## Nom de la configuration
+    name = models.CharField(max_length=64)
     ## Exercice de base
     exercise = models.ForeignKey(Exercise)
     ## Classe pour laquelle l'exercice est personnalisé
