@@ -203,18 +203,24 @@ def get_subjects_exercices(request):
 @teacher_required
 def save_subject_config(request):
     post = json.loads(request.body)
+    config_name = post['config_name']
+    school_class_id = post['school_class']
     subject_id = post['subject_id']
     data = json.dumps(post['data'])
     response = {}
     try:
-        if subject_id is not None and data is not None:
+        if subject_id is not None and data is not None and config_name is not None:
             subject = Subject.objects.get(id=subject_id)
             subject_config = SubjectConfig()
+            subject_config.name = config_name
             subject_config.subject = subject
             subject_config.data = data
+            if school_class_id != '*':
+                school_class = SchoolClass.objects.get(id=school_class_id)
+                subject_config.school_class = school_class
             subject_config.save()
             response['result'] = 'success'
-    except (Subject.DoesNotExist):
+    except (Subject.DoesNotExist, SchoolClass.DoesNotExist):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
 

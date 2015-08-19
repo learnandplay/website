@@ -55,6 +55,8 @@ class SchoolClass(models.Model):
 ## Classe SubjectConfig\n
 # Classe servant à personnaliser un sujet d'étude
 class SubjectConfig(models.Model):
+    ## Nom de la configuration
+    name = models.CharField(max_length=64)
     ## Sujet d'étude de base
     subject = models.ForeignKey(Subject)
     ## Classe pour laquelle le sujet est personnalisé
