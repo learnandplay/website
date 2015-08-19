@@ -340,15 +340,24 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   $scope.addSelectToForm = function(key, fieldConfig) {
     $scope.schema.properties[key] = {
       "title": fieldConfig.title,
-      "type": typeof fieldConfig.value[0],
-      "enum": fieldConfig.value,
-      "default": fieldConfig.default ? fieldConfig.default : fieldConfig.value[0]
+      "type": "string"
     };
+    if (typeof fieldConfig.value[0] == "string") {
+      $scope.schema.properties[key].enum = fieldConfig.value;
+      $scope.schema.properties[key].default = fieldConfig.default ? fieldConfig.default : fieldConfig.value[0];
+    }
+    else if (typeof fieldConfig.value[0] == "object") {
+      $scope.schema.properties[key].default = fieldConfig.value[0].value;
+    }
     $scope.schema.required.push(key);
-    $scope.form.push({
+    var form = {
       "key": key,
       "type": "select"
-    });
+    };
+    if (typeof fieldConfig.value[0] == "object") {
+      form.titleMap = fieldConfig.value;
+    }
+    $scope.form.push(form);
   };
 
   $scope.addIntegerInputToForm = function(key, fieldConfig) {
@@ -417,6 +426,15 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     $scope.addStringInputToForm("config_name", {"title": "Nom de la configuration", "maxLength": 64});
   }
 
+  $scope.addSchoolClassSelector = function() {
+    var classes = [{"value": "*", "name": "Toutes les classes"}];
+    $scope.school_classes.forEach(function(school_class) {
+      classes.push({"value": typeof school_class.id == "string" ? school_class.id : school_class.id.toString(),
+                    "name": school_class.name + " - " + school_class.school_name});
+    });
+    $scope.addSelectToForm("school_class", {"title": "Classe", "value": classes});
+  }
+
   $scope.addSaveButton = function() {
     $scope.form.push({"type": "submit", "title": "Sauvegarder"});
   }
@@ -426,6 +444,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     if (form.$valid) {
       var requestData = {
         "config_name": $scope.model.config_name,
+        "school_class": $scope.model.school_class,
         "data": $scope.model,
       };
       if ($scope.selectedConfigType == "Exercice") {
@@ -471,6 +490,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       configData = JSON.parse(configData);
     if (configData) {
       $scope.addNameField();
+      $scope.addSchoolClassSelector();
       for (var key in configData) {
         if (!configData.hasOwnProperty(key)) {
           continue;
@@ -507,6 +527,15 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       $scope.subjects = data.subjects;
       $scope.select.selectedExercise = $scope.exercises[0] ? $scope.exercises[0] : undefined;
       $scope.select.selectedSubject = $scope.subjects[0] ? $scope.subjects[0] : undefined;
+      $http({
+        url: "/backoffice/restapi/get_user_schoolclasses/",
+        method: "GET",
+      }).success(function(data, status, headers, config) {
+        $scope.school_classes = data;
+      }).error(function(data, status, headers, config) {
+        $scope.alertError = true;
+        $scope.alertErrorMessage = "Impossible de récupérer la liste des classes";
+      });
     }).error(function(data, status, headers, config) {
       $scope.alertError = true;
       $scope.alertErrorMessage = "Impossible de récupérer la liste des exercices et des matières";

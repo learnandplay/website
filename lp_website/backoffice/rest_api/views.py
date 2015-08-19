@@ -222,8 +222,9 @@ def save_subject_config(request):
 @teacher_required
 def save_exercise_config(request):
     post = json.loads(request.body)
-    exercise_id = post['exercise_id']
     config_name = post['config_name']
+    school_class_id = post['school_class']
+    exercise_id = post['exercise_id']
     data = json.dumps(post['data'])
     response = {}
     try:
@@ -233,7 +234,11 @@ def save_exercise_config(request):
             exercise_config.name = config_name
             exercise_config.exercise = exercise
             exercise_config.data = data
+            if school_class_id != '*':
+                school_class = SchoolClass.objects.get(id=school_class_id)
+                exercise_config.school_class = school_class
             exercise_config.save()
-    except (Exercise.DoesNotExist):
+            response['result'] = 'success'
+    except (Exercise.DoesNotExist, SchoolClass.DoesNotExist):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
