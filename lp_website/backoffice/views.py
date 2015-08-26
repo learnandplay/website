@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
@@ -8,8 +9,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm, SchoolClassPasswordForm, SchoolClassPasswordNotRequiredForm
-from backoffice.models import LPUser, SchoolClass
+from backoffice.models import LPUser, SchoolClass, Subject, SubjectConfig, Exercise, ExerciseConfig
 from backoffice.decorators import anonymous_required, teacher_required
+from backoffice.rest_api.serializers import SubjectSerializer, SubjectConfigSerializer, ExerciseSerializer, ExerciseConfigSerializer
 from pprint import pprint
 
 ## index\n
@@ -193,3 +195,23 @@ def statistics(request):
 @teacher_required
 def configuration(request):
     return render(request, 'backoffice/configuration.html')
+
+@login_required
+@teacher_required
+def subject_configuration(request, subject_id):
+    subject_config = SubjectConfig.objects.get(id=subject_id)
+    subject = subject_config.subject
+    config_serializer = SubjectConfigSerializer(subject_config)
+    subject_serializer = SubjectSerializer(subject)
+    return render(request, 'backoffice/configuration.html',
+    {'edit_mode': True, 'data_type': "subject", 'data_config_base': json.dumps(subject_serializer.data), 'data_config_custom': json.dumps(config_serializer.data)})
+
+@login_required
+@teacher_required
+def exercise_configuration(request, exercise_id):
+    exercise_config = ExerciseConfig.objects.get(id=exercise_id)
+    exercise = exercise_config.exercise
+    config_serializer = ExerciseConfigSerializer(exercise_config)
+    exercise_serializer = ExerciseSerializer(exercise)
+    return render(request, 'backoffice/configuration.html',
+    {'edit_mode': True, 'data_type': "exercise", 'data_config_base': json.dumps(exercise_serializer.data), 'data_config_custom': json.dumps(config_serializer.data)})

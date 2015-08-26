@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 ## @package serializers
-# Serializers utilisés par l'API, basé sur les serializers de django rest_framework
-from backoffice.models import LPUser, SchoolClass, Statistics, Subject, Exercise
+# Serializers basés sur les serializers de django rest_framework
+from backoffice.models import LPUser, SchoolClass, Statistics, Subject, SubjectConfig, Exercise, ExerciseConfig
 from rest_framework import serializers
 from django.core.urlresolvers import reverse
 import json
@@ -99,6 +99,11 @@ class SubjectSerializer(serializers.ModelSerializer):
 		model = Subject
 		fields = ('id', 'name', 'data')
 
+class SubjectConfigSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = SubjectConfig
+		fields = ('id', 'name', 'start_date', 'end_date', 'data')
+
 class ExerciseSerializer(serializers.ModelSerializer):
 	subject = serializers.SerializerMethodField('generate_subject')
 
@@ -108,3 +113,8 @@ class ExerciseSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Exercise
 		fields = ('id', 'name', 'subject', 'data')
+
+class ExerciseConfigSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = ExerciseConfig
+		fields = ('id', 'name', 'start_date', 'end_date', 'data')

@@ -333,6 +333,8 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
 
 
 backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
+  $scope.edit = {};
+  $scope.edit.editMode = false;
   $scope.select = {};
   $scope.configTypes = ["Exercice", "Matière"];
   $scope.selectedConfigType = $scope.configTypes[0];
@@ -440,6 +442,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   }
 
   $scope.onSubmit = function(form, select) {
+    var url = "";
     $scope.$broadcast('schemaFormValidate');
     if (form.$valid) {
       var requestData = {
@@ -447,10 +450,17 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
         "school_class": $scope.model.school_class,
         "data": $scope.model,
       };
-      if ($scope.selectedConfigType == "Exercice") {
-        requestData["exercise_id"] = $scope.select.selectedExercise.id;
+      if (($scope.selectedConfigType == "Exercice" && !$scope.edit.editMode) || ($scope.edit.editMode && $scope.edit.editType == "exercise")) {
+        if ($scope.edit.editMode) {
+          requestData["exercise_id"] = $scope.edit.configBase.id;
+          url = "/backoffice/restapi/save_exercise_config/" + $scope.edit.configCustom.id + "/";
+        }
+        else {
+          requestData["exercise_id"] = $scope.select.selectedExercise.id;
+          url = "/backoffice/restapi/save_exercise_config/";
+        }
         $http({
-          url: "/backoffice/restapi/save_exercise_config/",
+          url: url,
           method: "POST",
           data: requestData,
           headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -463,9 +473,16 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
         });
       }
       else {
-        requestData["subject_id"] = $scope.select.selectedSubject.id;
+        if ($scope.edit.editMode) {
+          requestData["subject_id"] = $scope.edit.configBase.id;
+          url = "/backoffice/restapi/save_subject_config/" + $scope.edit.configCustom.id + "/";
+        }
+        else {
+          requestData["subject_id"] = $scope.select.selectedSubject.id;
+          url = "/backoffice/restapi/save_subject_config/";
+        }
         $http({
-          url: "/backoffice/restapi/save_subject_config/",
+          url: url,
           method: "POST",
           data: requestData,
           headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -480,12 +497,23 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     }
   }
 
+  $scope.prepareFormWithCustomData = function() {
+    var customData = JSON.parse($scope.edit.configCustom.data)
+    for (key in customData) {
+      $scope.model[key] = customData[key];
+    }
+  }
+
   $scope.prepareForm = function() {
     $scope.alertSuccess = false;
     $scope.alertWarning = false;
     $scope.alertError = false;
     $scope.initSchema();
-    var configData = $scope.selectedConfigType == "Exercice" ? $scope.select.selectedExercise.data : $scope.select.selectedSubject.data;
+    var configData;
+    if ($scope.edit.editMode)
+      configData = $scope.edit.configBase.data
+    else
+      configData = $scope.selectedConfigType == "Exercice" ? $scope.select.selectedExercise.data : $scope.select.selectedSubject.data;
     if (configData)
       configData = JSON.parse(configData);
     if (configData) {
@@ -508,6 +536,8 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
           $scope.addBoolInputToForm(key, configData[key]);
         }
       }
+      if ($scope.edit.editMode)
+        $scope.prepareFormWithCustomData();
       $scope.addSaveButton();
     }
     else {
@@ -532,6 +562,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
         method: "GET",
       }).success(function(data, status, headers, config) {
         $scope.school_classes = data;
+        $scope.checkForEdit();
       }).error(function(data, status, headers, config) {
         $scope.alertError = true;
         $scope.alertErrorMessage = "Impossible de récupérer la liste des classes";
@@ -541,6 +572,17 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       $scope.alertErrorMessage = "Impossible de récupérer la liste des exercices et des matières";
     });
   };
+
+  $scope.checkForEdit = function() {
+    var configDiv = $("#edit_config_data");
+    if (configDiv.length != 0) {
+      $scope.edit.editMode = true;
+      $scope.edit.editType = configDiv.data("type");
+      $scope.edit.configBase = configDiv.data("config-base");
+      $scope.edit.configCustom = configDiv.data("config-custom");
+      $scope.prepareForm();
+    }
+  }
 
   $scope.getExercisesAndSubjects();
 });

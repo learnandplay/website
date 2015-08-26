@@ -201,7 +201,7 @@ def get_subjects_exercices(request):
 
 @login_required
 @teacher_required
-def save_subject_config(request):
+def save_subject_config(request, subject_config_id=None):
     post = json.loads(request.body)
     config_name = post['config_name']
     school_class_id = post['school_class']
@@ -211,7 +211,10 @@ def save_subject_config(request):
     try:
         if subject_id is not None and data is not None and config_name is not None:
             subject = Subject.objects.get(id=subject_id)
-            subject_config = SubjectConfig()
+            if subject_config_id is not None:
+                subject_config = SubjectConfig.objects.get(id=subject_config_id)
+            else:
+                subject_config = SubjectConfig()
             subject_config.name = config_name
             subject_config.subject = subject
             subject_config.data = data
@@ -220,13 +223,13 @@ def save_subject_config(request):
                 subject_config.school_class = school_class
             subject_config.save()
             response['result'] = 'success'
-    except (Subject.DoesNotExist, SchoolClass.DoesNotExist):
+    except (Subject.DoesNotExist, SchoolClass.DoesNotExist, SubjectConfig.DoesNotExist):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
 
 @login_required
 @teacher_required
-def save_exercise_config(request):
+def save_exercise_config(request, exercise_config_id=None):
     post = json.loads(request.body)
     config_name = post['config_name']
     school_class_id = post['school_class']
@@ -236,7 +239,10 @@ def save_exercise_config(request):
     try:
         if exercise_id is not None and data is not None and config_name is not None:
             exercise = Exercise.objects.get(id=exercise_id)
-            exercise_config = ExerciseConfig()
+            if exercise_config_id is not None:
+                exercise_config = ExerciseConfig.objects.get(id=exercise_config_id)
+            else:
+                exercise_config = ExerciseConfig()
             exercise_config.name = config_name
             exercise_config.exercise = exercise
             exercise_config.data = data
@@ -245,6 +251,6 @@ def save_exercise_config(request):
                 exercise_config.school_class = school_class
             exercise_config.save()
             response['result'] = 'success'
-    except (Exercise.DoesNotExist, SchoolClass.DoesNotExist):
+    except (Exercise.DoesNotExist, SchoolClass.DoesNotExist, ExerciseConfig.DoesNotExist):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))

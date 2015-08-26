@@ -14,6 +14,7 @@
       {%verbatim%}{{alertErrorMessage}}{%endverbatim%}
   </div>
 
+  {% if not edit_mode %}
   <div class="row">
     <div class="col-xs-6 col-sm-4">
       <select class="form-control"
@@ -37,6 +38,10 @@
       <button class="btn btn-primary" ng-click="prepareForm()">Personnaliser</button>
     </div>
   </div>
+  {% else %}
+  <p>Lien vers la liste des configs</p>
+  <div id="edit_config_data" data-type="{{data_type}}" data-config-base="{{data_config_base}}" data-config-custom="{{data_config_custom}}" style="display: none;"></div>
+  {% endif %}
 
   <div class="config-container">
     <div class="alert alert-warning alert-dismissible" role="alert" ng-show='alertWarning'>
