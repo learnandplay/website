@@ -1,0 +1,71 @@
+{% extends "backoffice/layout.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Mes personnalisations{% endblock title %}
+
+{% block navbar_my_configurations %}active{% endblock navbar_my_configurations %}
+
+{% block content %}
+<div ng-controller="ConfigurationsListCtrl">
+
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-show='alertError'>
+        <button type="button" class="close" ng-click="alertError=false"><span aria-hidden="true">&times;</span></button>
+        {%verbatim%}{{configurationsAlertError}}{%endverbatim%}
+    </div>
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Confirmer la suppression
+                </div>
+                <div class="modal-body">
+                    <p>Vous êtes sur le point de supprimer la configuration <strong ng-init="userData.configurationToDelete='';">{%verbatim%}{{userData.configurationToDelete.name}}{%endverbatim%}</strong>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button id="confirm-delete-modal" type="button" class="btn btn-danger" ng-click="deleteConfiguration(userData.configurationToDelete);">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <select class="form-control"
+            ng-model="selectedConfigurationType"
+            ng-change="changeSelectedConfigurationType()">
+            <option value="exercises_configurations">Exercice</option>
+            <option value="subjects_configurations">Matière</option>
+    </select>
+
+	<table class="table table-striped" ng-show="configurations.length!=0">
+    	<thead>
+        	<tr>
+              <th data-field="name">Nom</th>
+              <th data-field="base_name">Associé à</th>
+              <th data-field="school_class">Classe</th>
+              <th>Actions</th>
+        	</tr>
+    	</thead>
+    	<tbody>
+			<tr ng-repeat="config in configurations">
+        <td>{%verbatim%}{{config.name}}{%endverbatim%}</td>
+        <td>{%verbatim%}{{config.base_name}}{%endverbatim%}</td>
+        <td>{%verbatim%}{{config.school_class}}{%endverbatim%}</td>
+        <td>
+          <a href="{%verbatim%}{{config.edit_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
+          <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirm-delete" ng-click="userData.configurationToDelete = config;">Supprimer</button>
+        </td>
+			</tr>
+		</tbody>
+	</table>
+    <div class="alert alert-danger" role="alert" ng-show="configurations.length==0">Aucune personnalisation n'est associée à vos classes</div>
+</div>
+
+<a class="btn btn-primary" href="{% url 'backoffice:configuration' %}">{% bootstrap_icon "plus" %} Créer une personnalisation</a>
+{% endblock content %}
+
+{% block script %}
+$("#confirm-delete-modal").on('click', function() {
+   $("#confirm-delete").modal("hide");
+});
+{% endblock script %}

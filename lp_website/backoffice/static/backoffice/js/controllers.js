@@ -429,7 +429,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   }
 
   $scope.addSchoolClassSelector = function() {
-    var classes = [{"value": "*", "name": "Toutes les classes"}];
+    var classes = [];
     $scope.school_classes.forEach(function(school_class) {
       classes.push({"value": typeof school_class.id == "string" ? school_class.id : school_class.id.toString(),
                     "name": school_class.name + " - " + school_class.school_name});
@@ -585,4 +585,50 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   }
 
   $scope.getExercisesAndSubjects();
+});
+
+backofficeApp.controller('ConfigurationsListCtrl', function($scope, $http) {
+  $scope.configurationType = ['exercises_configurations', 'subjects_configurations'];
+  $scope.configurationTypeName = {'exercises_configurations' : 'Exercice', 'subjects_configurations': 'Matière'};
+  $scope.selectedConfigurationType = $scope.configurationType[0];
+  $scope.selectedConfigurationTypeName = $scope.configurationTypeName[$scope.selectedConfigurationType];
+
+  $scope.changeSelectedConfigurationType = function() {
+    $scope.configurations = $scope.initialData[$scope.selectedConfigurationType];
+    $scope.selectedConfigurationTypeName = $scope.configurationTypeName[$scope.selectedConfigurationType];
+  }
+
+  $scope.deleteConfiguration = function(configuration) {
+    $http({
+    		url: configuration.delete_url,
+    		method: "POST",
+    		data: {"config_id": configuration.id},
+    		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+		}).success(function(data, status, headers, config) {
+			var i = $scope.initialData[$scope.selectedConfigurationType].length;
+			while (i--) {
+				if ($scope.initialData[$scope.selectedConfigurationType][i].id == configuration.id) {
+					$scope.initialData[$scope.selectedConfigurationType].splice(i, 1);
+				}
+			}
+		}).error(function(data, status, headers, config) {
+    		$scope.alertError = true;
+			$scope.configurationsAlertError = "Impossible de supprimer la configuration";
+		});
+  }
+
+  $scope.getConfigurations = function() {
+    $http({
+        url: "/backoffice/restapi/get_configurations/",
+        method: "GET",
+    }).success(function(data, status, headers, config) {
+        $scope.initialData = JSON.parse(data);
+        $scope.configurations = $scope.initialData[$scope.selectedConfigurationType];
+    }).error(function(data, status, headers, config) {
+        $scope.alertError = true;
+      $scope.configurationsAlertError = "Impossible de récupérer la liste des configurations";
+    });
+  };
+
+	$scope.getConfigurations();
 });

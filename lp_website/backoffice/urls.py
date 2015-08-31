@@ -29,4 +29,5 @@ urlpatterns = patterns('',
         url(r'^subject/(?P<subject_id>\d+)/$', views.subject_configuration, name='subject_configuration'),
         url(r'^exercise/(?P<exercise_id>\d+)/$', views.exercise_configuration, name='exercise_configuration'),
     ))),
+    url(r'^my_configurations/$', views.my_configurations, name='my_configurations'),
 )

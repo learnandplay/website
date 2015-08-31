@@ -94,15 +94,38 @@ class StatisticsSerializer(serializers.ModelSerializer):
 		model = Statistics
 		fields = ('username', 'subject', 'exercise', 'date', 'data')
 
+
 class SubjectSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Subject
 		fields = ('id', 'name', 'data')
 
+
 class SubjectConfigSerializer(serializers.ModelSerializer):
+	edit_url = serializers.SerializerMethodField('generate_edit_url')
+
+	delete_url = serializers.SerializerMethodField('generate_delete_url')
+
+	base_name = serializers.SerializerMethodField('generate_base_name')
+
+	school_class = serializers.SerializerMethodField('generate_school_class')
+
+	def generate_edit_url(self, subjectConfig):
+		return reverse('backoffice:subject_configuration', kwargs={'subject_id': subjectConfig.id})
+
+	def generate_delete_url(self, subjectConfig):
+		return reverse('backoffice:api_delete_subject_configuration')
+
+	def generate_base_name(self, subjectConfig):
+		return subjectConfig.subject.name
+
+	def generate_school_class(self, subjectConfig):
+		return subjectConfig.school_class.name + ' - ' + subjectConfig.school_class.school_name
+
 	class Meta:
 		model = SubjectConfig
-		fields = ('id', 'name', 'start_date', 'end_date', 'data')
+		fields = ('id', 'name', 'start_date', 'end_date', 'data', 'edit_url', 'delete_url', 'base_name', 'school_class')
+
 
 class ExerciseSerializer(serializers.ModelSerializer):
 	subject = serializers.SerializerMethodField('generate_subject')
@@ -114,7 +137,28 @@ class ExerciseSerializer(serializers.ModelSerializer):
 		model = Exercise
 		fields = ('id', 'name', 'subject', 'data')
 
+
 class ExerciseConfigSerializer(serializers.ModelSerializer):
+	edit_url = serializers.SerializerMethodField('generate_edit_url')
+
+	delete_url = serializers.SerializerMethodField('generate_delete_url')
+
+	base_name = serializers.SerializerMethodField('generate_base_name')
+
+	school_class = serializers.SerializerMethodField('generate_school_class')
+
+	def generate_edit_url(self, exerciseConfig):
+		return reverse('backoffice:exercise_configuration', kwargs={'exercise_id': exerciseConfig.id})
+
+	def generate_delete_url(self, exerciseConfig):
+		return reverse('backoffice:api_delete_exercise_configuration')
+
+	def generate_base_name(self, exerciseConfig):
+		return exerciseConfig.exercise.subject.name + ' - ' + exerciseConfig.exercise.name
+
+	def generate_school_class(self, exerciseConfig):
+		return exerciseConfig.school_class.name + ' - ' + exerciseConfig.school_class.school_name
+
 	class Meta:
 		model = ExerciseConfig
-		fields = ('id', 'name', 'start_date', 'end_date', 'data')
+		fields = ('id', 'name', 'start_date', 'end_date', 'data', 'edit_url', 'delete_url', 'base_name', 'school_class')

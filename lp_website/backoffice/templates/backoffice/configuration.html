@@ -39,7 +39,7 @@
     </div>
   </div>
   {% else %}
-  <p>Lien vers la liste des configs</p>
+  <a href="{% url 'backoffice:my_configurations' %}">< Mes personnalisations</a>
   <div id="edit_config_data" data-type="{{data_type}}" data-config-base="{{data_config_base}}" data-config-custom="{{data_config_custom}}" style="display: none;"></div>
   {% endif %}
 

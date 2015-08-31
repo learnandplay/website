@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from backoffice.decorators import anonymous_required, teacher_required
 from backoffice.models import LPUser, SchoolClass, Statistics, Subject, Exercise, SubjectConfig, ExerciseConfig
-from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer, ExerciseSerializer
+from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer, SubjectConfigSerializer, ExerciseSerializer, ExerciseConfigSerializer
 from pprint import pprint
 
 ## Classe JSONResponse\n
@@ -218,9 +218,8 @@ def save_subject_config(request, subject_config_id=None):
             subject_config.name = config_name
             subject_config.subject = subject
             subject_config.data = data
-            if school_class_id != '*':
-                school_class = SchoolClass.objects.get(id=school_class_id)
-                subject_config.school_class = school_class
+            school_class = SchoolClass.objects.get(id=school_class_id)
+            subject_config.school_class = school_class
             subject_config.save()
             response['result'] = 'success'
     except (Subject.DoesNotExist, SchoolClass.DoesNotExist, SubjectConfig.DoesNotExist):
@@ -246,11 +245,49 @@ def save_exercise_config(request, exercise_config_id=None):
             exercise_config.name = config_name
             exercise_config.exercise = exercise
             exercise_config.data = data
-            if school_class_id != '*':
-                school_class = SchoolClass.objects.get(id=school_class_id)
-                exercise_config.school_class = school_class
+            school_class = SchoolClass.objects.get(id=school_class_id)
+            exercise_config.school_class = school_class
             exercise_config.save()
             response['result'] = 'success'
     except (Exercise.DoesNotExist, SchoolClass.DoesNotExist, ExerciseConfig.DoesNotExist):
         return HttpResponse(status=400)
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def get_configurations(request):
+    response = {}
+    classes = request.user.LPUser.school_class.all().order_by('name')
+    exercises_configurations = ExerciseConfig.objects.filter(school_class__in=classes).order_by('name')
+    exercises_config_serializer = ExerciseConfigSerializer(exercises_configurations, many=True)
+    response['exercises_configurations'] = exercises_config_serializer.data
+    subjects_configurations = SubjectConfig.objects.filter(school_class__in=classes).order_by('name')
+    subjects_config_serializer = SubjectConfigSerializer(subjects_configurations, many=True)
+    response['subjects_configurations'] = subjects_config_serializer.data
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def delete_exercise_configuration(request):
+    post = json.loads(request.body)
+    try:
+        ExerciseConfig.objects.get(id=post['config_id']).delete()
+    except ExerciseConfig.DoesNotExist:
+        return HttpResponse(status=400)
+    response = {}
+    response['result'] = 'success'
+    response['deleted'] = post['config_id']
+    return JSONResponse(json.dumps(response))
+
+@login_required
+@teacher_required
+def delete_subject_configuration(request):
+    post = json.loads(request.body)
+    try:
+        SubjectConfig.objects.get(id=post['config_id']).delete()
+    except SubjectConfig.DoesNotExist:
+        return HttpResponse(status=400)
+    response = {}
+    response['result'] = 'success'
+    response['deleted'] = post['config_id']
     return JSONResponse(json.dumps(response))

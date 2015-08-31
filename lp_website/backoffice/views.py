@@ -215,3 +215,8 @@ def exercise_configuration(request, exercise_id):
     exercise_serializer = ExerciseSerializer(exercise)
     return render(request, 'backoffice/configuration.html',
     {'edit_mode': True, 'data_type': "exercise", 'data_config_base': json.dumps(exercise_serializer.data), 'data_config_custom': json.dumps(config_serializer.data)})
+
+@login_required
+@teacher_required
+def my_configurations(request):
+    return render(request, 'backoffice/my_configurations.html')

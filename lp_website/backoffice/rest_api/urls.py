@@ -20,4 +20,7 @@ urlpatterns = patterns('',
         url(r'^$', views.save_exercise_config, name="api_save_exercise_config"),
         url(r'^(?P<exercise_config_id>\d+)/$', views.save_exercise_config, name="api_update_exercise_config"),
     ))),
+    url(r'^get_configurations/$', views.get_configurations, name="api_get_configurations"),
+    url(r'^delete_exercise_configuration/$', views.delete_exercise_configuration, name="api_delete_exercise_configuration"),
+    url(r'^delete_subject_configuration/$', views.delete_subject_configuration, name="api_delete_subject_configuration"),
 )
