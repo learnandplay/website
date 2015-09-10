@@ -191,11 +191,15 @@ def edit_profile(request):
 def statistics(request):
     return render(request, 'backoffice/statistics.html')
 
+## configuration\n
+# Page de création d'une configuration
 @login_required
 @teacher_required
 def configuration(request):
     return render(request, 'backoffice/configuration.html')
 
+## subject_configuration\n
+# Page d'edition d'une configuration de matiere
 @login_required
 @teacher_required
 def subject_configuration(request, subject_id):
@@ -206,6 +210,8 @@ def subject_configuration(request, subject_id):
     return render(request, 'backoffice/configuration.html',
     {'edit_mode': True, 'data_type': "subject", 'data_config_base': json.dumps(subject_serializer.data), 'data_config_custom': json.dumps(config_serializer.data)})
 
+## exercise_configuration\n
+# Page d'edition d'une configuration d'exercice
 @login_required
 @teacher_required
 def exercise_configuration(request, exercise_id):
@@ -216,6 +222,8 @@ def exercise_configuration(request, exercise_id):
     return render(request, 'backoffice/configuration.html',
     {'edit_mode': True, 'data_type': "exercise", 'data_config_base': json.dumps(exercise_serializer.data), 'data_config_custom': json.dumps(config_serializer.data)})
 
+## my_configurations\n
+# Liste des configurations
 @login_required
 @teacher_required
 def my_configurations(request):

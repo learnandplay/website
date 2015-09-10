@@ -180,6 +180,9 @@ def get_statistics(request, class_id, student_id):
     response = StatisticsSerializer(stats, many=True).data
     return JSONResponse(json.dumps(response))
 
+## get_subjects\n
+# Requête GET
+# @returns Toutes les matieres scolaires
 @login_required
 @teacher_required
 def get_subjects(request):
@@ -187,6 +190,9 @@ def get_subjects(request):
     serializer = SubjectSerializer(subjects, many=True)
     return JSONResponse(serializer.data)
 
+## get_subjects_exercices\n
+# Requête GET
+# @returns Tous les exercices associés à leur matiere correspondante
 @login_required
 @teacher_required
 def get_subjects_exercices(request):
@@ -199,6 +205,15 @@ def get_subjects_exercices(request):
     response['exercises'] = exercises_serializer.data
     return JSONResponse(json.dumps(response))
 
+## save_subject_config\n
+# Sauvegarder une nouvelle configuration ou modifier une configuration existante\n
+# Requête POST
+# @param subject_config_id ID de la configuration dans le cas de la modification d'une configuration deja existante
+# @param config_name Nom de la configuration
+# @param school_class Classe associée
+# @param subject_id Matiere associée
+# @param data Données de configuration
+# @returns Une erreur 400 si la matiere, la classe ou la configuration n'existent pas. Sinon un json confirmant la sauvegarde
 @login_required
 @teacher_required
 def save_subject_config(request, subject_config_id=None):
@@ -226,6 +241,15 @@ def save_subject_config(request, subject_config_id=None):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
 
+## save_exercise_config\n
+# Sauvegarder une nouvelle configuration ou modifier une configuration existante\n
+# Requête POST
+# @param exercise_config_id ID de la configuration dans le cas de la modification d'une configuration deja existante
+# @param config_name Nom de la configuration
+# @param school_class Classe associée
+# @param exercise_id Exercice associé
+# @param data Données de configuration
+# @returns Une erreur 400 si l'exercice, la classe ou la configuration n'existent pas. Sinon un json confirmant la sauvegarde
 @login_required
 @teacher_required
 def save_exercise_config(request, exercise_config_id=None):
@@ -253,6 +277,9 @@ def save_exercise_config(request, exercise_config_id=None):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
 
+## get_configurations\n
+# Requête GET
+# @returns Les configurations d'exercices dans 'exercises_configurations' et les configurations de matieres dans 'subjects_configurations'
 @login_required
 @teacher_required
 def get_configurations(request):
@@ -266,6 +293,11 @@ def get_configurations(request):
     response['subjects_configurations'] = subjects_config_serializer.data
     return JSONResponse(json.dumps(response))
 
+## delete_exercise_configuration\n
+# Supprimer une configuration\n
+# Requête POST
+# @param config_id ID de la configuration
+# @returns Une erreur 400 si la configuration n'existe pas, sinon un json confirmant la suppression
 @login_required
 @teacher_required
 def delete_exercise_configuration(request):
@@ -279,6 +311,11 @@ def delete_exercise_configuration(request):
     response['deleted'] = post['config_id']
     return JSONResponse(json.dumps(response))
 
+## delete_subject_configuration\n
+# Supprimer une configuration\n
+# Requête POST
+# @param config_id ID de la configuration
+# @returns Une erreur 400 si la configuration n'existe pas, sinon un json confirmant la suppression
 @login_required
 @teacher_required
 def delete_subject_configuration(request):

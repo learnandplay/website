@@ -12,6 +12,7 @@ from imagekit.processors import ResizeToFill
 class Subject(models.Model):
     ## Le nom du sujet
     name = models.CharField(max_length=32)
+    ## Données liées au sujet
     data = models.TextField()
     class Meta:
         db_table = 'lp_subject'
