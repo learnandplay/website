@@ -2,7 +2,7 @@ from django.conf.urls import include, patterns, url
 from backoffice import views
 
 urlpatterns = patterns('',
-    url(r'^restapi/', include('backoffice.rest_api.urls'), name='restapi'),
+    url(r'^api/', include('backoffice.api.urls'), name='api'),
     url(r'^$', views.index, name='index'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),

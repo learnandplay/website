@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from backoffice.decorators import anonymous_required, teacher_required
 from backoffice.models import LPUser, SchoolClass, Statistics, Subject, Exercise, SubjectConfig, ExerciseConfig
-from backoffice.rest_api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer, SubjectConfigSerializer, ExerciseSerializer, ExerciseConfigSerializer
+from backoffice.api.serializers import LPUserSerializer, SchoolClassSerializer, StatisticsSerializer, SubjectSerializer, SubjectConfigSerializer, ExerciseSerializer, ExerciseConfigSerializer
 from pprint import pprint
 
 ## Classe JSONResponse\n

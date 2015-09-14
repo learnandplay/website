@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm, SchoolClassPasswordForm, SchoolClassPasswordNotRequiredForm
 from backoffice.models import LPUser, SchoolClass, Subject, SubjectConfig, Exercise, ExerciseConfig
 from backoffice.decorators import anonymous_required, teacher_required
-from backoffice.rest_api.serializers import SubjectSerializer, SubjectConfigSerializer, ExerciseSerializer, ExerciseConfigSerializer
+from backoffice.api.serializers import SubjectSerializer, SubjectConfigSerializer, ExerciseSerializer, ExerciseConfigSerializer
 from pprint import pprint
 
 ## index\n

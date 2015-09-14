@@ -9,7 +9,7 @@ backofficeApp.config(function($httpProvider) {
 backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 	$scope.deleteSchoolClass = function(schoolClass) {
 		$http({
-    		url: "/backoffice/restapi/delete_school_class/",
+    		url: "/backoffice/api/delete_school_class/",
     		method: "POST",
     		data: {"class_id": schoolClass.id},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -28,7 +28,7 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 
 	$scope.getSchoolClasses = function() {
 		$http({
-	    	url: "/backoffice/restapi/get_user_schoolclasses/",
+	    	url: "/backoffice/api/get_user_schoolclasses/",
 	    	method: "GET",
 		}).success(function(data, status, headers, config) {
 	    	$scope.classes = data;
@@ -45,7 +45,7 @@ backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 	$scope.deleteStudent = function(student) {
 		$http({
-    		url: "/backoffice/restapi/delete_user/",
+    		url: "/backoffice/api/delete_user/",
     		method: "POST",
     		data: {"user_id": student.id},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -68,7 +68,7 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 
 	$scope.getStudentsList = function() {
 		$http({
-			url: "/backoffice/restapi/get_all_classes_students/",
+			url: "/backoffice/api/get_all_classes_students/",
 			method: "GET",
 		}).success(function(data, status, headers, config) {
 			data = JSON.parse(data);
@@ -95,7 +95,7 @@ backofficeApp.controller('StudentsListCtrl', function($scope, $http) {
 backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
     $scope.addAdministrator = function(administrator_username) {
     	$http({
-    		url: "/backoffice/restapi/add_administrator/",
+    		url: "/backoffice/api/add_administrator/",
     		method: "POST",
     		data: {"class_id": $scope.class_id, "username": administrator_username},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -112,7 +112,7 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 
     $scope.removeAdministrator = function(administrator) {
 		$http({
-    		url: "/backoffice/restapi/remove_administrator/",
+    		url: "/backoffice/api/remove_administrator/",
     		method: "POST",
     		data: {"class_id": $scope.class_id, "administrator_id": administrator.id},
     		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -135,7 +135,7 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 
 	$scope.getAdministratorsList = function() {
 		$http({
-			url: "/backoffice/restapi/get_schoolclass_administrators/" + $scope.class_id,
+			url: "/backoffice/api/get_schoolclass_administrators/" + $scope.class_id,
 			method: "GET",
 		}).success(function(data, status, headers, config) {
 			$scope.administrators = JSON.parse(data);
@@ -202,7 +202,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
 
   $scope.display_stats_time_subject = function() {
     $http({
-      url: "/backoffice/restapi/get_subjects/",
+      url: "/backoffice/api/get_subjects/",
       method: "GET",
     }).success(function(data, status, headers, config) {
       var stats = {};
@@ -280,7 +280,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
     if ($scope.previousSchoolClass != $scope.selectedSchoolClass ||
         $scope.previousStudent != $scope.selectedStudent) {
           $http({
-            url: "/backoffice/restapi/get_statistics/" + $scope.selectedSchoolClass.id + "/" + ($scope.selectedStudent ? $scope.selectedStudent.id : "-1"),
+            url: "/backoffice/api/get_statistics/" + $scope.selectedSchoolClass.id + "/" + ($scope.selectedStudent ? $scope.selectedStudent.id : "-1"),
             method: "GET",
           }).success(function(data, status, headers, config) {
             $scope.data = JSON.parse(data);
@@ -307,7 +307,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
 
   $scope.getStudentsList = function() {
     $http({
-      url: "/backoffice/restapi/get_all_classes_students/",
+      url: "/backoffice/api/get_all_classes_students/",
       method: "GET",
     }).success(function(data, status, headers, config) {
       data = JSON.parse(data);
@@ -453,11 +453,11 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       if (($scope.selectedConfigType == "Exercice" && !$scope.edit.editMode) || ($scope.edit.editMode && $scope.edit.editType == "exercise")) {
         if ($scope.edit.editMode) {
           requestData["exercise_id"] = $scope.edit.configBase.id;
-          url = "/backoffice/restapi/save_exercise_config/" + $scope.edit.configCustom.id + "/";
+          url = "/backoffice/api/save_exercise_config/" + $scope.edit.configCustom.id + "/";
         }
         else {
           requestData["exercise_id"] = $scope.select.selectedExercise.id;
-          url = "/backoffice/restapi/save_exercise_config/";
+          url = "/backoffice/api/save_exercise_config/";
         }
         $http({
           url: url,
@@ -475,11 +475,11 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       else {
         if ($scope.edit.editMode) {
           requestData["subject_id"] = $scope.edit.configBase.id;
-          url = "/backoffice/restapi/save_subject_config/" + $scope.edit.configCustom.id + "/";
+          url = "/backoffice/api/save_subject_config/" + $scope.edit.configCustom.id + "/";
         }
         else {
           requestData["subject_id"] = $scope.select.selectedSubject.id;
-          url = "/backoffice/restapi/save_subject_config/";
+          url = "/backoffice/api/save_subject_config/";
         }
         $http({
           url: url,
@@ -548,7 +548,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
 
   $scope.getExercisesAndSubjects = function() {
     $http({
-      url: "/backoffice/restapi/get_subjects_exercices/",
+      url: "/backoffice/api/get_subjects_exercices/",
       method: "GET",
     }).success(function(data, status, headers, config) {
       data = JSON.parse(data);
@@ -558,7 +558,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       $scope.select.selectedExercise = $scope.exercises[0] ? $scope.exercises[0] : undefined;
       $scope.select.selectedSubject = $scope.subjects[0] ? $scope.subjects[0] : undefined;
       $http({
-        url: "/backoffice/restapi/get_user_schoolclasses/",
+        url: "/backoffice/api/get_user_schoolclasses/",
         method: "GET",
       }).success(function(data, status, headers, config) {
         $scope.school_classes = data;
@@ -619,7 +619,7 @@ backofficeApp.controller('ConfigurationsListCtrl', function($scope, $http) {
 
   $scope.getConfigurations = function() {
     $http({
-        url: "/backoffice/restapi/get_configurations/",
+        url: "/backoffice/api/get_configurations/",
         method: "GET",
     }).success(function(data, status, headers, config) {
         $scope.initialData = JSON.parse(data);
