@@ -83,7 +83,6 @@ def teachers_required(request):
 # Liste des classes administrées par l'utilisateur
 @login_required
 @teacher_required
-@ensure_csrf_cookie
 def my_classes(request):
     return render(request, 'backoffice/my_classes.html')
 
@@ -93,7 +92,10 @@ def my_classes(request):
 @login_required
 @teacher_required
 def edit_class(request, id=None):
-    school_class = SchoolClass.objects.get(id=id) if id else None
+    try:
+        school_class = SchoolClass.objects.get(id=id) if id else None
+    except SchoolClass.DoesNotExist:
+        return HttpResponse(status=400)
     form = ClassForm(request.POST or None, instance=school_class)
     password_form = None
     if not id:
@@ -126,8 +128,11 @@ def my_students(request, class_id=None):
 @login_required
 @teacher_required
 def edit_student(request, class_id, id=None):
-    school_class = SchoolClass.objects.get(id=class_id)
-    student = LPUser.objects.get(id=id) if id else None
+    try:
+        school_class = SchoolClass.objects.get(id=class_id)
+        student = LPUser.objects.get(id=id) if id else None
+    except (SchoolClass.DoesNotExist, LPUser.DoesNotExist):
+        return HttpResponse(status=400)
     instance = student.user if student else None
     avatar_form = AvatarForm(request.POST, request.FILES)
     form = StudentForm(request.POST or None, instance=instance)
@@ -157,7 +162,10 @@ def edit_student(request, class_id, id=None):
 @login_required
 @teacher_required
 def class_administrators(request, class_id):
-    school_class = SchoolClass.objects.get(id=class_id)
+    try:
+        school_class = SchoolClass.objects.get(id=class_id)
+    except SchoolClass.DoesNotExist:
+        return HttpResponse(status=400)
     return render(request, 'backoffice/class_administrators.html',
         {'school_class': school_class})
 
@@ -203,7 +211,10 @@ def configuration(request):
 @login_required
 @teacher_required
 def subject_configuration(request, subject_id):
-    subject_config = SubjectConfig.objects.get(id=subject_id)
+    try:
+        subject_config = SubjectConfig.objects.get(id=subject_id)
+    except SubjectConfig.DoesNotExist:
+        return HttpResponse(status=400)
     subject = subject_config.subject
     config_serializer = SubjectConfigSerializer(subject_config)
     subject_serializer = SubjectSerializer(subject)
@@ -215,7 +226,10 @@ def subject_configuration(request, subject_id):
 @login_required
 @teacher_required
 def exercise_configuration(request, exercise_id):
-    exercise_config = ExerciseConfig.objects.get(id=exercise_id)
+    try:
+        exercise_config = ExerciseConfig.objects.get(id=exercise_id)
+    except ExerciseConfig.DoesNotExist:
+        return HttpResponse(status=400)
     exercise = exercise_config.exercise
     config_serializer = ExerciseConfigSerializer(exercise_config)
     exercise_serializer = ExerciseSerializer(exercise)
