@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.test import TestCase
 from django.contrib.auth.models import User
-from models import Subject, Exercise, SchoolClass, SubjectConfig, ExerciseConfig, LPUser, Statistics
+from backoffice.models import Subject, Exercise, SchoolClass, SubjectConfig, ExerciseConfig, LPUser, Statistics
 
 class SubjectTest(TestCase):
     def setUp(self):
