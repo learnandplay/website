@@ -44,13 +44,16 @@ def get_user_schoolclasses(request):
 @teacher_required
 def delete_school_class(request):
     post = json.loads(request.body)
-    try:
-        SchoolClass.objects.get(id=post['class_id']).delete()
-    except SchoolClass.DoesNotExist:
+    if 'class_id' in post:
+        try:
+            SchoolClass.objects.get(id=post['class_id']).delete()
+        except SchoolClass.DoesNotExist:
+            return HttpResponse(status=400)
+        response = {}
+        response['result'] = 'success'
+        response['deleted'] = post['class_id']
+    else:
         return HttpResponse(status=400)
-    response = {}
-    response['result'] = 'success'
-    response['deleted'] = post['class_id']
     return JSONResponse(json.dumps(response))
 
 ## get_all_classes_students\n
@@ -80,19 +83,18 @@ def get_all_classes_students(request):
 @teacher_required
 def delete_user(request):
     post = json.loads(request.body)
+    if 'user_id' not in post:
+        return HttpResponse(status=400)
     user_id = post['user_id']
     response = {}
-    if user_id is not None:
-        try:
-            lp_user = LPUser.objects.get(id=user_id)
-            lp_user.user.delete()
-            lp_user.delete()
-        except LPUser.DoesNotExist:
-            return HttpResponse(status=400)
-        response['result'] = 'success'
-        response['deleted'] = user_id
-    else:
+    try:
+        lp_user = LPUser.objects.get(id=user_id)
+        lp_user.user.delete()
+        lp_user.delete()
+    except LPUser.DoesNotExist:
         return HttpResponse(status=400)
+    response['result'] = 'success'
+    response['deleted'] = user_id
     return JSONResponse(json.dumps(response))
 
 ## get_schoolclass_administrators\n
@@ -121,19 +123,18 @@ def get_schoolclass_administrators(request, class_id):
 @teacher_required
 def remove_administrator(request):
     post = json.loads(request.body)
+    if 'class_id' not in post or 'administrator_id' not in post:
+        return HttpResponse(status=400)
     class_id = post['class_id']
     administrator_id = post['administrator_id']
     response = {}
-    if class_id is not None and administrator_id is not None:
-        try:
-            LPUser.objects.get(id=administrator_id).school_class.remove(SchoolClass.objects.get(id=class_id))
-        except (LPUser.DoesNotExist, SchoolClass.DoesNotExist):
-            return HttpResponse(status=400)
-        response['result'] = 'success'
-        response['removed'] = administrator_id
-        response['class_id'] = class_id
-    else:
+    try:
+        LPUser.objects.get(id=administrator_id).school_class.remove(SchoolClass.objects.get(id=class_id))
+    except (LPUser.DoesNotExist, SchoolClass.DoesNotExist):
         return HttpResponse(status=400)
+    response['result'] = 'success'
+    response['removed'] = administrator_id
+    response['class_id'] = class_id
     if request.user.id == administrator_id:
         response['needRedirect'] = reverse('backoffice:my_classes')
     return JSONResponse(json.dumps(response))
@@ -148,6 +149,8 @@ def remove_administrator(request):
 @teacher_required
 def add_administrator(request):
     post = json.loads(request.body)
+    if 'class_id' not in post or 'username' not in post:
+        return HttpResponse(status=400)
     response = {}
     try:
         user = LPUser.objects.filter(user__groups__name__in=['teachers']).get(user__username=post['username'])
@@ -218,25 +221,26 @@ def get_subjects_exercices(request):
 @teacher_required
 def save_subject_config(request, subject_config_id=None):
     post = json.loads(request.body)
+    if 'config_name' not in post or 'school_class' not in post or 'subject_id' not in post or 'data' not in post:
+        return HttpResponse(status=400)
     config_name = post['config_name']
     school_class_id = post['school_class']
     subject_id = post['subject_id']
     data = json.dumps(post['data'])
     response = {}
     try:
-        if subject_id is not None and data is not None and config_name is not None:
-            subject = Subject.objects.get(id=subject_id)
-            if subject_config_id is not None:
-                subject_config = SubjectConfig.objects.get(id=subject_config_id)
-            else:
-                subject_config = SubjectConfig()
-            subject_config.name = config_name
-            subject_config.subject = subject
-            subject_config.data = data
-            school_class = SchoolClass.objects.get(id=school_class_id)
-            subject_config.school_class = school_class
-            subject_config.save()
-            response['result'] = 'success'
+        subject = Subject.objects.get(id=subject_id)
+        if subject_config_id is not None:
+            subject_config = SubjectConfig.objects.get(id=subject_config_id)
+        else:
+            subject_config = SubjectConfig()
+        subject_config.name = config_name
+        subject_config.subject = subject
+        subject_config.data = data
+        school_class = SchoolClass.objects.get(id=school_class_id)
+        subject_config.school_class = school_class
+        subject_config.save()
+        response['result'] = 'success'
     except (Subject.DoesNotExist, SchoolClass.DoesNotExist, SubjectConfig.DoesNotExist):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
@@ -254,25 +258,26 @@ def save_subject_config(request, subject_config_id=None):
 @teacher_required
 def save_exercise_config(request, exercise_config_id=None):
     post = json.loads(request.body)
+    if 'config_name' not in post or 'school_class' not in post or 'exercise_id' not in post or 'data' not in post:
+        return HttpResponse(status=400)
     config_name = post['config_name']
     school_class_id = post['school_class']
     exercise_id = post['exercise_id']
     data = json.dumps(post['data'])
     response = {}
     try:
-        if exercise_id is not None and data is not None and config_name is not None:
-            exercise = Exercise.objects.get(id=exercise_id)
-            if exercise_config_id is not None:
-                exercise_config = ExerciseConfig.objects.get(id=exercise_config_id)
-            else:
-                exercise_config = ExerciseConfig()
-            exercise_config.name = config_name
-            exercise_config.exercise = exercise
-            exercise_config.data = data
-            school_class = SchoolClass.objects.get(id=school_class_id)
-            exercise_config.school_class = school_class
-            exercise_config.save()
-            response['result'] = 'success'
+        exercise = Exercise.objects.get(id=exercise_id)
+        if exercise_config_id is not None:
+            exercise_config = ExerciseConfig.objects.get(id=exercise_config_id)
+        else:
+            exercise_config = ExerciseConfig()
+        exercise_config.name = config_name
+        exercise_config.exercise = exercise
+        exercise_config.data = data
+        school_class = SchoolClass.objects.get(id=school_class_id)
+        exercise_config.school_class = school_class
+        exercise_config.save()
+        response['result'] = 'success'
     except (Exercise.DoesNotExist, SchoolClass.DoesNotExist, ExerciseConfig.DoesNotExist):
         return HttpResponse(status=400)
     return JSONResponse(json.dumps(response))
@@ -302,6 +307,8 @@ def get_configurations(request):
 @teacher_required
 def delete_exercise_configuration(request):
     post = json.loads(request.body)
+    if 'config_id' not in post:
+        return HttpResponse(status=400)
     try:
         ExerciseConfig.objects.get(id=post['config_id']).delete()
     except ExerciseConfig.DoesNotExist:
@@ -320,6 +327,8 @@ def delete_exercise_configuration(request):
 @teacher_required
 def delete_subject_configuration(request):
     post = json.loads(request.body)
+    if 'config_id' not in post:
+        return HttpResponse(status=400)
     try:
         SubjectConfig.objects.get(id=post['config_id']).delete()
     except SubjectConfig.DoesNotExist:
