@@ -20,7 +20,7 @@ class TeachersRequiredTest(TestCase):
         self.client = Client()
         self.client.login(username='Benjamin.Boisset', password='password')
 
-    def test_index(self):
+    def test_teachers_required(self):
         response = self.client.get(reverse('backoffice:teachers_required'))
         self.assertEqual(response.status_code, 200)
 
