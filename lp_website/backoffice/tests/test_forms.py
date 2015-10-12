@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from django.test import TestCase
 from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm, SchoolClassPasswordForm, SchoolClassPasswordNotRequiredForm
 
