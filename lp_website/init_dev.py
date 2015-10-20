@@ -228,11 +228,11 @@ lp_students[4][4].school_class.add(school_classes[4])
 
 subjects = []
 
-subjects.append(Subject(name='Mathématiques', data='{"foo": {"value": ["value1", "value2"], "title": "description choix"}, "bar": {"value": "integer", "title": "description integer"}, "result": {"value": "string", "title": "description string"}, "choice": {"value": "bool", "title": "description bool"}}'))
+subjects.append(Subject(name='Mathématiques', reference='maths', data='{"foo": {"value": ["value1", "value2"], "title": "description choix"}, "bar": {"value": "integer", "title": "description integer"}, "result": {"value": "string", "title": "description string"}, "choice": {"value": "bool", "title": "description bool"}}'))
 subjects[0].save()
-subjects.append(Subject(name='Français'))
+subjects.append(Subject(name='Français', reference='fr'))
 subjects[1].save()
-subjects.append(Subject(name='Anglais'))
+subjects.append(Subject(name='Anglais', reference='en'))
 subjects[2].save()
 
 ##

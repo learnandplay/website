@@ -240,11 +240,11 @@ lp_students[1][9].school_class.add(school_classes[1])
 
 subjects = []
 
-subjects.append(Subject(name='Mathématiques', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+subjects.append(Subject(name='Mathématiques', reference='maths', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 subjects[0].save()
-subjects.append(Subject(name='Français', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+subjects.append(Subject(name='Français', reference='fr', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 subjects[1].save()
-subjects.append(Subject(name='Anglais', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+subjects.append(Subject(name='Anglais', reference='en', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 subjects[2].save()
 
 ##
