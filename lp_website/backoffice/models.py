@@ -26,6 +26,8 @@ class Exercise(models.Model):
     name = models.CharField(max_length=64)
     ## Sujet d'étude de l'exercice
     subject = models.ForeignKey(Subject)
+    ## Reference de l'exercice
+    reference = models.CharField(max_length=32)
     ## Données liées à l'exercice
     data = models.TextField()
     class Meta:

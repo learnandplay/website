@@ -254,19 +254,19 @@ subjects[2].save()
 exercises = []
 
 exercises.append([])
-exercises[0].append(Exercise(name='Additions', subject=subjects[0], data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[0].append(Exercise(name='Additions', subject=subjects[0], reference='maths-additions', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 exercises[0][0].save()
-exercises[0].append(Exercise(name='Soustractions', subject=subjects[0], data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[0].append(Exercise(name='Soustractions', subject=subjects[0], reference='maths-soustractions', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 exercises[0][1].save()
-exercises[0].append(Exercise(name='Géométrie', subject=subjects[0], data='{"goal": {"value": ["Reconnaissance de formes", "Reconnaissance des tailles"], "title": "Type de questions"}, "allow_retry": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "default": "false", "title": "Autoriser l\'élève à refaire une question"}, "nb_try": {"value": "integer", "title": "Nombre de tentatives"}, "accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[0].append(Exercise(name='Géométrie', subject=subjects[0], reference='maths-geometrie', data='{"goal": {"value": ["Reconnaissance de formes", "Reconnaissance des tailles"], "title": "Type de questions"}, "allow_retry": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "default": "false", "title": "Autoriser l\'élève à refaire une question"}, "nb_try": {"value": "integer", "title": "Nombre de tentatives"}, "accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 exercises[0][2].save()
 
 exercises.append([])
-exercises[1].append(Exercise(name='Lecture', subject=subjects[1], data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[1].append(Exercise(name='Lecture', subject=subjects[1], reference='fr-lecture', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 exercises[1][0].save()
 
 exercises.append([])
-exercises[2].append(Exercise(name='Lecture', subject=subjects[2], data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[2].append(Exercise(name='Lecture', subject=subjects[2], reference='en-lecture', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 exercises[2][0].save()
 
 ##
