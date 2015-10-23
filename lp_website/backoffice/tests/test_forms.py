@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.test import TestCase
-from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm, SchoolClassPasswordForm, SchoolClassPasswordNotRequiredForm
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm
 
 ## Classe UserRegistrationFormTest\n
 # Classe de test pour le formulaire UserRegistrationForm
@@ -181,78 +181,4 @@ class UserPasswordNotRequiredFormTest(TestCase):
     ## Test du formulaire avec une confirmation de mot de passe manquante. is_valid doit renvoyer False
     def test_missing_password_confirm(self):
         form = UserPasswordNotRequiredForm(data=self.missing_password_confirm)
-        self.assertFalse(form.is_valid())
-
-
-## Classe SchoolClassPasswordFormTest\n
-# Classe de test pour le formulaire SchoolClassPasswordForm
-class SchoolClassPasswordFormTest(TestCase):
-    ## Préparation des différents jeux de données pour les tests
-    def setUp(self):
-        self.valid_form_data = {'password':'password', 'password_confirm':'password'}
-        self.empty_form = {}
-        self.invalid_password = {'password':'pass', 'password_confirm':'pass'}
-        self.invalid_password_confirm = {'password':'password', 'password_confirm':'password420'}
-        self.missing_password_confirm = {'password':'password'}
-
-    ## Test du formulaire avec des données valides. is_valid doit renvoyer True
-    def test_valid_form(self):
-        form = SchoolClassPasswordForm(data=self.valid_form_data)
-        self.assertTrue(form.is_valid())
-
-    ## Test du formulaire avec des données vides. is_valid doit renvoyer False
-    def test_empty_form(self):
-        form = SchoolClassPasswordForm(data=self.empty_form)
-        self.assertFalse(form.is_valid())
-
-    ## Test du formulaire avec un mot de passe trop faible. is_valid doit renvoyer False
-    def test_invalid_password(self):
-        form = SchoolClassPasswordForm(data=self.invalid_password)
-        self.assertFalse(form.is_valid())
-
-    ## Test du formulaire avec une confirmation de mot de passe différente. is_valid doit renvoyer False
-    def test_invalid_password_confirm(self):
-        form = SchoolClassPasswordForm(data=self.invalid_password_confirm)
-        self.assertFalse(form.is_valid())
-
-    ## Test du formulaire avec une confirmation de mot de passe manquante. is_valid doit renvoyer False
-    def test_missing_password_confirm(self):
-        form = SchoolClassPasswordForm(data=self.missing_password_confirm)
-        self.assertFalse(form.is_valid())
-
-
-## Classe SchoolClassPasswordNotRequiredFormTest\n
-# Classe de test pour le formulaire SchoolClassPasswordNotRequiredForm
-class SchoolClassPasswordNotRequiredFormTest(TestCase):
-    ## Préparation des différents jeux de données pour les tests
-    def setUp(self):
-        self.valid_form_data = {'password':'password', 'password_confirm':'password'}
-        self.empty_form = {}
-        self.invalid_password = {'password':'pass', 'password_confirm':'pass'}
-        self.invalid_password_confirm = {'password':'password', 'password_confirm':'password420'}
-        self.missing_password_confirm = {'password':'password'}
-
-    ## Test du formulaire avec des données valides. is_valid doit renvoyer True
-    def test_valid_form(self):
-        form = SchoolClassPasswordNotRequiredForm(data=self.valid_form_data)
-        self.assertTrue(form.is_valid())
-
-    ## Test du formulaire avec des données vides. is_valid doit renvoyer True (le mot de passe n'est pas obligatoire)
-    def test_empty_form(self):
-        form = SchoolClassPasswordNotRequiredForm(data=self.empty_form)
-        self.assertTrue(form.is_valid())
-
-    ## Test du formulaire avec un mot de passe trop faible. is_valid doit renvoyer False
-    def test_invalid_password(self):
-        form = SchoolClassPasswordNotRequiredForm(data=self.invalid_password)
-        self.assertFalse(form.is_valid())
-
-    ## Test du formulaire avec une confirmation de mot de passe différente. is_valid doit renvoyer False
-    def test_invalid_password_confirm(self):
-        form = SchoolClassPasswordNotRequiredForm(data=self.invalid_password_confirm)
-        self.assertFalse(form.is_valid())
-
-    ## Test du formulaire avec une confirmation de mot de passe manquante. is_valid doit renvoyer False
-    def test_missing_password_confirm(self):
-        form = SchoolClassPasswordNotRequiredForm(data=self.missing_password_confirm)
         self.assertFalse(form.is_valid())

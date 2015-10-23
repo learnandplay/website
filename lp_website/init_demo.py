@@ -35,9 +35,9 @@ lp_teachers[1].save()
 
 school_classes = []
 
-school_classes.append(SchoolClass(name='CP 1', school_name='Ecole Albert Camus', password='pbkdf2_sha256$12000$C4jsYralAzH5$64Wv3fsO5ubpaPZX1bQxm4aIFnyrBuw83nzhIpbgb4c='))
+school_classes.append(SchoolClass(name='CP 1', school_name='Ecole Albert Camus'))
 school_classes[0].save()
-school_classes.append(SchoolClass(name='CP 2', school_name='Ecole Albert Camus', password='pbkdf2_sha256$12000$C4jsYralAzH5$64Wv3fsO5ubpaPZX1bQxm4aIFnyrBuw83nzhIpbgb4c='))
+school_classes.append(SchoolClass(name='CP 2', school_name='Ecole Albert Camus'))
 school_classes[1].save()
 lp_teachers[0].school_class.add(school_classes[0])
 lp_teachers[0].school_class.add(school_classes[1])

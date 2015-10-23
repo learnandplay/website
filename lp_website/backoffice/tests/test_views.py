@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.test import Client
 from django.core.urlresolvers import reverse
-from backoffice.forms import ClassForm, SchoolClassPasswordForm
+from backoffice.forms import ClassForm
 
 ## Classe IndexTest\n
 # Classe de test pour la view index

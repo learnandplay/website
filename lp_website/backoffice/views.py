@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm, SchoolClassPasswordForm, SchoolClassPasswordNotRequiredForm
+from backoffice.forms import UserRegistrationForm, UserLoginForm, ClassForm, AvatarForm, StudentForm, UserEmailForm, UserPasswordNotRequiredForm
 from backoffice.models import LPUser, SchoolClass, Subject, SubjectConfig, Exercise, ExerciseConfig
 from backoffice.decorators import anonymous_required, teacher_required
 from backoffice.api.serializers import SubjectSerializer, SubjectConfigSerializer, ExerciseSerializer, ExerciseConfigSerializer
@@ -97,21 +97,14 @@ def edit_class(request, id=None):
     except SchoolClass.DoesNotExist:
         return HttpResponse(status=400)
     form = ClassForm(request.POST or None, instance=school_class)
-    password_form = None
-    if not id:
-        password_form = SchoolClassPasswordForm(request.POST or None)
-    else:
-        password_form = SchoolClassPasswordNotRequiredForm(request.POST or None)
-    if form.is_valid() and password_form.is_valid():
+    if form.is_valid():
         school_class = form.save()
-        if id or password_form.cleaned_data['password'] != '':
-            school_class.password = make_password(password_form.cleaned_data['password'])
         if not id:
             request.user.LPUser.school_class.add(school_class)
         school_class.save()
         return redirect('backoffice:my_classes')
     return render(request, 'backoffice/edit_class.html',
-        {'class_form': form, 'password_form': password_form, 'school_class': school_class})
+        {'class_form': form, 'school_class': school_class})
 
 ## my_students\n
 # Liste des étudiants gérés par l'utilisateur

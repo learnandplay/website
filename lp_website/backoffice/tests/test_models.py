@@ -35,7 +35,7 @@ class ExerciseTest(TestCase):
 class SchoolClassTest(TestCase):
     ## Creation d'un SchoolClass valide
     def setUp(self):
-        SchoolClass.objects.create(name='CP', school_name='Paul Valery', password='password', data='{}')
+        SchoolClass.objects.create(name='CP', school_name='Paul Valery', data='{}')
 
     ## Test de récupération et d'affichage de l'objet SchoolClass
     def test_SchoolClass_str(self):
@@ -49,7 +49,7 @@ class SubjectConfigTest(TestCase):
     ## Creation d'un SubjectConfig valide
     def setUp(self):
         subject = Subject.objects.create(name='Anglais', data='{}')
-        school_class = SchoolClass.objects.create(name='CP', school_name='Paul Valery', password='password', data='{}')
+        school_class = SchoolClass.objects.create(name='CP', school_name='Paul Valery', data='{}')
         SubjectConfig.objects.create(name='Configuration de test', subject=subject, school_class=school_class, data='{}')
 
     ## Test de récupération et d'affichage de l'objet SubjectConfig
@@ -65,7 +65,7 @@ class ExerciseConfigTest(TestCase):
     def setUp(self):
         subject = Subject.objects.create(name='Anglais', data='{}')
         exercise = Exercise.objects.create(name='Lecture', subject=subject, data='{}')
-        school_class = SchoolClass.objects.create(name='CP', school_name='Paul Valery', password='password', data='{}')
+        school_class = SchoolClass.objects.create(name='CP', school_name='Paul Valery', data='{}')
         ExerciseConfig.objects.create(name='Configuration de test', exercise=exercise, school_class=school_class, data='{}')
 
     ## Test de récupération et d'affichage de l'objet ExerciseConfig
