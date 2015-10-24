@@ -5,7 +5,6 @@ backofficeApp.config(function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 });
 
-
 backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 	$scope.deleteSchoolClass = function(schoolClass) {
 		$http({
@@ -339,6 +338,14 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
   $scope.configTypes = ["Exercice", "Matière"];
   $scope.selectedConfigType = $scope.configTypes[0];
 
+  var errorMessages = {
+    // String errors
+    200: "Nombre mimimum de caractères: {{schema.minLength}}",
+    201: "Nombre maximum de caractères dépassé. Maximum: {{schema.maxLength}}",
+    // Object errors
+    302: "Requis",
+  };
+
   $scope.addSelectToForm = function(key, fieldConfig) {
     $scope.schema.properties[key] = {
       "title": fieldConfig.title,
@@ -354,7 +361,8 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     $scope.schema.required.push(key);
     var form = {
       "key": key,
-      "type": "select"
+      "type": "select",
+      "validationMessage": errorMessages
     };
     if (typeof fieldConfig.value[0] == "object") {
       form.titleMap = fieldConfig.value;
@@ -371,7 +379,10 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
       $scope.schema.properties[key].default = parseInt(fieldConfig.default);
     }
     $scope.schema.required.push(key);
-    $scope.form.push(key);
+    $scope.form.push({
+      "key": key,
+      "validationMessage": errorMessages
+    });
   };
 
   $scope.addStringInputToForm = function(key, fieldConfig) {
@@ -387,7 +398,8 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     $scope.schema.required.push(key);
     $scope.form.push({
       "key": key,
-      "type": "string"
+      "type": "string",
+      "validationMessage": errorMessages
     });
   };
 
@@ -401,6 +413,7 @@ backofficeApp.controller('ConfigurationCtrl', function($scope, $http) {
     $scope.form.push({
       "key": key,
       "type": "radiobuttons",
+      "validationMessage": errorMessages,
       "titleMap": [
         {
           "value": true,
