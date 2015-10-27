@@ -1,5 +1,6 @@
 *.pyc
 *~
+.coverage
 lp_website/static/
 lp_website/media/*
 !lp_website/media/avatars

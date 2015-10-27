@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'static_precompiler',
     'imagekit',
     'rest_framework',
+    'django_nose',
     'website',
     'backoffice',
 )
@@ -119,3 +120,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+# Use nose to run all tests
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the 'foo' and 'bar' apps
+#NOSE_ARGS = [
+#    '--with-coverage',
+#    '--cover-package=backoffice',
+#]
