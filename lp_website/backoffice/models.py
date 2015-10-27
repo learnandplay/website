@@ -48,6 +48,8 @@ class SchoolClass(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     ## Date de modification
     modification_date = models.DateTimeField(auto_now=True)
+    ## Ip du serveur
+    ip = models.CharField(max_length=32, default='')
     ## Données liées à la classe
     data = models.TextField(null=True, blank=True)
     class Meta:

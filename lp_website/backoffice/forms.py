@@ -58,6 +58,8 @@ class ClassForm(forms.ModelForm):
     name = forms.CharField(label="Nom de la classe", max_length=64)
     ## Nom de l'établissement
     school_name = forms.CharField(label="Nom de l'établissement", max_length=128)
+    ## Adresse IP
+    ip = forms.CharField(label="Adresse IP du serveur", required=False)
 
 ## Classe AvatarForm\n
 # Formulaire pour l'upload d'avatar
