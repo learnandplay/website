@@ -116,9 +116,16 @@ LOGGED_USER_REDIRECT = '/backoffice/'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+    ),
+}
+
+JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION': False,
 }
 
 # Use nose to run all tests
