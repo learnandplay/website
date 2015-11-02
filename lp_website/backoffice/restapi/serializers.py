@@ -28,3 +28,10 @@ class LPUserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = LPUser
 		fields = ('id', 'username')
+
+## Classe SubjectConfigSerializer\n
+# Serialise une configuration de matiere
+class SubjectConfigSerializer(serializers.ModelSerializer):
+        class Meta:
+                model = SubjectConfig
+                fields = ('id', 'name', 'start_date', 'end_date', 'data')
