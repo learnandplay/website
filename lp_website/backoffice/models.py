@@ -66,6 +66,10 @@ class SubjectConfig(models.Model):
     subject = models.ForeignKey(Subject)
     ## Classe pour laquelle le sujet est personnalisé
     school_class = models.ForeignKey(SchoolClass, blank=True, null=True)
+    ## Date de création
+    creation_date = models.DateTimeField(auto_now_add=True)
+    ## Date de modification
+    modification_date = models.DateTimeField(auto_now=True)
     ## Date de début de mise en place de la configuration
     start_date = models.DateTimeField(null=True, blank=True)
     ## Date de fin de mise en place de la configuration
@@ -86,6 +90,10 @@ class ExerciseConfig(models.Model):
     exercise = models.ForeignKey(Exercise)
     ## Classe pour laquelle l'exercice est personnalisé
     school_class = models.ForeignKey(SchoolClass, blank=True, null=True)
+    ## Date de création
+    creation_date = models.DateTimeField(auto_now_add=True)
+    ## Date de modification
+    modification_date = models.DateTimeField(auto_now=True)
     ## Date de début de mise en place de la configuration
     start_date = models.DateTimeField(null=True, blank=True)
     ## Date de fin de mise en place de la configuration
