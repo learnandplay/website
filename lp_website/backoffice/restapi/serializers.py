@@ -38,7 +38,7 @@ class SubjectConfigSerializer(serializers.ModelSerializer):
 	reference = serializers.SerializerMethodField('generate_reference')
 
 	## Génère la reference
-	# @param exercise_config La configuration
+	# @param subject_config La configuration
 	# @returns La reference
 	def generate_reference(self, subject_config):
 		return subject_config.subject.reference
