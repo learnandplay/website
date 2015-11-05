@@ -47,11 +47,11 @@ class GetSubjectConfig(APIView):
         try:
             user = request.user.LPUser
             my_school_class = user.school_class.get(id=class_id)
-            subject_ref = Subject.objects.filter(reference=ref)
+            subject_ref = Subject.objects.get(reference=ref)
             subject_config = SubjectConfig.objects.filter(school_class=my_school_class, subject=subject_ref).order_by('-modification_date')[:1]
         except (SchoolClass.DoesNotExist, SubjectConfig.DoesNotExist, Subject.DoesNotExist):
             return HttpResponse(status=400)
-        serializer = SubjectConfigSerializer(subject_config, many=True)
+        serializer = SubjectConfigSerializer(subject_config[0])
         return JSONResponse(serializer.data)
 
 class GetExerciseConfig(APIView):
@@ -62,9 +62,9 @@ class GetExerciseConfig(APIView):
         try:
             user = request.user.LPUser
             my_school_class = user.school_class.get(id=class_id)
-            exercise_ref = Exercise.objects.filter(reference=ref)
+            exercise_ref = Exercise.objects.get(reference=ref)
             exercise_config = ExerciseConfig.objects.filter(school_class=my_school_class, exercise=exercise_ref).order_by('-modification_date')[:1]
         except (SchoolClass.DoesNotExist, ExerciseConfig.DoesNotExist, Exercise.DoesNotExist):
             return HttpResponse(status=400)
-        serializer = ExerciseConfigSerializer(exercise_config, many=True)
+        serializer = ExerciseConfigSerializer(exercise_config[0])
         return JSONResponse(serializer.data)
