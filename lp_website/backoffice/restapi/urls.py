@@ -3,9 +3,9 @@ from backoffice.restapi import views
 from backoffice.restapi.views import GetClasses, GetStudents, GetSubjectConfig, GetExerciseConfig
 
 urlpatterns = patterns('',
-                       url(r'^api-token-auth/$', 'rest_framework_jwt.views.obtain_jwt_token'),
-                       url(r'^classes/$', GetClasses.as_view()),
-                       url(r'^students/(?P<class_id>\d+)/$', GetStudents.as_view()),
-                       url(r'^subject-config/(?P<class_id>\d+)/(?P<ref>\w+)/$', GetSubjectConfig.as_view()),
-                       url(r'^exercise-config/(?P<class_id>\d+)/(?P<ref>[\w-]+)/$', GetExerciseConfig.as_view()),
+                       url(r'^api-token-auth/$', 'rest_framework_jwt.views.obtain_jwt_token', name='restapi-token-auth'),
+                       url(r'^classes/$', GetClasses.as_view(), name='restapi-classes'),
+                       url(r'^students/(?P<class_id>\d+)/$', GetStudents.as_view(), name='restapi-students'),
+                       url(r'^subject-config/(?P<class_id>\d+)/(?P<ref>\w+)/$', GetSubjectConfig.as_view(), name='restapi-subject-config'),
+                       url(r'^exercise-config/(?P<class_id>\d+)/(?P<ref>[\w-]+)/$', GetExerciseConfig.as_view(), name='restapi-exercise-config'),
 )
