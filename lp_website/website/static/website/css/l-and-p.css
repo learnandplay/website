@@ -40,6 +40,8 @@ h1, h2 {
     height: 100%;
     padding-top: 5em;
     padding-bottom: 5em;
+    background-attachment: fixed;
+    ;
 }
 
 #titre-equipe{
@@ -56,29 +58,15 @@ p{
     font-size: 1.2em;
     text-align: justify;
 }
-#first-section{
-    background-image: url("../image/accueil-fond.jpg");
-}
+#first-section{background-image: url("Images/accueil-fond.jpg");}
+#second-section{background-image: url("Images/projet-fond.jpg");}
 
-#second-section{
-    background-image: url("../image/projet-fond.jpg");
-}
+#third-section{background-image: url("Images/equipe-fond.jpg");}
 
-#third-section{
-    background-image: url("../image/equipe-fond.jpg");
-}
+#fourth-section{background-image: url("Images/partenaires-fond.jpg");}
 
-#fourth-section{
-    background-image: url("../image/partenaires-fond.jpg");
-}
-
-#last-section{
-    background-image: url("../image/contact-fond.jpg");
-}
-#logo{
-    margin-left: auto;
-    margin-right: auto;
-}
+#last-section{background-image: url("Images/contact-fond.jpg");}
+#logo{margin-left: auto;margin-right: auto;}
 
 #centre-page{
     position: relative;
@@ -109,19 +97,17 @@ button{
     display: block;
 }
 
-#ludovic{background-image: url('../image/post_l.png');}
-#laetitia{background-image: url('../image/louren_l.png');}
-#tom{background-image: url('../image/rossi_t.png');}
-#dino{background-image: url('../image/calasc_r.png');}
-#lambert{background-image: url('../image/teisse_l.png');}
-#romainz{background-image: url('../image/zanchi_r.png');}
-#benjamin{background-image: url('../image/farcy_b.png');}
-#lingua{background-image: url('../image/lingua_a.png');}
+#ludovic{background-image: url("Images/post_l.jpg");}
+#laetitia{background-image: url('Images/louren_l.jpg');}
+#tom{background-image: url('Images/rossi_t.jpg');}
+#dino{background-image: url('Images/calasc_r.jpg');}
+#lambert{background-image: url('Images/teisse_l.jpg');}
+#romainz{background-image: url('Images/zanchi_r.jpg');}
+#benjamin{background-image: url('Images/farcy_b.jpg');}
+#lingua{background-image: url('Images/lingua_a.jpg');}
 
 .image:hover .circle {visibility: visible}
-
 .imagepadding{padding-bottom: 20px;}
-
 .linkequipe{position: relative; top: 53px;}
 
 .circle{
@@ -139,15 +125,12 @@ button{
 }
 
 .col-lg-12{text-align: center}
-
 #equipe{
     background-color: blanchedalmond;
     padding-top: 50px;
     text-align: center;
 }
-a{
-    color: white;
-}
+a{color: white;}
 
 a:hover, a:focus{
     text-decoration: none;
@@ -155,12 +138,5 @@ a:hover, a:focus{
     cursor: pointer
 }
 
-.btn:hover, .btn.focus ,.btn:focus{
-    color: forestgreen;
-
-}
-.nom{
-    font-weight: bold;
-}
-
+.nom{font-weight: bold;}
 .btn{font-size: 25px !important}

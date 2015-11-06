@@ -2,112 +2,166 @@
 {% load bootstrap3 %}
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+<head>
     <meta charset='utf-8'/>
     <title>Learn & Play</title>
-
     {% bootstrap_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'website/css/website.css' %}" />
-  </head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'website/css/social-buttons-3.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'website/css/l-and-p.css' %}" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-  <body>
-    <a href="{% url 'backoffice:index' %}" class="backoffice-link">Accéder au backoffice</a>
-    <div id="first-section">
-      <div class="container">
-	<div class="col-lg-12">
-	  <h1 id="lp_title">Learn & Play</h1>
-	  <h2 id="lp_under_title">Jeu éducatif multijoueur</h2>
-	  <img alt="" src="http://placehold.it/900x506" class="centered-image" />
+<nav class="navbar navbar-default navbar-fixed-top"  role="navigation">
+    <div class="container"  style="line-height: 3">
+        <a href="#first-section"><div class="col-md-3 col-sm-6 col-xs-6">Accueil </div></a>
+        <a  href="#second-section"><div class=" col-md-2 col-sm-6 col-xs-6">Le Projet</div></a>
+        <a  href="#third-section"><div class=" col-md-2 col-sm-6 col-xs-6">Qui sommes nous ? </div></a>
+        <a  href="#fourth-section"><div class="col-md-2 col-sm-6 col-xs-6"> Nos partenaires</div></a>
+	<div class="col-md-2 col-sm-6 col-xs-6">
+	  <a href="{% url 'backoffice:index' %}">Accéder au backoffice</a>
 	</div>
-      </div>
     </div>
-    <div id="second-section">
-      <div class="container">
-	<div class="col-lg-12">
-	  <h2>Le projet</h2>
-	  <img style="max-width:100%;" class="col-lg-6 content-padding-top" alt="" src="http://placehold.it/900x706"/>
-	  <p class="col-lg-6 content-padding-top" id="app-description">
-	    Learn&Play est un jeu éducatif pour tablettes tactiles destiné à une utilisation en classe de primaire. L’enfant sera plongé dans un monde ouvert dans lequel il fera évoluer son avatar. Les enfants pourront interagir entre eux pendant les mini-jeux, et l’integralité de l’application sera paramétrable par l’enseignant.
-	  </p>
-	</div>
-      </div>
+</nav>
+
+<section id="first-section" class="background-image">
+    <div class="container" id="centre-page">
+        <div class="row">
+            <div class="col-lg-12 ">
+                <img id="logo" class="img-responsive" title="logoPapillon" alt="LogoPapillon" src="{% static 'website/css/Images/logoPapillon.jpg' %}">
+            </div>
+            <div class="col-lg-12">
+                <h1>Bienvenue sur Learn and Play</h1>
+            </div>
+            <div class="col-lg-12 " style="text-align: center">
+                <h1 style="margin-bottom: 30px;">L'application qui va faire aimer réviser à vos enfants !</h1>
+                <a href="#second-section"><button id="decouvrir" class="btn btn-lg"> DECOUVRIR LE PROJET</button></a>
+            </div>
+        </div>
     </div>
-    <div id="third-section">
-      <div class="container">
-	<div class="col-lg-12">
-	  <h2>L'équipe</h2>
-	  <div class="col-lg-12" id="st-team-line">
-	    <img class="col-lg-2 equipe-portrait" alt="Ludovic Post" src="{% static 'website/image/post_l.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Ludovic Post</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	    <img class="col-lg-2 equipe-portrait" alt="Romain Zanchi" src="{% static 'website/image/zanchi_r.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Romain Zanchi</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	    <img class="col-lg-2 equipe-portrait" alt="Anthony Lingua" src="{% static 'website/image/lingua_a.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Anthony Lingua</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	  </div>
-	  <div class="col-lg-12" id="nd-team-line">
-	    <img class="col-lg-offset-2 col-lg-2 equipe-portrait" alt="Laeticia Lourenco" src="{% static 'website/image/louren_l.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Laeticia Lourenco</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	    <img class="col-lg-2 equipe-portrait" alt="Tom Rossi" src="{% static 'website/image/rossi_t.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Tom Rossi</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	  </div>
-	  <div class="col-lg-12" id="rd-team-line">
-	    <img class="col-lg-2 equipe-portrait" alt="Lambert Teisserenc-Bonesteve" src="{% static 'website/image/teisse_l.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Lambert Teisserenc-Bonesteve</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	    <img class="col-lg-2 equipe-portrait" alt="Benjamin Farcy" src="{% static 'website/image/farcy_b.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Benjamin Farcy</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	    <img class="col-lg-2 equipe-portrait" alt="Romain Calascibetta" src="{% static 'website/image/calasc_r.jpg' %}"/>
-	    <div class="col-lg-2">
-	      <span style="font-weight: 700; font-size:3em;" class="dev-name">Romain Calascibetta</span>
-	      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>
-	  </div>
-	</div>
-      </div>
+</section>
+
+<section id="second-section" class="background-image">
+    <div class="container" id="centre-page">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-sm-12">
+                <h1>Le Projet</h1>
+                <p class="justify">Learn&Play est un serious game pour tablettes tactiles destiné à une utilisation en classe de primaire et principalement
+                    aux classes de CP pour les élèves en difficulté.
+                    </br></br>L’enfant sera plongé dans un monde ouvert dans lequel il fera évoluer son avatar.
+                    Il pourra se balader à travers les différents univers représentant les différentes matières. Les élèves pourront interagir entre eux
+                    pendant les mini-jeux, jouer en coopération. Ceci leur permettra de développer leur esprit d’équipe.
+                    </br></br>Le site web mis en place permettra au professeur de débloquer des mondes (monde des mathématiques, du français) ou des mini-jeux à sa guise. L’application sera donc entièrement paramétrable par le professeur depuis un ordinateur ou une tablette.
+                    Notre objectif est de permettre à des enfants en difficulté de surmonter leurs problèmes grâce à une pédagogie différente qui les incite
+                    à s’entraider et une stimulation importante </p>
+                <img  id="logoPapillon" style="max-width: 20%" class="img-responsive" title="logo" alt="logo" src="{% static 'website/css/Images/logoPapillon.jpg' %}">
+            </div>
+        </div>
     </div>
-    <div id="last-section">
-      <div class="container">
-	<div class="col-lg-12">
-	  <h2>Les partenaires</h2>
-	  <div class="col-lg-12 content-padding-top">
-	    <div class="col-lg-4">
-	      <h3 class="partners-title">Imma Bertrand</h3>
-	      <img style="max-width:100%;" alt="" src="http://placehold.it/400x700"/>
-	      <p class="partners">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>	    
-	    <div class="col-lg-4">
-	      <h3 class="partners-title">Anne Gramond</h3>
-	      <img style="max-width:100%;" alt="" src="http://placehold.it/400x700"/>
-	      <p class="partners">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>	    
-	    <div class="col-lg-4">
-	      <h3 class="partners-title">Paul Henri Argiot</h3>
-	      <img style="max-width:100%;" alt="" src="http://placehold.it/400x700"/>
-	      <p class="partners">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea </p>
-	    </div>	    
-	  </div>
-	</div>
-      </div>
+</section>
+
+<section id="third-section" class="background-image">
+    <div class="container" style="margin-right: 0">
+        <div class="col-md-12" style="margin-bottom: 50px;">
+            <h1 id="titre-equipe">L'équipe Learn&Play</h1>
+            <img  id="logoPapillon" style="max-width: 10%;display: inline" class="img-responsive" title="logo" alt="logo" src="{% static 'website/css/Images/logoPapillon.jpg' %}">
+        </div>
+
+        <div class="col-lg-12" >
+            <div class="col-md-2 col-sm32 col-xs-4 imagepadding">
+                <p class="image" id="ludovic">
+                    <span class="circle"><a class="linkequipe"> <font class="nom">Ludovic Post</font> <br>Chef de projet</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 imagepadding">
+                <p class="image" id="laetitia">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Laetitia Lourenco</font> <br>Sous Chef de projet</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 imagepadding" >
+                <p class="image" id="tom">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Tom Rossi</font> <br>Responsable pôle mini-jeux</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 imagepadding">
+                <p class="image" id="dino">
+                    <span class="circle" ><a class="linkequipe" style="top: 37px;"> <font class="nom">Romain Calascibetta</font> <br>Responsable pôle serveur</a></span>
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="col-md-2 col-sm-4 col-xs-4 imagepadding">
+                <p class="image" id="romainz">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Romain Zanchi</font><br>Responsable pôle web</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 imagepadding">
+                <p class="image" id="lambert">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Lambert Teisserenc</font><br>Pôle graphique</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 imagepadding">
+                <p class="image"  id="benjamin">
+                    <span class="circle" ><a class="linkequipe"> <font class="nom">Benjamin Farcy</font><br>Pôle graphique</a></span>
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 imagepadding">
+                <p class="image" id="lingua">
+                    <span class="circle" ><a class="linkequipe" style="top: 37px;"> <font class="nom">Anthony Lingua</font><br>Pôle web et responsable communication </a></span>
+                </p>
+            </div>
+        </div>
+
     </div>
-  </body>
+</section>
+
+<section id="fourth-section" class="background-image">
+    <div class="container">
+        <div class="col-lg-12">
+            <h1>Les partenaires</h1>
+            <div class="col-md-12 content-padding-top col-xs-12 col-sm-12">
+                   <p class="justify">Grâce à Epitech et à l'EIP (ou Epitech Innovative Project) et au doctor Gramont du CHU de Nîmes qui avait pour envie d'aider les enfants
+                       d'école primaire, est venu l'idée de Learn & Play afin de permettre au élèves de primaire de s'améliorer en classe tout en
+                       profitant d'un moment de détente au sein de notre serious game.
+                   </p>
+            </div>
+            <div class="col-lg-12" style="margin-top: 50px;">
+                <div class="col-md-2 col-xs-1"></div>
+                <div class="col-md-5 col-xs-5 col-sm-5">
+                    <img  id="eipLogo" class="img-responsive" title="eip" alt="eip" src="{% static 'website/css/Images/eipLogo.jpg' %}">
+                </div>
+                <div class="col-md-5 col-xs-5 col-sm-5">
+                    <img  id="chu" class="img-responsive" title="chu" alt="chu" src="{% static 'website/css/Images/chuNimes.jpg' %}">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="last-section" class="background-image">
+    <div class="container" id="centre-page">
+        <div class="row" style="text-align: center">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <img  id="logo" class="img-responsive" title="logo" alt="logo" src="{% static 'website/css/Images/logo.jpg' %}">
+            </div>
+            <div id="reseau"class="col-md-6 col-sm-6 col-xs-6" style="padding-top: 85px;">
+                <h1>Suivez notre actualitée sur les réseaux sociaux</h1>
+                <a target=_blank href="https://www.facebook.com/pages/LearnPlay/608063825982842?ref=aymt_homepage_panel" class="btn btn-social-icon btn-facebook" style="width: 50px;">
+                    <i class="fa fa-facebook"></i></a>
+                <a target=_blank href="https://twitter.com/learnandplayPro" class="btn btn-social-icon btn-twitter">
+                    <i class="fa fa-twitter"></i></a>
+                <a target=_blank href="https://plus.google.com/u/0/113160396156739741362/posts" class="btn btn-social-icon btn-google-plus">
+                    <i class="fa fa-google-plus"></i></a>
+                <h1>Vous avez des questions ? </h1>
+                <a href="mailto:lourencolaetitia@gmail.com"><button class="btn btn-default btn-lg" >
+                    <span style="color: black" class="glyphicon glyphicon-envelope" ></span>
+                </button></a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
 </html>
