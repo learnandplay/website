@@ -1,0 +1,13 @@
+{
+  "name": "Learn & Play",
+  "version": "0.1.0",
+  "description": "Documentation de l'API du projet Learn & Play",
+  "title": "Learn & Play API documentation",
+  "order": [
+    "api-token-auth",
+    "GetClasses",
+    "GetStudents",
+    "GetSubjectConfig",
+    "GetExerciseConfig"
+  ]
+}
