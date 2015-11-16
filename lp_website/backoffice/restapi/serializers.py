@@ -45,7 +45,7 @@ class SubjectConfigSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = SubjectConfig
-		fields = ('id', 'name', 'start_date', 'end_date', 'data', 'reference')
+		fields = ('id', 'name', 'data', 'reference')
 
 
 ## Classe ExerciseConfigSerializer\n
@@ -62,4 +62,4 @@ class ExerciseConfigSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = ExerciseConfig
-		fields = ('id', 'name', 'start_date', 'end_date', 'data', 'reference')
+		fields = ('id', 'name', 'data', 'reference')

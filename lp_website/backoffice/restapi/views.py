@@ -137,8 +137,6 @@ class GetSubjectConfig(APIView):
 
     @apiSuccess {Number}    id          ID de la configuration
     @apiSuccess {String}    name        Nom de la configuration
-    @apiSuccess {Date}      start_date  Date de début de la configuration
-    @apiSuccess {Date}      end_date    Date de fin de la configuration
     @apiSuccess {Object}    data        Json de configuration
     @apiSuccess {String}    reference   Référence de la matière
 
@@ -147,8 +145,6 @@ class GetSubjectConfig(APIView):
         {
             "id":1,
             "name":"Anglais bloqué",
-            "start_date":null,
-            "end_date":null,
             "data":"{\"accessible\": false, \"config_name\": \"Anglais bloqué\", \"school_class\": \"2\"}",
             "reference":"en"
         }
@@ -178,8 +174,6 @@ class GetExerciseConfig(APIView):
 
     @apiSuccess {Number}    id          ID de la configuration
     @apiSuccess {String}    name        Nom de la configuration
-    @apiSuccess {Date}      start_date  Date de début de la configuration
-    @apiSuccess {Date}      end_date    Date de fin de la configuration
     @apiSuccess {Object}    data        Json de configuration
     @apiSuccess {String}    reference   Référence de l'exercice'
 
@@ -188,8 +182,6 @@ class GetExerciseConfig(APIView):
         {
             "id":1,
             "name":"Config anglais lecture bloqué",
-            "start_date":null,
-            "end_date":null,
             "data":"{\"accessible\": false, \"config_name\": \"Config anglais lecture bloqué\", \"school_class\": \"2\"}",
             "reference":"en-lecture"
         }
