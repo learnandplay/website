@@ -243,3 +243,24 @@ class GetIfFirstExerciseUse(APIView):
         except (LPUser.DoesNotExist, Exercise.DoesNotExist, Statistics.DoesNotExist):
             return HttpResponse(status=400)
         return JSONResponse(json.dumps(response))
+
+class GetIfFirstSubjectUse(APIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JSONWebTokenAuthentication, )
+
+    def get(self, request, user_id, ref):
+        response = {}
+        try:
+            user_object = LPUser.objects.get(id=user_id)
+            subject_id = Subject.objects.get(reference=ref).id
+            exercise_list = Exercise.objects.filter(subject=subject_id).values_list('id', flat=True)
+            for (i, exercise) in enumerate(exercise_list):
+                exercise_object = Exercise.objects.get(id=exercise)
+                exercise_nb = Statistics.objects.filter(user=user_object, exercise=exercise_object).count()
+                if (exercise_nb > 0):
+                    response['first_use'] = 'false'
+                    return JSONResponse(json.dumps(response))
+            response['first_use'] = 'true'
+        except (LPUser.DoesNotExist, Subject.DoesNotExist, Exercise.DoesNotExist):
+            return HttpResponse(status=400)
+        return JSONResponse(json.dumps(response))        

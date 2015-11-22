@@ -1,6 +1,6 @@
 from django.conf.urls import include, patterns, url
 from backoffice.restapi import views
-from backoffice.restapi.views import GetClasses, GetStudents, GetSubjectConfig, GetExerciseConfig, PostExerciseStat, GetIfFirstExerciseUse
+from backoffice.restapi.views import GetClasses, GetStudents, GetSubjectConfig, GetExerciseConfig, PostExerciseStat, GetIfFirstExerciseUse, GetIfFirstSubjectUse
 
 urlpatterns = patterns('',
                        url(r'^api-token-auth/$', 'rest_framework_jwt.views.obtain_jwt_token', name='restapi-token-auth'),
@@ -10,4 +10,5 @@ urlpatterns = patterns('',
                        url(r'^exercise-config/(?P<class_id>\d+)/(?P<ref>[\w-]+)/$', GetExerciseConfig.as_view(), name='restapi-exercise-config'),
                        url(r'^save-exercise-stat/$', PostExerciseStat.as_view(), name='restapi-save-exercise-stat'),
                        url(r'^is-first-exercise-use/(?P<user_id>\d+)/(?P<ref>[\w-]+)/$', GetIfFirstExerciseUse.as_view(), name='restapi-is-first-exercise-use'),
+                       url(r'^is-first-subject-use/(?P<user_id>\d+)/(?P<ref>[\w-]+)/$', GetIfFirstSubjectUse.as_view(), name='restapi-is-first-subject-use'),
 )
