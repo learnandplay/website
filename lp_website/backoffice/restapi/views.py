@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -198,3 +199,29 @@ class GetExerciseConfig(APIView):
             return HttpResponse(status=400)
         serializer = ExerciseConfigSerializer(exercise_config[0])
         return JSONResponse(serializer.data)
+
+
+class PostExerciseStat(APIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JSONWebTokenAuthentication, )
+
+    def post(self, request):
+        post = json.loads(request.body)
+        if 'exercise_id' not in post or 'user_id' not in post or 'data' not in post:
+            return HttpResponse(status=400)
+        exercise_id = post['exercise_id']
+        user_id = post['user_id']
+        stats = post['data']
+        response = {}
+        try:
+            exercise = Exercise.objects.get(id=exercise_id)
+            user = LPUser.objects.get(id=user_id)
+            statistic = Statistics()
+            statistic.exercise = exercise
+            statistic.user = user
+            statistic.data = stats
+            statistic.save()
+            response['result'] = 'success'
+        except (Exercise.DoesNotExist, LPUser.DoesNotExist):
+            return HttpResponse(status=400)
+        return JSONResponse(json.dumps(response))
