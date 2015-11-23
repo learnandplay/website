@@ -219,8 +219,8 @@ class PostExerciseStat(APIView):
     """
     @api {post} /save-exercise-stat/ Sauvegarder une statistique
     @apiUse teacher_required
-    @apiParam {String} reference    Reference de l'exercice
     @apiParam {Number} user_id      ID de l'utilisateur
+    @apiParam {String} reference    Reference de l'exercice
     @apiParam {String} data         Statistiques au format JSON string
     @apiVersion 0.1.0
     @apiName PostExerciseStat
@@ -334,7 +334,26 @@ class GetIfFirstSubjectUse(APIView):
 class PostSaveIp(APIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, )
+    """
+    @api {post} /save-ip/ Sauvegarder l'ip du serveur d'une classe
+    @apiUse teacher_required
+    @apiParam {Number} class_id     ID de la classe
+    @apiParam {String} server_ip    IP du serveur
+    @apiVersion 0.1.0
+    @apiName PostSaveIp
+    @apiGroup Classes
 
+    @apiSuccess {String} result Resultat
+
+    @apiSuccessExample Success-Response:
+        HTTP/1.1 200 OK
+        {
+            "result":"success"
+        }
+
+    @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
+    """
     def post(self, request):
         user = request.user.LPUser
         post = json.loads(request.body)

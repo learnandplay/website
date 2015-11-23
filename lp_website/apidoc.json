@@ -7,6 +7,7 @@
     "api-token-auth",
     "GetClasses",
     "GetStudents",
+    "PostSaveIp",
     "GetSubjectConfig",
     "GetExerciseConfig",
     "PostExerciseStat",
