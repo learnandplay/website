@@ -11,6 +11,7 @@ apiResponses = {
     'get_students': '[{"id":11,"username":"Anthony.Payet"},{"id":3,"username":"Benjamin.Boisset"},{"id":4,"username":"Julien.Lefebvre"},{"id":10,"username":"Laura.Moulin"},{"id":12,"username":"Lea.Martinez"},{"id":9,"username":"Lucie.Masson"},{"id":5,"username":"Manon.Durand"},{"id":7,"username":"Marie.Petit"},{"id":6,"username":"Pierre.Moreau"},{"id":8,"username":"Romain.Brunet"}]',
     'get_subject_config': '{"id":2,"name":"Maths d\xc3\xa9bloqu\xc3\xa9es","data":"{\\"accessible\\": true, \\"config_name\\": \\"Maths d\\\\u00e9bloqu\\\\u00e9es\\", \\"school_class\\": \\"2\\"}","reference":"maths"}',
     'get_exercise_config': '{"id":1,"name":"Config anglais lecture bloqu\xc3\xa9","data":"{\\"accessible\\": false, \\"config_name\\": \\"Config anglais lecture bloqu\\\\u00e9\\", \\"school_class\\": \\"2\\"}","reference":"en-lecture"}',
+    'post_exercise_stat': '{"result":"success"}',
 }
 
 ## Classe RestApiTokenAuthTest\n
@@ -135,4 +136,60 @@ class RestApiGetExerciseConfigTest(TestCase):
         class_id = 2
         ref = 'toto'
         response = self.client.get(reverse('backoffice:restapi-exercise-config', kwargs={'class_id':class_id,'ref':ref}))
+        self.assertEqual(response.status_code, 400)
+
+## Classe RestApiPostExerciseStatTest\n
+# Classe de test pour la view PostExerciseStat
+class RestApiPostExerciseStatTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test
+    def setUp(self):
+        self.client = APIClient()
+        user = User.objects.get(username='teacher1')
+        self.client.force_authenticate(user=user)
+
+    ## Test d'une requete POST valide. Doit renvoyer un code 200
+    def test_post_exercise_stat(self):
+        reference = 'maths-geometrie'
+        user_id = 5
+        data = {"multi":"true","time":"79","success":"8","failure":"2"}
+        response = self.client.post(reverse('backoffice:restapi-save-exercise-stat'), json.dumps({'reference':reference,'user_id':user_id,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['post_exercise_stat'])
+
+    ## Test d'une requete POST invalide: utilisation d'une reference invalide. Doit renvoyer un code 400
+    def test_post_invalid_reference(self):
+        reference = 'abcd'
+        user_id = 5
+        data = {"multi":"true","time":"79","success":"8","failure":"2"}
+        response = self.client.post(reverse('backoffice:restapi-save-exercise-stat'), json.dumps({'reference':reference,'user_id':user_id,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST invalide: reference manquante. Doit renvoyer un code 400
+    def test_post_missing_reference(self):
+        user_id = 5
+        data = {"multi":"true","time":"79","success":"8","failure":"2"}
+        response = self.client.post(reverse('backoffice:restapi-save-exercise-stat'), json.dumps({'user_id':user_id,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST invalide: utilisation d'un user_id invalide. Doit renvoyer un code 400
+    def test_post_invalid_user_id(self):
+        reference = 'maths-geometrie'
+        user_id = 420
+        data = {"multi":"true","time":"79","success":"8","failure":"2"}
+        response = self.client.post(reverse('backoffice:restapi-save-exercise-stat'), json.dumps({'reference':reference,'user_id':user_id,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST invalide: user_id manquant. Doit renvoyer un code 400
+    def test_post_missing_user_id(self):
+        reference = 'maths-geometrie'
+        data = {"multi":"true","time":"79","success":"8","failure":"2"}
+        response = self.client.post(reverse('backoffice:restapi-save-exercise-stat'), json.dumps({'reference':reference,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST invalide: data manquante. Doit renvoyer un code 400
+    def test_post_missing_data(self):
+        reference = 'maths-geometrie'
+        user_id = 5
+        response = self.client.post(reverse('backoffice:restapi-save-exercise-stat'), json.dumps({'reference':reference,'user_id':user_id}), content_type='application/x-www-form-urlencoded')
         self.assertEqual(response.status_code, 400)

@@ -21,11 +21,19 @@ from backoffice.restapi.serializers import SchoolClassSerializer, LPUserSerializ
 @apiDefine UNAUTHORIZED
 @apiError UNAUTHORIZED Le token n'est pas inclus dans le header ou est invalide
 
-@apiErrorExample Error-Response:
+@apiErrorExample Unauthorized:
     HTTP 401 UNAUTHORIZED
     {
         "detail": "Authentication credentials were not provided."
     }
+"""
+
+"""
+@apiDefine BADREQUEST
+@apiError BAD-REQUEST Des parametres sont manquants ou invalides
+
+@apiErrorExample Bad-request:
+    HTTP 400 BAD REQUEST
 """
 
 """
@@ -46,7 +54,7 @@ from backoffice.restapi.serializers import SchoolClassSerializer, LPUserSerializ
 
 @apiError BADREQUEST La paire nom d'utilisateur / mot de passe n'est pas valide
 
-@apiErrorExample Error-Response:
+@apiErrorExample Bad-request:
     HTTP 400 BAD REQUEST
     {
         "non_field_errors": [
@@ -116,6 +124,7 @@ class GetStudents(APIView):
         ]
 
     @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
     """
     def get(self, request, class_id):
         try:
@@ -152,6 +161,7 @@ class GetSubjectConfig(APIView):
         }
 
     @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
     """
     def get(self, request, class_id, ref):
         try:
@@ -189,6 +199,7 @@ class GetExerciseConfig(APIView):
         }
 
     @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
     """
     def get(self, request, class_id, ref):
         try:
@@ -205,17 +216,37 @@ class GetExerciseConfig(APIView):
 class PostExerciseStat(APIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, )
+    """
+    @api {post} /save-exercise-stat/ Sauvegarder une statistique
+    @apiUse teacher_required
+    @apiParam {String} reference    Reference de l'exercice
+    @apiParam {Number} user_id      ID de l'utilisateur
+    @apiParam {String} data         Statistiques au format JSON string
+    @apiVersion 0.1.0
+    @apiName PostExerciseStat
+    @apiGroup Statistiques
 
+    @apiSuccess {String} result Resultat
+
+    @apiSuccessExample Success-Response:
+        HTTP/1.1 200 OK
+        {
+            "result":"success"
+        }
+
+    @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
+    """
     def post(self, request):
         post = json.loads(request.body)
-        if 'exercise_id' not in post or 'user_id' not in post or 'data' not in post:
+        if 'reference' not in post or 'user_id' not in post or 'data' not in post:
             return HttpResponse(status=400)
-        exercise_id = post['exercise_id']
+        ref = post['reference']
         user_id = post['user_id']
         stats = post['data']
         response = {}
         try:
-            exercise = Exercise.objects.get(id=exercise_id)
+            exercise = Exercise.objects.get(reference=ref)
             user = LPUser.objects.get(id=user_id)
             statistic = Statistics()
             statistic.exercise = exercise
@@ -225,7 +256,7 @@ class PostExerciseStat(APIView):
             response['result'] = 'success'
         except (Exercise.DoesNotExist, LPUser.DoesNotExist):
             return HttpResponse(status=400)
-        return JSONResponse(json.dumps(response))
+        return JSONResponse(response)
 
 class GetIfFirstExerciseUse(APIView):
     permission_classes = (IsAuthenticated, )
@@ -264,7 +295,7 @@ class GetIfFirstSubjectUse(APIView):
             response['first_use'] = 'true'
         except (LPUser.DoesNotExist, Subject.DoesNotExist, Exercise.DoesNotExist):
             return HttpResponse(status=400)
-        return JSONResponse(json.dumps(response))        
+        return JSONResponse(json.dumps(response))
 
 class PostSaveIp(APIView):
     permission_classes = (IsAuthenticated, )
