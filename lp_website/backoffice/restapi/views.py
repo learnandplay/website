@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import re
 import json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -264,3 +265,27 @@ class GetIfFirstSubjectUse(APIView):
         except (LPUser.DoesNotExist, Subject.DoesNotExist, Exercise.DoesNotExist):
             return HttpResponse(status=400)
         return JSONResponse(json.dumps(response))        
+
+class PostSaveIp(APIView):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JSONWebTokenAuthentication, )
+
+    def post(self, request):
+        user = request.user.LPUser
+        post = json.loads(request.body)
+        if 'server_ip' not in post or 'class_id' not in post:
+            return HttpResponse(status=400)
+        server_ip = post['server_ip']
+        class_id = post['class_id']
+        response = {}
+        ip_match = re.match(r"^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$", server_ip)
+        if not (ip_match):
+            return HttpResponse(status=400)
+        try:
+            school_class = user.school_class.get(id=class_id)
+            school_class.ip = server_ip
+            school_class.save()
+            response['result'] = 'success'
+        except (SchoolClass.DoesNotExist):
+            return HttpResponse(status=400)
+        return JSONResponse(json.dumps(response))
