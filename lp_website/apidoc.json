@@ -9,6 +9,7 @@
     "GetStudents",
     "GetSubjectConfig",
     "GetExerciseConfig",
-    "PostExerciseStat"
+    "PostExerciseStat",
+    "GetIfFirstExerciseUse"
   ]
 }
