@@ -13,7 +13,9 @@ apiResponses = {
     'get_exercise_config': '{"id":1,"name":"Config anglais lecture bloqu\xc3\xa9","data":"{\\"accessible\\": false, \\"config_name\\": \\"Config anglais lecture bloqu\\\\u00e9\\", \\"school_class\\": \\"2\\"}","reference":"en-lecture"}',
     'post_exercise_stat': '{"result":"success"}',
     'get_if_first_exercise_use_true' : '{"first_use":"true"}',
-    'get_if_first_exercise_use_false' : '{"first_use":"false"}'
+    'get_if_first_exercise_use_false' : '{"first_use":"false"}',
+    'get_if_first_subject_use_true' : '{"first_use":"true"}',
+    'get_if_first_subject_use_false' : '{"first_use":"false"}'
 }
 
 ## Classe RestApiTokenAuthTest\n
@@ -234,4 +236,44 @@ class RestApiGetIfFirstExerciseUseTest(TestCase):
         user_id = 4
         ref = 'abcd'
         response = self.client.get(reverse('backoffice:restapi-is-first-exercise-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 400)
+
+## Classe RestApiGetIfFirstSubjectUseTest\n
+# Classe de test pour la view GetIfFirstSubjectUse
+class RestApiGetIfFirstSubjectUseTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test
+    def setUp(self):
+        self.client = APIClient()
+        user = User.objects.get(username='teacher1')
+        self.client.force_authenticate(user=user)
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200
+    def test_get_subject_first_use_true(self):
+        user_id = 4
+        ref = 'fr'
+        response = self.client.get(reverse('backoffice:restapi-is-first-subject-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['get_if_first_subject_use_true'])
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200
+    def test_get_subject_first_use_false(self):
+        user_id = 4
+        ref = 'maths'
+        response = self.client.get(reverse('backoffice:restapi-is-first-subject-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['get_if_first_subject_use_false'])
+
+    ## Test d'une requete GET invalide: utilisation d'un user_id invalide. Doit renvoyer un code 400
+    def test_get_subject_first_use_wrong_user_id(self):
+        user_id = 420
+        ref = 'fr'
+        response = self.client.get(reverse('backoffice:restapi-is-first-subject-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete GET invalide: utilisation d'une reference invalide. Doit renvoyer un code 400
+    def test_get_subject_fisrt_use_wrong_reference(self):
+        user_id = 4
+        ref = 'abcd'
+        response = self.client.get(reverse('backoffice:restapi-is-first-subject-use', kwargs={'user_id':user_id,'ref':ref}))
         self.assertEqual(response.status_code, 400)

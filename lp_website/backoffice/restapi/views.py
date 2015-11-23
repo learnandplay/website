@@ -308,11 +308,11 @@ class GetIfFirstSubjectUse(APIView):
                 exercise_nb = Statistics.objects.filter(user=user_object, exercise=exercise_object).count()
                 if (exercise_nb > 0):
                     response['first_use'] = 'false'
-                    return JSONResponse(json.dumps(response))
+                    return JSONResponse(response)
             response['first_use'] = 'true'
         except (LPUser.DoesNotExist, Subject.DoesNotExist, Exercise.DoesNotExist):
             return HttpResponse(status=400)
-        return JSONResponse(json.dumps(response))
+        return JSONResponse(response)
 
 class PostSaveIp(APIView):
     permission_classes = (IsAuthenticated, )
