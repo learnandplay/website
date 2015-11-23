@@ -296,7 +296,24 @@ class GetIfFirstExerciseUse(APIView):
 class GetIfFirstSubjectUse(APIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, )
+    """
+    @api {get} /is-first-subject-use/:user_id/:reference/ Vérifier si le joueur joue pour la première fois a une matière
+    @apiUse teacher_required
+    @apiVersion 0.1.0
+    @apiName GetIfFirstSubjectUse
+    @apiGroup Statistiques
 
+    @apiSuccess {String} first_use Indique si le joueur joue pour la première fois a la matière
+
+    @apiSuccessExample Success-Response:
+        HTTP/1.1 200 OK
+        {
+            "first_use":"true"
+        }
+
+    @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
+    """
     def get(self, request, user_id, ref):
         response = {}
         try:
