@@ -353,4 +353,4 @@ class PostSaveIp(APIView):
             response['result'] = 'success'
         except (SchoolClass.DoesNotExist):
             return HttpResponse(status=400)
-        return JSONResponse(json.dumps(response))
+        return JSONResponse(response)

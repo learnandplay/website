@@ -15,7 +15,8 @@ apiResponses = {
     'get_if_first_exercise_use_true' : '{"first_use":"true"}',
     'get_if_first_exercise_use_false' : '{"first_use":"false"}',
     'get_if_first_subject_use_true' : '{"first_use":"true"}',
-    'get_if_first_subject_use_false' : '{"first_use":"false"}'
+    'get_if_first_subject_use_false' : '{"first_use":"false"}',
+    'post_save_ip': '{"result":"success"}'
 }
 
 ## Classe RestApiTokenAuthTest\n
@@ -276,4 +277,48 @@ class RestApiGetIfFirstSubjectUseTest(TestCase):
         user_id = 4
         ref = 'abcd'
         response = self.client.get(reverse('backoffice:restapi-is-first-subject-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 400)
+
+## Classe RestApiPostSaveIpTest\n
+# Classe de test pour la view PostSaveIp
+class RestApiPostSaveIpTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test
+    def setUp(self):
+        self.client = APIClient()
+        user = User.objects.get(username='teacher1')
+        self.client.force_authenticate(user=user)
+
+    ## Test d'une requete POST valide. Doit renvoyer un code 200
+    def test_post_save_ip(self):
+        class_id = 2
+        server_ip = '173.194.40.159'
+        response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'class_id':class_id,'server_ip':server_ip}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['post_save_ip'])
+
+    ## Test d'une requete POST valide: utilisation d'un server_ip mal formatée. Doit renvoyer un code 400
+    def test_post_save_ip_invalid_ip(self):
+        class_id = 2
+        server_ip = '173.194.40..1'
+        response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'class_id':class_id,'server_ip':server_ip}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST valide: server_ip manquant. Doit renvoyer un code 400
+    def test_post_save_ip_missing_ip(self):
+        class_id = 2
+        response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'class_id':class_id}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST valide: utilisation d'un class_id invalide. Doit renvoyer un code 400
+    def test_post_save_ip_invalid_class_id(self):
+        class_id = 420
+        server_ip = '173.194.40.159'
+        response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'class_id':class_id,'server_ip':server_ip}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST valide: class_id manquant. Doit renvoyer un code 400
+    def test_post_save_ip_missing_class_id(self):
+        server_ip = '173.194.40.159'
+        response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'server_ip':server_ip}), content_type='application/x-www-form-urlencoded')
         self.assertEqual(response.status_code, 400)
