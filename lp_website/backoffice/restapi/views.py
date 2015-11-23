@@ -274,7 +274,7 @@ class GetIfFirstExerciseUse(APIView):
                 response['first_use'] = 'false'
         except (LPUser.DoesNotExist, Exercise.DoesNotExist, Statistics.DoesNotExist):
             return HttpResponse(status=400)
-        return JSONResponse(json.dumps(response))
+        return JSONResponse(response)
 
 class GetIfFirstSubjectUse(APIView):
     permission_classes = (IsAuthenticated, )

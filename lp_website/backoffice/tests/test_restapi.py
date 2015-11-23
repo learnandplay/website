@@ -12,6 +12,8 @@ apiResponses = {
     'get_subject_config': '{"id":2,"name":"Maths d\xc3\xa9bloqu\xc3\xa9es","data":"{\\"accessible\\": true, \\"config_name\\": \\"Maths d\\\\u00e9bloqu\\\\u00e9es\\", \\"school_class\\": \\"2\\"}","reference":"maths"}',
     'get_exercise_config': '{"id":1,"name":"Config anglais lecture bloqu\xc3\xa9","data":"{\\"accessible\\": false, \\"config_name\\": \\"Config anglais lecture bloqu\\\\u00e9\\", \\"school_class\\": \\"2\\"}","reference":"en-lecture"}',
     'post_exercise_stat': '{"result":"success"}',
+    'get_if_first_exercise_use_true' : '{"first_use":"true"}',
+    'get_if_first_exercise_use_false' : '{"first_use":"false"}'
 }
 
 ## Classe RestApiTokenAuthTest\n
@@ -192,4 +194,44 @@ class RestApiPostExerciseStatTest(TestCase):
         reference = 'maths-geometrie'
         user_id = 5
         response = self.client.post(reverse('backoffice:restapi-save-exercise-stat'), json.dumps({'reference':reference,'user_id':user_id}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+## Classe RestApiGetIfFirstExerciseUseTest\n
+# Classe de test pour la view GetIfFirstExerciseUse
+class RestApiGetIfFirstExerciseUseTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test
+    def setUp(self):
+        self.client = APIClient()
+        user = User.objects.get(username='teacher1')
+        self.client.force_authenticate(user=user)
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200
+    def test_get_exercise_first_use_true(self):
+        user_id = 4
+        ref = 'fr-lecture'
+        response = self.client.get(reverse('backoffice:restapi-is-first-exercise-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['get_if_first_exercise_use_true'])
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200
+    def test_get_exercise_first_use_false(self):
+        user_id = 4
+        ref = 'maths-additions'
+        response = self.client.get(reverse('backoffice:restapi-is-first-exercise-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['get_if_first_exercise_use_false'])
+
+    ## Test d'une requete GET invalide: utilisation d'un user_id invalide. Doit renvoyer un code 400
+    def test_get_exercise_first_use_wrong_user_id(self):
+        user_id = 420
+        ref = 'fr-lecture'
+        response = self.client.get(reverse('backoffice:restapi-is-first-exercise-use', kwargs={'user_id':user_id,'ref':ref}))
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete GET invalide: utilisation d'une reference invalide. Doit renvoyer un code 400
+    def test_get_exercise_fisrt_use_wrong_reference(self):
+        user_id = 4
+        ref = 'abcd'
+        response = self.client.get(reverse('backoffice:restapi-is-first-exercise-use', kwargs={'user_id':user_id,'ref':ref}))
         self.assertEqual(response.status_code, 400)
