@@ -260,10 +260,16 @@ exercises[0].append(Exercise(name='Soustractions', subject=subjects[0], referenc
 exercises[0][1].save()
 exercises[0].append(Exercise(name='Géométrie', subject=subjects[0], reference='maths-geometrie', data='{"goal": {"value": ["Reconnaissance de formes", "Reconnaissance des tailles"], "title": "Type de questions"}, "allow_retry": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "default": "false", "title": "Autoriser l\'élève à refaire une question"}, "nb_try": {"value": "integer", "title": "Nombre de tentatives"}, "accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 exercises[0][2].save()
+exercises[0].append(Exercise(name='Compter les pommes', subject=subjects[0], reference='maths-compte-pomme', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[0][3].save()
 
 exercises.append([])
 exercises[1].append(Exercise(name='Lecture', subject=subjects[1], reference='fr-lecture', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
 exercises[1][0].save()
+exercises[1].append(Exercise(name='Memory', subject=subjects[1], reference='fr-memory', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[1][1].save()
+exercises[1].append(Exercise(name='Reconnaissance des sons', subject=subjects[1], reference='fr-reco-sons', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
+exercises[1][2].save()
 
 exercises.append([])
 exercises[2].append(Exercise(name='Lecture', subject=subjects[2], reference='en-lecture', data='{"accessible": {"value": "bool", "titleMap": ["Autoriser", "Ne pas autoriser"], "title": "Autoriser l\'accès"}}'))
