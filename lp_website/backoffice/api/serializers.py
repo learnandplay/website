@@ -71,6 +71,8 @@ class StatisticsSerializer(serializers.ModelSerializer):
 	subject = serializers.SerializerMethodField('generate_subject')
 	## Exercice
 	exercise = serializers.SerializerMethodField('generate_exercise')
+	## Date formattée
+	datestring = serializers.SerializerMethodField('generate_datestring')
 
 	## Génère le nom d'utilisateur
 	# @param statistics Une statistique
@@ -84,15 +86,21 @@ class StatisticsSerializer(serializers.ModelSerializer):
 	def generate_subject(self, statistics):
 		return statistics.exercise.subject.name
 
-	## Génère l'exercice'
+	## Génère l'exercice
 	# @param statistics Une statistique
 	# @returns Le nom de l'exercice
 	def generate_exercise(self, statistics):
 		return statistics.exercise.name
 
+	## Génère la date formatée
+	# @param statistics Une statistique
+	# @returns Une string contenant la date formatée
+	def generate_datestring(self, statistics):
+		return statistics.date.strftime('%d/%m/%Y %Hh%M')
+
 	class Meta:
 		model = Statistics
-		fields = ('username', 'subject', 'exercise', 'date', 'data')
+		fields = ('username', 'subject', 'exercise', 'date', 'datestring','data')
 
 ## Classe SubjectSerializer\n
 # Serialise une matiere
@@ -155,7 +163,7 @@ class ExerciseSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Exercise
-		fields = ('id', 'name', 'subject', 'data')
+		fields = ('id', 'reference', 'name', 'subject', 'data')
 
 ## Classe ExerciseConfigSerializer\n
 # Serialise une configuration d'exercice

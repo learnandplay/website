@@ -192,6 +192,13 @@ def edit_profile(request):
 def statistics(request):
     return render(request, 'backoffice/statistics.html')
 
+## raw_statistics\n
+# Page de visualisation des statistiques brutes
+@login_required
+@teacher_required
+def raw_statistics(request):
+    return render(request, 'backoffice/raw_statistics.html')
+
 ## configuration\n
 # Page de création d'une configuration
 @login_required

@@ -5,6 +5,25 @@ backofficeApp.config(function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 });
 
+var generateStrTime = function(time, label) {
+  time = Math.round(time);
+  var hours = Math.floor(time / (60 * 60));
+  var minutes_divisor = time % (60 * 60);
+  var minutes = Math.floor(minutes_divisor / 60);
+  var seconds_divisor = minutes_divisor % 60;
+  var seconds = Math.ceil(seconds_divisor);
+  var str = '';
+  if (label)
+    str += label + ": ";
+  if (hours)
+    str += hours + " heures(s) ";
+  if (minutes || hours)
+    str += minutes + " minute(s) ";
+  if (seconds || minutes || hours)
+    str += seconds + " seconde(s)";
+  return (str);
+}
+
 backofficeApp.controller('ClassesListCtrl', function($scope, $http) {
 	$scope.deleteSchoolClass = function(schoolClass) {
 		$http({
@@ -152,16 +171,6 @@ backofficeApp.controller('AdministratorsCtrl', function($scope, $http) {
 
 
 backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
-  var generateTimeTooltip = function(label, time) {
-    time = Math.round(time);
-    var hours = Math.floor(time / (60 * 60));
-    var minutes_divisor = time % (60 * 60);
-    var minutes = Math.floor(minutes_divisor / 60);
-    var seconds_divisor = minutes_divisor % 60;
-    var seconds = Math.ceil(seconds_divisor);
-    return (label + ": " + hours + " heure(s) " + minutes + " minute(s) " + seconds + " seconde(s)");
-  }
-
   $scope.loadedStatisticsType = undefined;
   $scope.statisticsTypes = [{'type': 'stats_solo_multi', 'name': 'Solo/Multijoueur'},
                           {'type': 'stats_time_subject', 'name': 'Temps par matière'},
@@ -171,7 +180,7 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
   $scope.previousStudent = undefined;
   $scope.options_stats_solo_multi = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%=value%>%"};
   $scope.colours_stats_solo_multi = ['#81CFE0', '#1E8BC3'];
-  $scope.options_stats_time_subject = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: function(v){return(generateTimeTooltip(v.label, v.value));}};
+  $scope.options_stats_time_subject = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: function(v){return(generateStrTime(v.value, v.label));}};
   $scope.colours_stats_time_subject = ['#2ECC71', '#1BA39C'];
   $scope.options_stats_success_fail = {animationSteps: 20, animationEasing: "linear", responsive: true, tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%=value%>%"};
   $scope.colours_stats_success_fail = ['#2ECC71', '#F7464A'];
@@ -321,6 +330,82 @@ backofficeApp.controller('StatisticsCtrl', function($scope, $http) {
         $scope.selectedSchoolClass = undefined;
       }
       $scope.selectedStudent = null;
+    }).error(function(data, status, headers, config) {
+      $scope.alertError = true;
+      $scope.alertErrorMessage = "Impossible de récupérer la liste des étudiants";
+    });
+  };
+
+  $scope.getStudentsList();
+});
+
+
+backofficeApp.controller('RawStatisticsCtrl', function($scope, $http) {
+  $scope.loadedStats = false;
+  $scope.getStatistics = function() {
+    $http({
+      url: "/backoffice/api/get_statistics/" + $scope.selectedExercise.reference + '/' + $scope.selectedStudent.id,
+      method: "GET",
+    }).success(function(data, status, headers, config) {
+      $scope.statistics = JSON.parse(data);
+      
+      $scope.statistics.forEach(function(stat) {
+        stat.data = JSON.parse(stat.data);
+        stat.multi = stat.data.hasOwnProperty('multi') ? stat.data.multi : 'false';
+        stat.multi = stat.multi == 'false' ? 'Non' : 'Oui';
+        stat.timestring = stat.data.hasOwnProperty('time') ? generateStrTime(stat.data.time) : 0;
+        stat.pourcent_success = 0;
+        if (stat.data.hasOwnProperty('success') && stat.data.hasOwnProperty('failure')) {
+          var success = parseInt(stat.data.success);
+          var failure = parseInt(stat.data.failure);
+          stat.success = success;
+          stat.failure = failure;
+          stat.pourcent_success = Math.round(success * 100 / (success + failure));
+        }
+      });
+      $scope.loadedStats = true;
+    }).error(function(data, status, headers, config) {
+      $scope.alertError = true;
+      $scope.alertErrorMessage = "Impossible de récupérer les statistiques";
+    });
+  };
+
+  $scope.changeSelectedSchoolClass = function() {
+    $scope.students = $scope.initialData.students[$scope.selectedSchoolClass.id];
+    $scope.selectedStudent = $scope.students[0];
+  };
+
+  $scope.getExercisesList = function() {
+    $http({
+      url: "/backoffice/api/get_exercises/",
+      method: "GET",
+    }).success(function(data, status, headers, config) {
+      $scope.exercises = data;
+      $scope.selectedExercise = $scope.exercises[0];
+    }).error(function(data, status, headers, config) {
+      $scope.alertError = true;
+      $scope.alertErrorMessage = "Impossible de récupérer la liste des exercices";
+    });
+  };
+
+  $scope.getStudentsList = function() {
+    $http({
+      url: "/backoffice/api/get_all_classes_students/",
+      method: "GET",
+    }).success(function(data, status, headers, config) {
+      data = JSON.parse(data);
+      $scope.initialData = data;
+      $scope.classes = data.school_classes;
+      if ($scope.classes[0]) {
+        $scope.students = data.students[data.school_classes[0].id];
+        $scope.selectedSchoolClass = $scope.classes[0];
+        $scope.selectedStudent = $scope.students[0];
+        $scope.getExercisesList();
+      }
+      else {
+        $scope.students = undefined;
+        $scope.selectedSchoolClass = undefined;
+      }
     }).error(function(data, status, headers, config) {
       $scope.alertError = true;
       $scope.alertErrorMessage = "Impossible de récupérer la liste des étudiants";
