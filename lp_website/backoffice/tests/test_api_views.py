@@ -233,6 +233,35 @@ class GetStatisticsTest(TestCase):
         response = self.client.get(reverse('backoffice:api_get_statistics', kwargs={'class_id':class_id,'student_id':student_id}))
         self.assertEqual(response.status_code, 200)
 
+## Classe GetExerciseStatisticsTest\n
+# Classe de test pour la view api_get_exercise_statistics
+class GetExerciseStatisticsTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test et login avec un compte professeur
+    def setUp(self):
+        self.client = Client()
+        self.client.login(username='teacher1', password='password')
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200
+    def test_get_exercise_statistics(self):
+        ref = 'en-lecture'
+        student_id = 4
+        response = self.client.get(reverse('backoffice:api_get_exercise_statistics', kwargs={'ref':ref,'student_id':student_id}))
+        self.assertEqual(response.status_code, 200)
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200 et aucune statisques car utilisation d'une reference inexistante
+    def test_get_exercise_statistics_wrong_reference(self):
+        ref = 'toto'
+        student_id = 4
+        response = self.client.get(reverse('backoffice:api_get_exercise_statistics', kwargs={'ref':ref,'student_id':student_id}))
+        self.assertEqual(response.status_code, 200)
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200 et aucune statisques car utilisation d'un student_id inexistant
+    def test_get_exercise_statistics_wrong_student_id(self):
+        ref = 'en-lecture'
+        student_id = 420
+        response = self.client.get(reverse('backoffice:api_get_exercise_statistics', kwargs={'ref':ref,'student_id':student_id}))
+        self.assertEqual(response.status_code, 200)
 
 ## Classe GetSubjectsTest\n
 # Classe de test pour la view api_get_subjects

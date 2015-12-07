@@ -1,0 +1,69 @@
+{% extends "backoffice/layout.html" %}
+{% load bootstrap3 %}
+
+
+{% block title %}Statistiques brutes{% endblock title %}
+
+{% block navbar_raw_statistics %}active{% endblock navbar_raw_statistics %}
+
+{% block content %}
+<div ng-controller="RawStatisticsCtrl">
+  <div class="alert alert-danger alert-dismissible" role="alert" ng-show='alertError'>
+      <button type="button" class="close" ng-click="alertError=false"><span aria-hidden="true">&times;</span></button>
+      {%verbatim%}{{alertErrorMessage}}{%endverbatim%}
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6 col-sm-3">
+      <select class="form-control"
+        ng-model="selectedSchoolClass"
+        ng-options="(class.name + ' - ' + class.school_name) for class in classes"
+        ng-change="changeSelectedSchoolClass()">
+      </select>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      <select class="form-control"
+        ng-model="selectedStudent"
+        ng-options="student.username for student in students">
+      </select>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      <select class="form-control"
+        ng-model="selectedExercise"
+        ng-options="(exercise.subject + ' - ' + exercise.name) for exercise in exercises">
+      </select>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      <button class="btn btn-primary" ng-click="getStatistics()">Voir les statistiques</button>
+    </div>
+  </div>
+
+  <table class="table table-striped" ng-show="statistics.length!=0 && loadedStats">
+      <thead>
+          <tr>
+              <th data-field="username">Nom</th>
+              <th data-field="subject">Matière</th>
+              <th data-field="exercise">Exercice</th>
+              <th data-field="date">Date</th>
+              <th data-field="multi">Multijoueur</th>
+              <th data-field="time">Temps</th>
+              <th data-field='pourcent_success'>Taux de réussite</th>
+          </tr>
+      </thead>
+      <tbody>
+              <tr ng-repeat="statistic in statistics">
+                  <td>{%verbatim%}{{statistic.username}}{%endverbatim%}</td>
+                  <td>{%verbatim%}{{statistic.subject}}{%endverbatim%}</td>
+                  <td>{%verbatim%}{{statistic.exercise}}{%endverbatim%}</td>
+                  <td>{%verbatim%}{{statistic.datestring}}{%endverbatim%}</td>
+                  <td>{%verbatim%}{{statistic.multi}}{%endverbatim%}</td>
+                  <td>{%verbatim%}{{statistic.timestring}}{%endverbatim%}</td>
+                  <td>{%verbatim%}{{statistic.pourcent_success}}{%endverbatim%}%</td>
+              </tr>
+      </tbody>
+  </table>
+  <br ng-show="statistics.length==0 && loadedStats"/>
+  <div class="alert alert-danger" role="alert" ng-show="statistics.length==0 && loadedStats">Aucunes statistiques à afficher</div>
+
+</div>
+{% endblock content %}

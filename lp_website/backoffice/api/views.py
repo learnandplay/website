@@ -183,6 +183,20 @@ def get_statistics(request, class_id, student_id):
     response = StatisticsSerializer(stats, many=True).data
     return JSONResponse(json.dumps(response))
 
+## get_exercise_statistics\n
+# Recuperer les statistiques d'un eleve pour un exercice donné\n
+# Requête GET
+# @param ref Reference de l'exercice
+# @param student_id Id de l'utilisateur
+# @returns Les statistiques de l'utilisateur pour l'exercice donné
+@login_required
+@teacher_required
+def get_exercise_statistics(request, ref, student_id):
+    student_id = int(student_id)
+    stats = Statistics.objects.filter(user__id__in=[student_id], exercise__reference__in=[ref]).order_by('-date')
+    response = StatisticsSerializer(stats, many=True).data
+    return JSONResponse(json.dumps(response))
+
 ## get_subjects\n
 # Requête GET
 # @returns Toutes les matieres scolaires
@@ -191,6 +205,16 @@ def get_statistics(request, class_id, student_id):
 def get_subjects(request):
     subjects = Subject.objects.all().order_by('name')
     serializer = SubjectSerializer(subjects, many=True)
+    return JSONResponse(serializer.data)
+
+## get_exercises\n
+# Requête GET
+# @returns Tous les exercices
+@login_required
+@teacher_required
+def get_exercises(request):
+    exercises = Exercise.objects.all().order_by('subject__name', 'name')
+    serializer = ExerciseSerializer(exercises, many=True)
     return JSONResponse(serializer.data)
 
 ## get_subjects_exercices\n
