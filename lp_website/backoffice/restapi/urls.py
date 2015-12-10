@@ -1,6 +1,6 @@
 from django.conf.urls import include, patterns, url
 from backoffice.restapi import views
-from backoffice.restapi.views import GetClasses, GetStudents, GetSubjectConfig, GetExerciseConfig, PostExerciseStat, GetIfFirstExerciseUse, GetIfFirstSubjectUse, PostSaveIp
+from backoffice.restapi.views import GetClasses, GetStudents, GetSubjectConfig, GetExerciseConfig, PostExerciseStat, GetIfFirstExerciseUse, GetIfFirstSubjectUse, PostSaveIp, GetUserDatas, PostUserDatas
 
 urlpatterns = patterns('',
                        url(r'^api-token-auth/$', 'rest_framework_jwt.views.obtain_jwt_token', name='restapi-token-auth'),
@@ -12,4 +12,6 @@ urlpatterns = patterns('',
                        url(r'^is-first-exercise-use/(?P<user_id>\d+)/(?P<ref>[\w-]+)/$', GetIfFirstExerciseUse.as_view(), name='restapi-is-first-exercise-use'),
                        url(r'^is-first-subject-use/(?P<user_id>\d+)/(?P<ref>[\w-]+)/$', GetIfFirstSubjectUse.as_view(), name='restapi-is-first-subject-use'),
                        url(r'^save-ip/$', PostSaveIp.as_view(), name='restapi-save-ip'),
+                       url(r'^user-datas/(?P<student_id>\d+)/$', GetUserDatas.as_view(), name='restapi-user-datas'),
+                       url(r'^save-user-datas/$', PostUserDatas.as_view(), name='restapi-save-user-datas'),
 )
