@@ -45,6 +45,8 @@ class LPUserSerializer(serializers.ModelSerializer):
 	username = serializers.SerializerMethodField('generate_username')
 	## url pour éditer l'utilisateur
 	edit_url = serializers.SerializerMethodField('generate_edit_url')
+        ## url pour visualiser un profil
+	view_url = serializers.SerializerMethodField('generate_view_url')
 
 	## Génère le nom d'utilisateur
 	# @param lpuser L'utilisateur
@@ -58,9 +60,15 @@ class LPUserSerializer(serializers.ModelSerializer):
 	def generate_edit_url(self, lpuser):
 		return reverse('backoffice:edit_student', kwargs={'class_id': lpuser.school_class.all()[0].id, 'id': lpuser.id})
 
+        ## Génère l'url pour visualiser un profil
+	# @param lpuser L'utilisateur
+	# @returns L'url pour visualiser le profil
+	def generate_view_url(self, lpuser):
+		return reverse('backoffice:view_profile', kwargs={'class_id': lpuser.school_class.all()[0].id, 'id': lpuser.id})
+
 	class Meta:
 		model = LPUser
-		fields = ('id', 'username', 'edit_url', 'data')
+		fields = ('id', 'username', 'edit_url', 'view_url', 'data')
 
 ## Classe StatisticsSerializer\n
 # Serialise une statistique

@@ -49,9 +49,10 @@
                     <tr ng-repeat="student in students">
                         <td>{%verbatim%}{{student.username}}{%endverbatim%}</td>
                         <td>
-                            <a href="{%verbatim%}{{student.edit_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
-                            <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirm-delete" ng-click="userData.studentToDelete = student;">Supprimer</button>
-                        </td>
+                          <a href="{%verbatim%}{{student.edit_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Editer</a>&nbsp;&nbsp;
+			  <a href="{%verbatim%}{{student.view_url}}{%endverbatim%}" class="btn btn-xs btn-primary">Profil</a>&nbsp;&nbsp;
+                          <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirm-delete" ng-click="userData.studentToDelete = student;">Supprimer</button>
+			</td>
                     </tr>
             </tbody>
         </table>

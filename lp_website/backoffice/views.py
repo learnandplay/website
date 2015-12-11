@@ -189,7 +189,7 @@ def edit_profile(request):
 # Page de vue du profil utilisateur
 @login_required
 @teacher_required
-def view_profile(request):
+def view_profile(request, class_id, id=None):
     return render(request, 'backoffice/view_profile.html')
 
 ## statistics\n
