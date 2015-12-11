@@ -366,7 +366,10 @@ class PostSaveIp(APIView):
         if not (ip_match):
             return HttpResponse(status=400)
         try:
+            teacher_school_class = user.school_class.all()
             school_class = user.school_class.get(id=class_id)
+            if school_class not in teacher_school_class:
+                return HttpResponse(status=400)
             school_class.ip = server_ip
             school_class.save()
             response['result'] = 'success'
