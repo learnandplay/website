@@ -185,6 +185,13 @@ def edit_profile(request):
     return render(request, 'backoffice/edit_profile.html',
         {'avatar_form': avatar_form, 'email_form': email_form, 'password_form': password_form, 'lp_user': lp_user})
 
+## view_profile\n
+# Page de vue du profil utilisateur
+@login_required
+@teacher_required
+def view_profile(request):
+    return render(request, 'backoffice/view_profile.html')
+
 ## statistics\n
 # Page de visualisation des statistiques
 @login_required
