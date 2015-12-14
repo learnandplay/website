@@ -56,7 +56,7 @@ students[0].append(User(username='Benjamin.Boisset', email='student-dev@domain.c
 students[0][0].save()
 students[0][0].groups.add(Group.objects.get(name='students'))
 lp_students.append([])
-lp_students[0].append(LPUser())
+lp_students[0].append(LPUser(data='{"credits":42}'))
 lp_students[0][0].user = students[0][0]
 lp_students[0][0].save()
 lp_students[0][0].school_class.add(school_classes[0])
