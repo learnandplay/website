@@ -12,6 +12,6 @@ urlpatterns = patterns('',
                        url(r'^is-first-exercise-use/(?P<user_id>\d+)/(?P<ref>[\w-]+)/$', GetIfFirstExerciseUse.as_view(), name='restapi-is-first-exercise-use'),
                        url(r'^is-first-subject-use/(?P<user_id>\d+)/(?P<ref>[\w-]+)/$', GetIfFirstSubjectUse.as_view(), name='restapi-is-first-subject-use'),
                        url(r'^save-ip/$', PostSaveIp.as_view(), name='restapi-save-ip'),
-                       url(r'^user-datas/(?P<student_id>\d+)/$', GetUserDatas.as_view(), name='restapi-user-datas'),
+                       url(r'^user-datas/(?P<user_id>\d+)/$', GetUserDatas.as_view(), name='restapi-user-datas'),
                        url(r'^save-user-datas/$', PostUserDatas.as_view(), name='restapi-save-user-datas'),
 )

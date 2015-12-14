@@ -9,14 +9,17 @@ from pprint import pprint
 apiResponses = {
     'get_classes': '[{"id":1,"name":"CP 1","school_name":"Ecole Albert Camus","ip":""},{"id":2,"name":"CP 2","school_name":"Ecole Albert Camus","ip":""}]',
     'get_students': '[{"id":11,"username":"Anthony.Payet"},{"id":3,"username":"Benjamin.Boisset"},{"id":4,"username":"Julien.Lefebvre"},{"id":10,"username":"Laura.Moulin"},{"id":12,"username":"Lea.Martinez"},{"id":9,"username":"Lucie.Masson"},{"id":5,"username":"Manon.Durand"},{"id":7,"username":"Marie.Petit"},{"id":6,"username":"Pierre.Moreau"},{"id":8,"username":"Romain.Brunet"}]',
-    'get_subject_config': '{"id":2,"name":"Maths d\xc3\xa9bloqu\xc3\xa9es","data":"{\\"accessible\\": true, \\"config_name\\": \\"Maths d\\\\u00e9bloqu\\\\u00e9es\\", \\"school_class\\": \\"2\\"}","reference":"maths"}',
+    'get_subject_config': '{"id":1,"name":"Maths d\xc3\xa9bloqu\xc3\xa9es","data":"{\\"accessible\\": true, \\"config_name\\": \\"Maths d\\\\u00e9bloqu\\\\u00e9es\\", \\"school_class\\": \\"2\\"}","reference":"maths"}',
     'get_exercise_config': '{"id":1,"name":"Config anglais lecture bloqu\xc3\xa9","data":"{\\"accessible\\": false, \\"config_name\\": \\"Config anglais lecture bloqu\\\\u00e9\\", \\"school_class\\": \\"2\\"}","reference":"en-lecture"}',
     'post_exercise_stat': '{"result":"success"}',
     'get_if_first_exercise_use_true' : '{"first_use":"true"}',
     'get_if_first_exercise_use_false' : '{"first_use":"false"}',
     'get_if_first_subject_use_true' : '{"first_use":"true"}',
     'get_if_first_subject_use_false' : '{"first_use":"false"}',
-    'post_save_ip': '{"result":"success"}'
+    'post_save_ip': '{"result":"success"}',
+    'get_user_data': '{"credits":42}',
+    'get_user_data_empty': '{}',
+    'post_user_datas': '{"result":"success"}'
 }
 
 ## Classe RestApiTokenAuthTest\n
@@ -297,28 +300,101 @@ class RestApiPostSaveIpTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, apiResponses['post_save_ip'])
 
-    ## Test d'une requete POST valide: utilisation d'un server_ip mal formatée. Doit renvoyer un code 400
+    ## Test d'une requete POST invalide: utilisation d'un server_ip mal formatée. Doit renvoyer un code 400
     def test_post_save_ip_invalid_ip(self):
         class_id = 2
         server_ip = '173.194.40..1'
         response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'class_id':class_id,'server_ip':server_ip}), content_type='application/x-www-form-urlencoded')
         self.assertEqual(response.status_code, 400)
 
-    ## Test d'une requete POST valide: server_ip manquant. Doit renvoyer un code 400
+    ## Test d'une requete POST invalide: server_ip manquant. Doit renvoyer un code 400
     def test_post_save_ip_missing_ip(self):
         class_id = 2
         response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'class_id':class_id}), content_type='application/x-www-form-urlencoded')
         self.assertEqual(response.status_code, 400)
 
-    ## Test d'une requete POST valide: utilisation d'un class_id invalide. Doit renvoyer un code 400
+    ## Test d'une requete POST invalide: utilisation d'un class_id invalide. Doit renvoyer un code 400
     def test_post_save_ip_invalid_class_id(self):
         class_id = 420
         server_ip = '173.194.40.159'
         response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'class_id':class_id,'server_ip':server_ip}), content_type='application/x-www-form-urlencoded')
         self.assertEqual(response.status_code, 400)
 
-    ## Test d'une requete POST valide: class_id manquant. Doit renvoyer un code 400
+    ## Test d'une requete POST invalide: class_id manquant. Doit renvoyer un code 400
     def test_post_save_ip_missing_class_id(self):
         server_ip = '173.194.40.159'
         response = self.client.post(reverse('backoffice:restapi-save-ip'), json.dumps({'server_ip':server_ip}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+## Classe RestApiGetUserDatasTest\n
+# Classe de test pour la view GetUserDatas
+class RestApiGetUserDatasTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test
+    def setUp(self):
+        self.client = APIClient()
+        user = User.objects.get(username='teacher1')
+        self.client.force_authenticate(user=user)
+    ## Test d'une requete GET valide. Doit renvoyer un code 200
+    def test_get_user_datas(self):
+        user_id = 3
+        response = self.client.get(reverse('backoffice:restapi-user-datas', kwargs={'user_id':user_id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['get_user_data'])
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200 et une json vide car l'utilisateur ne possede pas de data associées
+    def test_get_user_datas_empty(self):
+        user_id = 4
+        response = self.client.get(reverse('backoffice:restapi-user-datas', kwargs={'user_id':user_id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['get_user_data_empty'])
+
+    ## Test d'une requete GET invalide: user_id innexistant. Doit renvoyer un code 400
+    def test_get_user_datas_wrong_id(self):
+        user_id = 420
+        response = self.client.get(reverse('backoffice:restapi-user-datas', kwargs={'user_id':user_id}))
+        self.assertEqual(response.status_code, 400)
+
+## Classe RestApiPostUserDatasTest\n
+# Classe de test pour la view PostUserDatas
+class RestApiPostUserDatasTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test
+    def setUp(self):
+        self.client = APIClient()
+        user = User.objects.get(username='teacher1')
+        self.client.force_authenticate(user=user)
+
+    ## Test d'une requete POST valide. Doit renvoyer un code 200
+    def test_post_user_datas(self):
+        user_id = 3
+        data = '{"credits":43}'
+        response = self.client.post(reverse('backoffice:restapi-save-user-datas'), json.dumps({'user_id':user_id,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, apiResponses['post_user_datas'])
+
+    ## Test d'une requete POST invalide: user_id innexistant. Doit renvoyer un code 400
+    def test_post_user_datas(self):
+        user_id = 420
+        data = '{"credits":43}'
+        response = self.client.post(reverse('backoffice:restapi-save-user-datas'), json.dumps({'user_id':user_id,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST invalide: data invalide. Doit renvoyer un code 400
+    def test_post_user_datas(self):
+        user_id = 3
+        data = '{"credits":43}dwdewdewew'
+        response = self.client.post(reverse('backoffice:restapi-save-user-datas'), json.dumps({'user_id':user_id,'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST invalide: user_id manquant. Doit renvoyer un code 400
+    def test_post_user_datas(self):
+        data = '{"credits":43}'
+        response = self.client.post(reverse('backoffice:restapi-save-user-datas'), json.dumps({'data':data}), content_type='application/x-www-form-urlencoded')
+        self.assertEqual(response.status_code, 400)
+
+    ## Test d'une requete POST invalide: data manquant. Doit renvoyer un code 400
+    def test_post_user_datas(self):
+        user_id = 3
+        response = self.client.post(reverse('backoffice:restapi-save-user-datas'), json.dumps({'user_id':user_id}), content_type='application/x-www-form-urlencoded')
         self.assertEqual(response.status_code, 400)

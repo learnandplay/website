@@ -385,25 +385,25 @@ class GetUserDatas(APIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, )
 
-    def get(self, request, student_id):
+    def get(self, request, user_id):
         try:
             user_teacher = request.user.LPUser
-            user_student = LPUser.objects.get(id=student_id)
+            user_student = LPUser.objects.get(id=user_id)
             teacher_school_class = user_teacher.school_class.all()
             user_school_class = user_student.school_class.all()
             if len(list(set(teacher_school_class) & set(user_school_class))) == 0:
                 return HttpResponse(status=400)
             user_data = user_student.data
             if user_data is None:
-                raise ValueError
+                user_data = '{}'
             response = json.loads(user_data)
         except (LPUser.DoesNotExist, SchoolClass.DoesNotExist, ValueError):
             return HttpResponse(status=400)
         return JSONResponse(response)
 
-# Paramètres : student_id, data
+# Paramètres : user_id, data
 # Sauvegarde des datas pour un user (student_id) au format JSON en db
-# uniquement possible si l'étudiant est dans une des classes du professeur 
+# uniquement possible si l'étudiant est dans une des classes du professeur
 # Retourne HTTP 400 si le json dans data est mal formatté ou si l'etudiant
 # n'est pas dans une classe du professeur ou si un paramètre est manquant
 # sinon retourne {"result": "success"}
@@ -414,11 +414,11 @@ class PostUserDatas(APIView):
     def post(self, request):
         post = json.loads(request.body)
         response = {}
-        if 'student_id' not in post or 'data' not in post:
+        if 'user_id' not in post or 'data' not in post:
             return HttpResponse(status=400)
         try:
             user_teacher = request.user.LPUser
-            user_student = LPUser.objects.get(id=post['student_id'])
+            user_student = LPUser.objects.get(id=post['user_id'])
             teacher_school_class = user_teacher.school_class.all()
             user_school_class = user_student.school_class.all()
             if len(list(set(teacher_school_class) & set(user_school_class))) == 0:
