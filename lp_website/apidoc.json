@@ -12,6 +12,8 @@
     "GetExerciseConfig",
     "PostExerciseStat",
     "GetIfFirstExerciseUse",
-    "GetIfFirstSubjectUse"
+    "GetIfFirstSubjectUse",
+    "GetUserDatas",
+    "PostUserDatas"
   ]
 }

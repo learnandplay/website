@@ -378,13 +378,31 @@ class PostSaveIp(APIView):
         return JSONResponse(response)
 
 
-# Recupère un json de data associé au student
-# Retourne HTTP 400 si le json est mal formatté ou en cas d'absence de data en db
-# ou si l'etudiant n'est pas dans une classe du professeur
 class GetUserDatas(APIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, )
+    """
+    @api {get} /user-datas/:user_id/ Récupérer les data associées à un utilisateur
+    @apiUse teacher_required
+    @apiVersion 0.1.0
+    @apiName GetUserDatas
+    @apiGroup Statistiques
 
+    @apiSuccess {Number} credits    Nombre de crédits gagnés par l'utilisateur
+
+    @apiSuccessExample Success-Response:
+        HTTP/1.1 200 OK
+        {
+            "credits": 42
+        }
+
+    @apiSuccessExample Success-Response-Empty:
+        HTTP/1.1 200 OK
+        {}
+
+    @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
+    """
     def get(self, request, user_id):
         try:
             user_teacher = request.user.LPUser
@@ -401,16 +419,29 @@ class GetUserDatas(APIView):
             return HttpResponse(status=400)
         return JSONResponse(response)
 
-# Paramètres : user_id, data
-# Sauvegarde des datas pour un user (student_id) au format JSON en db
-# uniquement possible si l'étudiant est dans une des classes du professeur
-# Retourne HTTP 400 si le json dans data est mal formatté ou si l'etudiant
-# n'est pas dans une classe du professeur ou si un paramètre est manquant
-# sinon retourne {"result": "success"}
 class PostUserDatas(APIView):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, )
+    """
+    @api {post} /save-user-datas/ Sauvegarder des datas pour un utilisateur
+    @apiUse teacher_required
+    @apiParam {Number} user_id      ID de l'utilisateur
+    @apiParam {String} data         Datas au format JSON string
+    @apiVersion 0.1.0
+    @apiName PostUserDatas
+    @apiGroup Statistiques
 
+    @apiSuccess {String} result Resultat
+
+    @apiSuccessExample Success-Response:
+        HTTP/1.1 200 OK
+        {
+            "result":"success"
+        }
+
+    @apiUse UNAUTHORIZED
+    @apiUse BADREQUEST
+    """
     def post(self, request):
         post = json.loads(request.body)
         response = {}
