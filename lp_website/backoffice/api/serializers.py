@@ -64,7 +64,7 @@ class LPUserSerializer(serializers.ModelSerializer):
 	# @param lpuser L'utilisateur
 	# @returns L'url pour visualiser le profil
 	def generate_view_url(self, lpuser):
-		return reverse('backoffice:view_profile', kwargs={'class_id': lpuser.school_class.all()[0].id, 'id': lpuser.id})
+		return reverse('backoffice:view_profile', kwargs={'user_id': lpuser.id})
 
 	class Meta:
 		model = LPUser

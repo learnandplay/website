@@ -189,8 +189,15 @@ def edit_profile(request):
 # Page de vue du profil utilisateur
 @login_required
 @teacher_required
-def view_profile(request, class_id, id=None):
-    return render(request, 'backoffice/view_profile.html')
+def view_profile(request, user_id):
+    try:
+        student = LPUser.objects.get(id=user_id)
+        data = getattr(student, 'data')
+        if data is None:
+            data = '{"Information":"Pas de données disponibles pour cet utilisateur"}'
+    except LPUser.DoesNotExist:
+        return HttpResponse(status=400)        
+    return render(request, 'backoffice/view_profile.html', {'student' : student, 'datas' : json.loads(data)})
 
 ## statistics\n
 # Page de visualisation des statistiques

@@ -4,7 +4,16 @@
 {% block title %}Vue profil{% endblock title %}
 
 {% block content %}
-<p>
-  Vue profil
-</p>
+<img class="centered-image large-avatar"src="{{ student.avatar.url }}">
+<div class="row" style="margin-top:3em;">
+  <div class="col-lg-offset-4 col-lg-6">
+    <h2 class="">Utilisateur :</h2>
+    <h4> {{ student }} </h4>
+    <h2 class="">Données relatives à l'utilisateur</h2>
+    {% for key, value in datas.items %}
+    <p>{{key}} : {{ value }}</p>
+    {% endfor %}
+  </div>
+</div>
+
 {% endblock content %}
