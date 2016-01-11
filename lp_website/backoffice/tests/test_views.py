@@ -244,3 +244,23 @@ class MyconfigurationsTest(TestCase):
     def test_my_configurations(self):
         response = self.client.get(reverse('backoffice:my_configurations'))
         self.assertEqual(response.status_code, 200)
+
+
+## Classe ViewProfileTest\n
+# Classe de test pour la view view_profile
+class ViewProfileTest(TestCase):
+    fixtures = ['demo_dump.json']
+    ## Préparation du client de test et login avec un compte professeur
+    def setUp(self):
+        self.client = Client()
+        self.client.login(username='teacher1', password='password')
+
+    ## Test d'une requete GET valide. Doit renvoyer un code 200
+    def test_view_profile(self):
+        response = self.client.get(reverse('backoffice:view_profile', kwargs={'user_id':3}))
+        self.assertEqual(response.status_code, 200)
+
+    ## Test d'une requete GET invalide: utilisation d'un user_id invalide. Doit renvoyer un code 400
+    def test_view_profile(self):
+        response = self.client.get(reverse('backoffice:view_profile', kwargs={'user_id':420}))
+        self.assertEqual(response.status_code, 400)
